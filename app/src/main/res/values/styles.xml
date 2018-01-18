@@ -1,0 +1,57 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!--<item name="windowActionBarOverlay">@style/popMenu_under_actionBar</item>-->
+        <!--<item name="actionOverflowMenuStyle">@style/popMenu_under_actionBar</item>-->
+    </style>
+
+    <style name="popMenu_under_actionBar" parent="@style/ThemeOverlay.AppCompat.Light" >
+        <!-- 是否覆盖锚点，默认为true，即盖住Toolbar -->
+        <item name="overlapAnchor">false</item>
+        <item name="actionBarItemBackground">@color/colorAccent</item>
+        <!--<item name="android:dropDownWidth">wrap_content</item>-->
+        <item name="android:layout_marginRight">5dp</item>
+        <!--&lt;!&ndash; 弹出层垂直方向上的偏移，即在竖直方向上距离Toolbar的距离，值为负则会盖住Toolbar &ndash;&gt;-->
+        <item name="android:dropDownHorizontalOffset">10dp</item>
+
+    </style>
+
+    <style name="AppTheme.NoTitle" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.TranslucentTranslucent" parent="AppTheme.NoTitle">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="waterEffect">
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+
+    <style name="style_radioButton" parent="waterEffect">
+        <item name="android:button">@null</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="style_song_sheet" parent="waterEffect">
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+
+</resources>

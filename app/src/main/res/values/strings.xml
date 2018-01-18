@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">晓音乐</string>
+    <string name="userName">用户名</string>
+    <string name="password">密码</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="notice_not_null">不能为空</string>
+    <string name="loginFail">登录失败%s%s</string>
+    <string name="registerFail">注册失败%s%s</string>
+    <string name="loading">加载中。。。</string>
+    <string name="collect">收藏</string>
+    <string name="postMusic">上传音乐</string>
+    <string name="notice_permission">您拒绝了部分权限，有些功能将不可用！</string>
+    <string name="getCloudAllMusicInfo">获取线上所有的音乐</string>
+    <string name="localMusic">本地音乐</string>
+    <string name="myCollection">我的收藏</string>
+    <string name="recentPlay">最近播放</string>
+    <string name="downloadManager">下载管理</string>
+    <string name="musicCount">（%s）</string>
+    <string name="music">歌曲：%s</string>
+    <string name="note_file_has_exist">文件已存在</string>
+    <string name="scanMusic">扫描音乐</string>
+    <string name="downloadMusic">下载音乐</string>
+    <string name="video">视频</string>
+    <string name="radio">电台</string>
+    <string name="smusic">音乐</string>
+    <string name="error_http">Http错误</string>
+    <string name="error_connect">连接错误</string>
+    <string name="error_connect_time_out">连接超时</string>
+    <string name="error_parse">解析错误</string>
+    <string name="error_else">未知错误</string>
+    <string name="error_get_data">获取数据失败</string>
+    <string name="songSheet">歌单</string>
+    <string name="Collection">收藏</string>
+    <string name="download">下载</string>
+</resources>

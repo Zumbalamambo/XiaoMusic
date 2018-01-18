@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/waterEffect"
+    android:paddingStart="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    tools:ignore="RtlSymmetry">
+
+
+    <TextView
+        android:textSize="16sp"
+        android:textColor="@color/colorGray"
+        android:id="@+id/tv_SerialNumber"
+        android:gravity="center"
+        android:layout_width="40dp"
+        android:layout_height="match_parent" />
+    <TextView
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/tv_SerialNumber"
+        android:layout_marginEnd="70dp"
+        android:lines="1"
+        android:textSize="14sp"
+        android:textColor="@color/colorBlack"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tv_name"
+        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/tv_SerialNumber"
+        android:layout_marginEnd="70dp"
+        android:textSize="10sp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tv_artist"
+        android:layout_below="@id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="SmallSp" />
+
+    <ImageView
+        android:layout_marginEnd="16dp"
+        android:padding="8dp"
+        android:tint="@color/colorGray"
+        android:id="@+id/iv_more"
+        style="@style/waterEffect"
+        android:src="@drawable/ic_more"
+        android:scaleType="centerCrop"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:background="@color/colorGray"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
+</RelativeLayout>

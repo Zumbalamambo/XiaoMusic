@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_songSheet"
+    style="@style/waterEffect"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="130dp">
+            <!--歌单背景-->
+            <ImageView
+                android:id="@+id/iv_songSheetBg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/zhanweitu" />
+            <!--歌单听量-->
+            <TextView
+                android:textColor="@color/colorWhite"
+                android:textSize="10sp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="9dp"
+                android:id="@+id/tv_songSheetNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_toStartOf="@id/tv_songSheetNum"
+                android:src="@drawable/ic_hear" />
+        </RelativeLayout>
+        <!--歌单描述-->
+        <TextView
+            android:lines="2"
+            android:id="@+id/tv_songSheetDes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="描述"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp" />
+
+</LinearLayout>
