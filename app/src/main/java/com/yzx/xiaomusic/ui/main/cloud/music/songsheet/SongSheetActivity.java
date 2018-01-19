@@ -15,17 +15,13 @@ import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseActivity;
-import com.yzx.xiaomusic.common.observel.MvpObserver;
+import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
-import com.yzx.xiaomusic.network.AppHttpClient;
-import com.yzx.xiaomusic.network.api.MuiscApi;
 import com.yzx.xiaomusic.ui.adapter.ChildMusicAdapter;
 import com.yzx.xiaomusic.ui.adapter.CloudMusicAdapter;
 import com.yzx.xiaomusic.utils.GlideUtils;
 
 import butterknife.BindView;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author yzx
@@ -33,7 +29,7 @@ import io.reactivex.schedulers.Schedulers;
  * Description  歌单详情
  */
 
-public class SongSheetActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
+public class SongSheetActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener,SongSheetContract.View {
     private static final String TAG = "yglSongSheetActivity";
     @BindView(R.id.iv_songSheetBg)
     ImageView ivSongSheetBg;
@@ -55,9 +51,18 @@ public class SongSheetActivity extends BaseActivity implements AppBarLayout.OnOf
     CollapsingToolbarLayout collapasingToolBar;
     @BindView(R.id.layout_songSheetHead)
     RelativeLayout layoutSongSheetHead;
+    @BindView(R.id.tv_collect_num)
+    TextView tvCollectionNum;
+    @BindView(R.id.tv_evaluate_num)
+    TextView tvEvaluteNum;
+    @BindView(R.id.tv_share_num)
+    TextView tvShareNum;
+
 
     private String songSheetId;
-    private SongSheetDetials songSheetDetials;
+    private CloudMusicAdapter adapter;
+    private SongSheetPresenter mPresenter;
+    private String songSheetTitle;
 
     @Override
     protected int getLayoutId() {
@@ -69,8 +74,14 @@ public class SongSheetActivity extends BaseActivity implements AppBarLayout.OnOf
         super.initData(savedInstanceState);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        songSheetId = bundle.getString(ChildMusicAdapter.KEY_SONG_SHEET_ID);
-        Log.i(TAG, "initView: " + songSheetId);
+        SongSheet.PlaylistsBean playlistsBean = (SongSheet.PlaylistsBean) bundle.getSerializable(ChildMusicAdapter.KEY_SONG_SHEET);
+        GlideUtils.loadImg(context, playlistsBean.getCoverImgUrl(), -1, GlideUtils.TRANSFORM_BLUR, ivSongSheetBg);
+        GlideUtils.loadImg(context, playlistsBean.getCoverImgUrl(), -1, ivLittleBg);
+        songSheetTitle = playlistsBean.getName();
+        showActionBarTitle(R.string.songSheet);
+        tvTitle.setText(playlistsBean.getName());
+        mPresenter = new SongSheetPresenter(this);
+        getSongSheetDetails(String.valueOf(playlistsBean.getId()));
     }
 
     @Override
@@ -80,35 +91,9 @@ public class SongSheetActivity extends BaseActivity implements AppBarLayout.OnOf
         showActionBarTitle(R.string.songSheet);
         collapasingToolBar.setTitleEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        final CloudMusicAdapter adapter = new CloudMusicAdapter();
+        adapter = new CloudMusicAdapter();
         recyclerView.setAdapter(adapter);
         appBarLayout.addOnOffsetChangedListener(this);
-        showLoading();
-        AppHttpClient
-                .getInstance()
-                .getService(MuiscApi.class)
-                .getSongSheetDetails(songSheetId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MvpObserver<SongSheetDetials>() {
-                    @Override
-                    protected void onSuccess(SongSheetDetials songSheetDetials) {
-                        hideLoading();
-                        SongSheetActivity.this.songSheetDetials = songSheetDetials;
-                        Log.i(TAG, "onSuccess: " + songSheetDetials.getResult().getCoverImgUrl());
-
-                        GlideUtils.loadImg(context, songSheetDetials.getResult().getCoverImgUrl(), -1, GlideUtils.TRANSFORM_BLUR, ivSongSheetBg);
-                        GlideUtils.loadImg(context, songSheetDetials.getResult().getCoverImgUrl(), -1, ivLittleBg);
-//                        tvTitle.setText(R.string.songSheet);
-                        showActionBarTitle(R.string.songSheet);
-                        tvTitle.setText(songSheetDetials.getResult().getName());
-                        GlideUtils.loadImg(context, songSheetDetials.getResult().getCreator().getAvatarUrl(), GlideUtils.TYPE_HEAD,GlideUtils.TRANSFORM_CIRCLE, ivHeadAuthor);
-                        tvNameAuthor.setText(songSheetDetials.getResult().getCreator().getNickname());
-                        adapter.setDatas(songSheetDetials.getResult().getTracks());
-                    }
-                });
-
-
     }
 
     @Override
@@ -116,7 +101,28 @@ public class SongSheetActivity extends BaseActivity implements AppBarLayout.OnOf
 
         int totalScrollRange = appBarLayout.getTotalScrollRange();
         float alpha = 1+(float) verticalOffset / (float) totalScrollRange;
-        Log.i(TAG, "onOffsetChanged: "+alpha);
         layoutSongSheetHead.animate().alpha(alpha).setInterpolator(new LinearInterpolator()).setDuration(0).start();
+        if (Math.abs(verticalOffset)> totalScrollRange*0.2f){
+            showActionBarTitle(songSheetTitle);
+        }else {
+            showActionBarTitle(R.string.songSheet);
+        }
+    }
+
+    @Override
+    public void getSongSheetDetails(String id) {
+        Log.i(TAG, "getSongSheetDetails: "+id);
+        mPresenter.getSongSheetDetails(id);
+    }
+
+    @Override
+    public void setDatas(SongSheetDetials detials) {
+
+        GlideUtils.loadImg(context, detials.getResult().getCreator().getAvatarUrl(), GlideUtils.TYPE_HEAD,GlideUtils.TRANSFORM_CIRCLE, ivHeadAuthor);
+        tvNameAuthor.setText(detials.getResult().getCreator().getNickname());
+        adapter.setDatas(detials.getResult().getTracks());
+        tvCollectionNum.setText(String.valueOf(detials.getResult().getSubscribedCount()));
+        tvEvaluteNum.setText(String.valueOf(detials.getResult().getCommentCount()));
+        tvShareNum.setText(String.valueOf(detials.getResult().getShareCount()));
     }
 }

@@ -17,6 +17,7 @@ import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.ui.main.cloud.music.songsheet.SongSheetActivity;
 import com.yzx.xiaomusic.utils.GlideUtils;
+import com.yzx.xiaomusic.utils.ResourceUtils;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class ChildMusicAdapter extends VirtualLayoutAdapter<ChildMusicAdapter.Ho
     private static final String TAG = "yglChildMusicAdapter";
     private static final int TYPE_TITLE = 1;
     private static final int TYPE_SONG_SHEET = 2;
-    public static final String KEY_SONG_SHEET_ID = "songSheetId";
+    public static final String KEY_SONG_SHEET = "songSheet";
     private SongSheet songSheet;
 
 
@@ -72,11 +73,13 @@ public class ChildMusicAdapter extends VirtualLayoutAdapter<ChildMusicAdapter.Ho
             case TYPE_SONG_SHEET:
 
                 if (songSheet!=null){
-                    List<SongSheet.PlaylistsBean> playlists = songSheet.getPlaylists();
+                    final List<SongSheet.PlaylistsBean> playlists = songSheet.getPlaylists();
                     final SongSheet.PlaylistsBean playlistsBean = playlists.get(i-1);
                     holder.tvSongSheetDes.setText(playlistsBean.getName());
                     if (playlistsBean.getPlayCount()>100000){
-                        holder.tvSongSheetNum.setText(String.format("%s%s", String.valueOf(playlistsBean.getPlayCount()/10000),"万"));
+                        holder.tvSongSheetNum.setText(String.format("%s%s",
+                                String.valueOf(playlistsBean.getPlayCount()/10000),
+                                ResourceUtils.parseString(R.string.TenThousand)));
                     }else {
                         holder.tvSongSheetNum.setText(String.valueOf(playlistsBean.getPlayCount()));
                     }
@@ -87,7 +90,7 @@ public class ChildMusicAdapter extends VirtualLayoutAdapter<ChildMusicAdapter.Ho
                         public void onClick(View v) {
                             Intent intent = new Intent(context, SongSheetActivity.class);
                             Bundle bundle = new Bundle();
-                            bundle.putString(KEY_SONG_SHEET_ID, String.valueOf(playlistsBean.getId()));
+                            bundle.putSerializable(KEY_SONG_SHEET,playlistsBean);
                             intent.putExtras(bundle);
                             context.startActivity(intent);
                         }

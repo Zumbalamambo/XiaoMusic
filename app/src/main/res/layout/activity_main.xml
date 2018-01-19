@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawerLayout"
-    tools:context="com.yzx.xiaomusic.MainActivity">
+    tools:context=".ui.main.MainActivity">
 
     <include layout="@layout/contain_main"/>
 

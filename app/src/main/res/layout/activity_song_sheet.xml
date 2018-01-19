@@ -76,10 +76,11 @@
                         tools:ignore="SmallSp" />
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_navigate_next_grey"
+                        android:src="@drawable/ic_next"
                         android:tint="#fff" />
                 </LinearLayout>
 
@@ -91,24 +92,55 @@
                     android:paddingEnd="20dp"
                     android:layout_marginTop="25dp"
                     android:orientation="horizontal">
+                    <LinearLayout
+                        style="@style/style_weight_h_1">
 
-                    <TextView
-                        android:id="@+id/tv_collect_num"
-                        android:drawableTop="@drawable/ic_head"
-                        style="@style/style_song_sheet" />
-                    <TextView
-                        android:id="@+id/tv_evaluate_num"
-                        android:drawableTop="@drawable/ic_head"
-                        style="@style/style_song_sheet" />
-                    <TextView
-                        android:id="@+id/tv_share_num"
-                        android:drawableTop="@drawable/ic_head"
-                        style="@style/style_song_sheet"/>
-                    <TextView
-                        android:text="@string/download"
-                        android:id="@+id/tv_download_num"
-                        android:drawableTop="@drawable/ic_head"
-                        style="@style/style_song_sheet" />
+                        <ImageView
+                            android:src="@drawable/ic_collect"
+                            style="@style/style_img_centercrop_40" />
+
+                        <TextView
+                            android:id="@+id/tv_collect_num"
+                            style="@style/style_textView_w_w_10"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/style_weight_h_1">
+
+                        <ImageView
+                            android:src="@drawable/ic_message"
+                            style="@style/style_img_centercrop_40" />
+
+                        <TextView
+                            android:id="@+id/tv_evaluate_num"
+                            style="@style/style_textView_w_w_10"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/style_weight_h_1">
+
+                        <ImageView
+                            android:src="@drawable/ic_share"
+                            style="@style/style_img_centercrop_40" />
+
+                        <TextView
+                            android:id="@+id/tv_share_num"
+                            style="@style/style_textView_w_w_10"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/style_weight_h_1">
+
+                        <ImageView
+                            android:src="@drawable/ic_download"
+                            style="@style/style_img_centercrop_40" />
+
+                        <TextView
+                            android:id="@+id/tv_download_num"
+                            android:text="@string/download"
+                            style="@style/style_textView_w_w_10"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </RelativeLayout>

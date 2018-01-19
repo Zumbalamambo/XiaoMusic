@@ -21,18 +21,19 @@
                 android:orientation="horizontal"
                 android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
                 <RadioButton
                     android:id="@+id/rb_music"
-                    android:background="@drawable/ic_head"
+                    android:checked="true"
+                    android:background="@drawable/ic_muisc"
                     style="@style/style_radioButton" />
                 <RadioButton
                     android:id="@+id/rb_cloud"
-                    android:background="@drawable/ic_head"
+                    android:background="@drawable/ic_cloud"
                     style="@style/style_radioButton" />
                 <RadioButton
                     android:id="@+id/rb_friend"
-                    android:background="@drawable/ic_head"
+                    android:background="@drawable/ic_friends"
                     style="@style/style_radioButton" />
             </RadioGroup>
         </RelativeLayout>

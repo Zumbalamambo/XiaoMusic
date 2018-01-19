@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     private static final String TAG = "MainActivity";
     @BindView(R.id.rb_music)
     RadioButton rbMusic;
@@ -49,19 +49,47 @@ public class MainActivity extends BaseActivity {
         fragments.add(new FriendFragment());
         adapter.setFragmentDatas(fragments);
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(this);
     }
 
     @OnClick({R.id.rb_music, R.id.rb_cloud, R.id.rb_friend})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rb_music:
+                viewPager.setCurrentItem(0);
                 break;
             case R.id.rb_cloud:
+                viewPager.setCurrentItem(1);
                 break;
             case R.id.rb_friend:
+                viewPager.setCurrentItem(2);
                 break;
         }
     }
 
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        switch (position) {
+            case 0:
+                rbMusic.setChecked(true);
+                break;
+            case 1:
+                rbCloud.setChecked(true);
+                break;
+            case 2:
+                rbFriend.setChecked(true);
+                break;
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

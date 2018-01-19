@@ -33,4 +33,5 @@
     <string name="songSheet">歌单</string>
     <string name="Collection">收藏</string>
     <string name="download">下载</string>
+    <string name="TenThousand">万</string>
 </resources>

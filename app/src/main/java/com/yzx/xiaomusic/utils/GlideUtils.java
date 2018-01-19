@@ -44,7 +44,7 @@ public class GlideUtils {
                 options.transform(new CropCircleTransformation());
                 break;
             case TRANSFORM_BLUR:
-                options.transform(new BlurTransformation( 20, 30));
+                options.transform(new BlurTransformation( 20, 50));
                 break;
         }
         options.dontAnimate();

@@ -39,8 +39,8 @@
 
     <style name="style_radioButton" parent="waterEffect">
         <item name="android:button">@null</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">63dp</item>
+        <item name="android:layout_height">50dp</item>
     </style>
 
     <style name="style_song_sheet" parent="waterEffect">
@@ -53,5 +53,30 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <!--宽度权重为1-->
+    <style name="style_weight_h_1">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+<!--中心缩放宽高为40的图片-->
+    <style name="style_img_centercrop_40">
+        <item name="android:tint">@color/colorWhite</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
+    </style>
+
+    <!--宽高自适应白色8号字体-->
+    <style name="style_textView_w_w_10">
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/colorLightWhite</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 
 </resources>
