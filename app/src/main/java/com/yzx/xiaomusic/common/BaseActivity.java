@@ -7,20 +7,20 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
 
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.yzx.xiaomusic.utils.LoadingUtils;
 import com.yzx.xiaomusic.utils.ResourceUtils;
 import com.yzx.xiaomusic.utils.ToastUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.SupportActivity;
 
 /**
  * Created by yzx on 2018/1/10.
  * Description Activity基类
  */
 
-public abstract class BaseActivity extends RxAppCompatActivity implements BaseView {
+public abstract class BaseActivity extends SupportActivity implements BaseView {
 
     private Unbinder bind;
     public Context context;

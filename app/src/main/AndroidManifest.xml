@@ -53,6 +53,8 @@
             android:theme="@style/AppTheme.NoTitle"/>
         <activity android:name=".ui.main.cloud.music.songsheet.SongSheetActivity"
             android:theme="@style/AppTheme.TranslucentTranslucent"/>
+        <activity android:name=".ui.main.play.PlayActivity"
+            android:theme="@style/AppTheme.TranslucentTranslucent"/>
     </application>
 
 </manifest>

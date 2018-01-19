@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,7 @@ public class CloudMusicAdapter extends RecyclerView.Adapter<CloudMusicAdapter.Ho
         final SongSheetDetials.ResultBean.TracksBean bean = musicInfoList.get(i);
         holder.tvName.setText(bean.getName());
         holder.tvSerialNumber.setText(String.valueOf(i+1));
-        Log.i(TAG, "onBindViewHolder: "+bean.getArtists().get(0).getName());
+//        Log.i(TAG, "onBindViewHolder: "+bean.getArtists().get(0).getName());
         holder.tvArtist.setText(bean.getArtists().get(0).getName());
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override

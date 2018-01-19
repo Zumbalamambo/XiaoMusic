@@ -17,7 +17,7 @@ import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseActivity;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
-import com.yzx.xiaomusic.ui.adapter.ChildMusicAdapter;
+import com.yzx.xiaomusic.ui.adapter.ChildCloudMusicAdapter;
 import com.yzx.xiaomusic.ui.adapter.CloudMusicAdapter;
 import com.yzx.xiaomusic.utils.GlideUtils;
 
@@ -74,7 +74,7 @@ public class SongSheetActivity extends BaseActivity implements AppBarLayout.OnOf
         super.initData(savedInstanceState);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        SongSheet.PlaylistsBean playlistsBean = (SongSheet.PlaylistsBean) bundle.getSerializable(ChildMusicAdapter.KEY_SONG_SHEET);
+        SongSheet.PlaylistsBean playlistsBean = (SongSheet.PlaylistsBean) bundle.getSerializable(ChildCloudMusicAdapter.KEY_SONG_SHEET);
         GlideUtils.loadImg(context, playlistsBean.getCoverImgUrl(), -1, GlideUtils.TRANSFORM_BLUR, ivSongSheetBg);
         GlideUtils.loadImg(context, playlistsBean.getCoverImgUrl(), -1, ivLittleBg);
         songSheetTitle = playlistsBean.getName();

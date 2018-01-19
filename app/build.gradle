@@ -21,25 +21,30 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
     //noinspection GradleCompatible
     implementation 'com.android.support:design:26.1.0'
 
     //LeakCanary
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
     //butterknife
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
     //Glide
     compile 'com.github.bumptech.glide:glide:4.5.0'
     compile 'jp.wasabeef:glide-transformations:3.0.1'
+
     //rxjava rxandroid retrofit
     compile 'io.reactivex.rxjava2:rxjava:2.1.7'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -48,26 +53,45 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
-    compile 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
+
     //bugly
     compile 'com.tencent.bugly:crashreport:2.6.6.1'
+
     // LeanCloud 基础包
+
     //    compile ('cn.leancloud.android:avoscloud-sdk:v4.4.4')
+
     //Bmob
+
     //    compile 'cn.bmob.android:bmob-sdk:3.4.6'
+
     //    compile 'com.squareup.okhttp:okhttp:2.4.0'//CDN文件服务使用okhttp相关包进行文件的上传和下载（必填）
+
     //    compile 'com.squareup.okio:okio:1.13.0'
+
     //    compile 'com.android.support:support-v4:27.0.2'
+
     //    compile 'cn.bmob.android:http-legacy:1.0'
+
     // Room
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+
     // RxJava support for Room
     implementation 'android.arch.persistence.room:rxjava2:1.0.0'
+
     //vlayout
     compile('com.alibaba.android:vlayout:1.2.8@aar') {
         transitive = true
     }
+
+    //banner
+    compile 'com.github.pinguo-zhouwei:MZBannerView:v2.0.0'
+
+    //    //fragmentation
+
+    //    compile 'me.yokeyword:fragmentation:1.2.4'
+    implementation project(':fragmentation')
+    implementation project(':fragmentation_core')
 }

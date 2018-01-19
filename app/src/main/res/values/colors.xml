@@ -12,7 +12,9 @@
     <color name="colorLightWhite">#AAFFFFFF</color>
     <color name="colorTransparent">#00000000</color>
     <color name="colorGray">#a1a6a4</color>
-    <color name="colorBlack">#ff000000</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorBgToast">#88000000</color>
     <color name="colorRed">#ff0000</color>
+    <color name="colorDarkGray">#333333</color>
+    <color name="colorIconGray">#151111</color>
 </resources>

@@ -2,9 +2,9 @@ package com.yzx.xiaomusic.common;
 
 import android.os.Bundle;
 
-import com.trello.rxlifecycle2.components.support.RxFragment;
+import me.yokeyword.fragmentation.SupportFragment;
 
-public abstract class LazyFragment extends RxFragment {
+public abstract class LazyFragment extends SupportFragment {
 
     protected boolean isViewInitiated;
     protected boolean isVisibleToUser;
