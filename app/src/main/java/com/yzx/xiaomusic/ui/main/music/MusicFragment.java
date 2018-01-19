@@ -20,10 +20,6 @@ public class MusicFragment extends BaseFragment {
     RecyclerView recyclerView;
     private MusicAdapter adapter;
 
-    @Override
-    public void fetchData() {
-
-    }
 
     @Override
     protected int getLayoutId() {

@@ -87,8 +87,11 @@ public class ChildCloudFragment extends BaseFragment implements ChildCloudContra
         delegateAdapter.setAdapters(adapters);
 
     }
+
     @Override
-    public void fetchData() {
+    public void onEnterAnimationEnd(Bundle savedInstanceState) {
+        super.onEnterAnimationEnd(savedInstanceState);
+
         getSongSheetList("全部","hot",0,6,true);
     }
 

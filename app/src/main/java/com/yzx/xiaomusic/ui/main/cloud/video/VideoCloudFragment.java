@@ -12,10 +12,7 @@ import com.yzx.xiaomusic.common.BaseFragment;
  */
 
 public class VideoCloudFragment extends BaseFragment {
-    @Override
-    public void fetchData() {
 
-    }
 
     @Override
     protected int getLayoutId() {

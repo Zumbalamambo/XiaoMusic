@@ -9,13 +9,14 @@ import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Created by yzx on 2018/1/12.
  * Description
  */
 
-public abstract class BaseFragment extends LazyFragment {
+public abstract class BaseFragment extends SupportFragment {
 
     private Unbinder bind;
 

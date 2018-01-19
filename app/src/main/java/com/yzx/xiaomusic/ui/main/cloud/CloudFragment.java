@@ -31,10 +31,6 @@ public class CloudFragment extends BaseFragment {
     private ArrayList<BaseFragment> fragments;
     private ArrayList<Integer> titles;
 
-    @Override
-    public void fetchData() {
-
-    }
 
     @Override
     protected int getLayoutId() {
