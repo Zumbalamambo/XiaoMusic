@@ -1,4 +1,4 @@
-package com.yzx.xiaomusic.ui.main.cloud.music.songsheet;
+package com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails;
 
 import com.yzx.xiaomusic.common.observel.MvpObserver;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
@@ -8,14 +8,14 @@ import com.yzx.xiaomusic.entities.SongSheetDetials;
  * Description
  */
 
-public class SongSheetPresenter implements SongSheetContract.Presenter {
+public class SongSheetDetailsPresenter implements SongSheetDetailsContract.Presenter {
 
-    private final SongSheetActivity mActivity;
-    private final SongSheetModel mModel;
+    private final SongSheetDetailsModel mModel;
+    private final SongSheetDetailsFragment mFragment;
 
-    public SongSheetPresenter(SongSheetActivity activity) {
-        mActivity = activity;
-        mModel = new SongSheetModel();
+    public SongSheetDetailsPresenter(SongSheetDetailsFragment fragment) {
+        mFragment = fragment;
+        mModel = new SongSheetDetailsModel();
     }
 
     @Override
@@ -23,7 +23,7 @@ public class SongSheetPresenter implements SongSheetContract.Presenter {
         mModel.getSongSheetDetails(id, new MvpObserver<SongSheetDetials>() {
             @Override
             protected void onSuccess(SongSheetDetials songSheetDetials) {
-                mActivity.setDatas(songSheetDetials);
+                mFragment.setDatas(songSheetDetials);
             }
 
             @Override

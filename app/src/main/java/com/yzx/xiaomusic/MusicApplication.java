@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.tencent.bugly.crashreport.CrashReport;
 
+import me.yokeyword.fragmentation.Fragmentation;
+
 /**
  *
  * @author yzx
@@ -21,6 +23,11 @@ public class MusicApplication extends Application {
         musicApplication = this;
 //        Bmob.initialize(this, "492b528b11d9806258a71340ec1ad925");
         CrashReport.initCrashReport(getApplicationContext(), "21692abef2", true);
+        Fragmentation.builder()
+                // show stack view. Mode: BUBBLE, SHAKE, NONE
+                .stackViewMode(Fragmentation.BUBBLE)
+                .debug(BuildConfig.DEBUG)
+                .install();
     }
 
     public static MusicApplication getApplication() {

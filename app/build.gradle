@@ -34,8 +34,10 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
 
     //LeakCanary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
+    //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+
+    //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-ic_share-op:1.5.4'
 
     //butterknife
     compile 'com.jakewharton:butterknife:8.8.1'
@@ -94,4 +96,5 @@ dependencies {
     //    compile 'me.yokeyword:fragmentation:1.2.4'
     implementation project(':fragmentation')
     implementation project(':fragmentation_core')
+    implementation project(':xrecyclerview')
 }

@@ -2,10 +2,9 @@ package com.yzx.xiaomusic.ui.main;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
@@ -33,16 +32,8 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
     RadioButton rbFriend;
     @BindView(R.id.viewPager)
     ViewPager viewPager;
-    @BindView(R.id.iv_music_poster)
-    ImageView ivMusicPoster;
-    @BindView(R.id.tv_music_name)
-    TextView tvMusicName;
-    @BindView(R.id.tv_music_artist)
-    TextView tvMusicArtist;
-    @BindView(R.id.iv_play)
-    ImageView ivPlay;
-    @BindView(R.id.iv_music_menu)
-    ImageView ivMusicMenu;
+    @BindView(R.id.toolBar)
+    Toolbar toolBar;
 
     @Override
     protected int getLayoutId() {
@@ -51,12 +42,14 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+        toolBar.setNavigationIcon(R.drawable.ic_menu);
         viewPager.setOffscreenPageLimit(3);
         MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(getChildFragmentManager());
         ArrayList<BaseFragment> fragments = new ArrayList<>();
-        fragments.add(new MusicFragment());
-        fragments.add(new CloudFragment());
-        fragments.add(new FriendFragment());
+        fragments.add(MusicFragment.getInstance());
+        fragments.add(CloudFragment.getInstance());
+        fragments.add(FriendFragment.getInstance());
         adapter.setFragmentDatas(fragments);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);

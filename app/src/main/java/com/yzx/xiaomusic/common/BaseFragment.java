@@ -1,11 +1,19 @@
 package com.yzx.xiaomusic.common;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.yzx.xiaomusic.R;
+import com.yzx.xiaomusic.utils.ResourceUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -18,7 +26,17 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 public abstract class BaseFragment extends SupportFragment {
 
+    private static final String TAG = "yglBaseFragment";
     private Unbinder bind;
+    public Context context;
+    public boolean isFirstLoad;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        context = getContext();
+        Log.i(TAG, "onCreate: "+this.getClass().getSimpleName());
+    }
 
     @Nullable
     @Override
@@ -28,7 +46,30 @@ public abstract class BaseFragment extends SupportFragment {
         bind = ButterKnife.bind(this, rootView);
         initData(savedInstanceState);
         initView(savedInstanceState);
+        Log.i(TAG, "onCreateView: "+this.getClass().getSimpleName());
         return rootView;
+    }
+
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+
+        Log.i(TAG, "onLazyInitView: "+this.getClass().getSimpleName());
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (!isFirstLoad){
+            loadData();
+        }
+    }
+
+    /**
+     * 可见并且第一次加载才数据（懒加载）
+     */
+    public void loadData() {
+
     }
 
     /**
@@ -46,7 +87,21 @@ public abstract class BaseFragment extends SupportFragment {
     }
     protected abstract void initView(Bundle savedInstanceState);
 
-
+    public void setToolBar(Toolbar toolBar, String title){
+        setToolBar(toolBar,title, R.drawable.ic_back);
+    }
+    public void setToolBar(Toolbar toolBar, @StringRes int title){
+        setToolBar(toolBar,title, R.drawable.ic_back);
+    }
+    public void setToolBar(Toolbar toolBar, @StringRes int title, @DrawableRes int icon){
+        setToolBar(toolBar, ResourceUtils.parseString(title));
+    }
+    public void setToolBar(Toolbar toolBar, String title, @DrawableRes int icon){
+        if (toolBar!=null){
+            toolBar.setTitle(title);
+            toolBar.setNavigationIcon(icon);
+        }
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -1,5 +1,6 @@
 package com.yzx.xiaomusic.ui.main.cloud;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -23,6 +24,7 @@ import butterknife.BindView;
 public class CloudFragment extends BaseFragment {
 
 
+    private static CloudFragment cloudFragment;
     @BindView(R.id.viewPager)
     ViewPager viewPager;
     @BindView(R.id.tabLayout)
@@ -31,6 +33,16 @@ public class CloudFragment extends BaseFragment {
     private ArrayList<BaseFragment> fragments;
     private ArrayList<Integer> titles;
 
+    @SuppressLint("ValidFragment")
+    private CloudFragment() {
+    }
+
+    public static CloudFragment getInstance(){
+        if (cloudFragment == null){
+            cloudFragment = new CloudFragment();
+        }
+        return cloudFragment;
+    }
 
     @Override
     protected int getLayoutId() {
@@ -41,9 +53,9 @@ public class CloudFragment extends BaseFragment {
     public void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         fragments = new ArrayList<>();
-        fragments.add(new ChildCloudFragment());
-        fragments.add(new VideoCloudFragment());
-        fragments.add(new RadioCloudFragment());
+        fragments.add(ChildCloudFragment.getInstance());
+        fragments.add(VideoCloudFragment.getInstance());
+        fragments.add(RadioCloudFragment.getInstance());
         titles = new ArrayList();
         titles.add(R.string.smusic);
         titles.add(R.string.video);

@@ -1,7 +1,6 @@
 package com.yzx.xiaomusic.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.entities.MusicInfo;
-import com.yzx.xiaomusic.ui.main.music.local.LocalMusicActivity;
 import com.yzx.xiaomusic.utils.ResourceUtils;
 import com.yzx.xiaomusic.utils.ScanMusicUtils;
 
@@ -28,6 +26,8 @@ import butterknife.ButterKnife;
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.Holder> {
 
 
+    private OnItemClickListener onItemClickListener;
+
     @Override
     public Holder onCreateViewHolder(ViewGroup viewGroup, int i) {
 
@@ -35,7 +35,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.Holder> {
     }
 
     @Override
-    public void onBindViewHolder(Holder holder, final int i) {
+    public void onBindViewHolder(final Holder holder, final int i) {
 
         final Context context = holder.itemView.getContext();
         switch (i) {
@@ -62,17 +62,11 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.Holder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (i) {
-                    case 0:
-                        context.startActivity(new Intent(context, LocalMusicActivity.class));
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
+
+                if (onItemClickListener!=null){
+                    onItemClickListener.onItemClickListener(holder.itemView,i);
                 }
+
             }
         });
     }
@@ -85,6 +79,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.Holder> {
     public void setDatas() {
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
     class Holder extends RecyclerView.ViewHolder {
         @BindView(R.id.iv_icon)
         ImageView ivIcon;
@@ -97,5 +94,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.Holder> {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public interface OnItemClickListener{
+        void onItemClickListener(View itemView, int i);
     }
 }

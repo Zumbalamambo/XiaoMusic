@@ -1,4 +1,4 @@
-package com.yzx.xiaomusic.ui.main.cloud.music.songsheet;
+package com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails;
 
 import com.yzx.xiaomusic.common.observel.MvpObserver;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
@@ -13,7 +13,7 @@ import io.reactivex.schedulers.Schedulers;
  * Description
  */
 
-public class SongSheetModel implements SongSheetContract.Model<SongSheetDetials,SongSheetActivity> {
+public class SongSheetDetailsModel implements SongSheetDetailsContract.Model<SongSheetDetials> {
 
     @Override
     public void getSongSheetDetails(String id, MvpObserver<SongSheetDetials> observer) {

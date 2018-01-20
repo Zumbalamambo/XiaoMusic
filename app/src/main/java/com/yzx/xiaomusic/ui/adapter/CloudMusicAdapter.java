@@ -19,7 +19,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.yzx.xiaomusic.ui.main.music.local.LocalMusicActivity.MUSIC_INFO;
+import static com.yzx.xiaomusic.ui.main.music.local.LocalMusicFragment.MUSIC_INFO;
 
 
 /**

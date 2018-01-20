@@ -1,7 +1,9 @@
 package com.yzx.xiaomusic.ui.main.cloud.music;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
@@ -11,6 +13,9 @@ import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.ui.adapter.ChildCloudMusicAdapter;
+import com.yzx.xiaomusic.ui.main.MainFragment;
+import com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails.SongSheetDetailsFragment;
+import com.yzx.xiaomusic.ui.main.cloud.music.songsheetlist.SongSheetListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +24,29 @@ import butterknife.BindView;
 
 /**
  * Created by yzx on 2018/1/12.
- * Description
+ * Description  cloudMusic----music
  */
 
-public class ChildCloudFragment extends BaseFragment implements ChildCloudContract.View{
+public class ChildCloudFragment extends BaseFragment implements ChildCloudContract.View, ChildCloudMusicAdapter.OnItemClickLsitener {
     private static final String TAG = "yglChildCloudFragment";
+    private static final String KEY_SONG_SHEET = "songSheet";
+    private static ChildCloudFragment childCloudFragment;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     private ChildCloudPresenter mPresenter;
     private ChildCloudMusicAdapter songSheetAdapter;
     private ChildCloudMusicAdapter bannerAdapter;
+
+    @SuppressLint("ValidFragment")
+    private ChildCloudFragment() {
+    }
+
+    public static ChildCloudFragment getInstance(){
+        if (childCloudFragment == null){
+            childCloudFragment = new ChildCloudFragment();
+        }
+        return childCloudFragment;
+    }
 
     @Override
     protected int getLayoutId() {
@@ -67,12 +85,14 @@ public class ChildCloudFragment extends BaseFragment implements ChildCloudContra
         };
         adapters.add(bannerAdapter);
 
-        adapters.add(new ChildCloudMusicAdapter(new GridLayoutHelper(4),4){
+        ChildCloudMusicAdapter theFourAdapter = new ChildCloudMusicAdapter(new GridLayoutHelper(4), 4) {
             @Override
             public int getItemViewType(int position) {
                 return ChildCloudMusicAdapter.TYPE_THE_FOUR;
             }
-        });
+        };
+        theFourAdapter.setOnItemClickListener(this);
+        adapters.add(theFourAdapter);
         //歌单
         adapters.add(new ChildCloudMusicAdapter(new SingleLayoutHelper(),1));
         GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
@@ -83,15 +103,15 @@ public class ChildCloudFragment extends BaseFragment implements ChildCloudContra
                 return ChildCloudMusicAdapter.TYPE_SONG_SHEET;
             }
         };
+        songSheetAdapter.setOnItemClickListener(this);
         adapters.add(songSheetAdapter);
         delegateAdapter.setAdapters(adapters);
 
     }
 
     @Override
-    public void onEnterAnimationEnd(Bundle savedInstanceState) {
-        super.onEnterAnimationEnd(savedInstanceState);
-
+    public void loadData() {
+        super.loadData();
         getSongSheetList("全部","hot",0,6,true);
     }
 
@@ -105,4 +125,33 @@ public class ChildCloudFragment extends BaseFragment implements ChildCloudContra
         bannerAdapter.setDatas(songSheet);
         songSheetAdapter.setDatas(songSheet);
     }
+
+    @Override
+    public void onItemClickListener(View itemView, int position, SongSheet.PlaylistsBean playlistsBean, int type) {
+
+                MainFragment parentFragment = (MainFragment) getParentFragment().getParentFragment();
+        switch (type){
+            case ChildCloudMusicAdapter.TYPE_SONG_SHEET:
+                SongSheetDetailsFragment songSheetFragment = SongSheetDetailsFragment.getInstance();
+                Bundle args =new Bundle();
+                args.putSerializable(KEY_SONG_SHEET,playlistsBean);
+                songSheetFragment.setArguments(args);
+                parentFragment.start(songSheetFragment);
+                break;
+            case ChildCloudMusicAdapter.TYPE_THE_FOUR:
+                switch (position){
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        parentFragment.start(SongSheetListFragment.getInstance());
+                        break;
+                    case 3:
+                        break;
+                }
+                break;
+        }
+    }
+
 }

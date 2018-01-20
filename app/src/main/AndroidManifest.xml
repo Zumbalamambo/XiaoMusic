@@ -45,13 +45,7 @@
         </activity>
         <activity android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.TranslucentTranslucent"/>
-        <activity android:name=".ui.login.LoginActivity"
-            android:theme="@style/AppTheme.TranslucentTranslucent"/>
         <activity android:name=".ui.login.RegisterActivity"
-            android:theme="@style/AppTheme.TranslucentTranslucent"/>
-        <activity android:name=".ui.main.music.local.LocalMusicActivity"
-            android:theme="@style/AppTheme.NoTitle"/>
-        <activity android:name=".ui.main.cloud.music.songsheet.SongSheetActivity"
             android:theme="@style/AppTheme.TranslucentTranslucent"/>
         <activity android:name=".ui.main.play.PlayActivity"
             android:theme="@style/AppTheme.TranslucentTranslucent"/>

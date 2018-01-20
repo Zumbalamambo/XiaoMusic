@@ -15,6 +15,7 @@
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.Toolbar
+                android:id="@+id/toolBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"/>
 
@@ -42,70 +43,69 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
-        android:layout_marginBottom="60dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:background="@color/colorWhite"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:layout_gravity="bottom"
-        android:gravity="center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        tools:ignore="RtlSymmetry">
-        <!--音乐海报-->
-        <ImageView
-            android:id="@+id/iv_music_poster"
-            android:scaleType="centerCrop"
-            android:src="@drawable/zhanweitu"
-            android:layout_width="40dp"
-            android:layout_height="40dp" />
-        <LinearLayout
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:background="@color/colorWhite"-->
+        <!--android:paddingStart="16dp"-->
+        <!--android:paddingEnd="16dp"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="60dp"-->
+        <!--tools:ignore="RtlSymmetry">-->
+        <!--&lt;!&ndash;音乐海报&ndash;&gt;-->
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_music_poster"-->
+            <!--android:scaleType="centerCrop"-->
+            <!--android:src="@drawable/zhanweitu"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp" />-->
+        <!--<LinearLayout-->
+            <!--android:layout_marginStart="10dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content">-->
 
-            <TextView
-                android:text="@string/app_name"
-                android:textSize="12sp"
-                android:textColor="@color/colorBlack"
-                android:id="@+id/tv_music_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <!--<TextView-->
+                <!--android:text="@string/app_name"-->
+                <!--android:textSize="12sp"-->
+                <!--android:textColor="@color/colorBlack"-->
+                <!--android:id="@+id/tv_music_name"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
 
-            <TextView
-                android:layout_marginTop="5dp"
-                android:text="@string/app_name"
-                android:textSize="8sp"
-                android:textColor="@color/colorGray"
-                android:id="@+id/tv_music_artist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:ignore="SmallSp" />
+            <!--<TextView-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:text="@string/app_name"-->
+                <!--android:textSize="8sp"-->
+                <!--android:textColor="@color/colorGray"-->
+                <!--android:id="@+id/tv_music_artist"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--tools:ignore="SmallSp" />-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
-        <ImageView
-            android:tint="@color/colorDarkGray"
-            android:src="@drawable/ic_pause"
-            android:id="@+id/iv_play"
-            android:layout_width="40dp"
-            android:layout_height="40dp" />
+        <!--<ImageView-->
+            <!--android:tint="@color/colorDarkGray"-->
+            <!--android:src="@drawable/ic_pause"-->
+            <!--android:id="@+id/iv_play"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp" />-->
 
-        <ImageView
-            android:tint="@color/colorBlack"
-            android:src="@drawable/ic_menu"
-            android:id="@+id/iv_music_menu"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
-    </LinearLayout>
+        <!--<ImageView-->
+            <!--android:tint="@color/colorBlack"-->
+            <!--android:src="@drawable/ic_menu"-->
+            <!--android:id="@+id/iv_music_menu"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp" />-->
+    <!--</LinearLayout>-->
 
 
 

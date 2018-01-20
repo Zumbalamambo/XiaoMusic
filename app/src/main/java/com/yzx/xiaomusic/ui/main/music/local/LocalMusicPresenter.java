@@ -7,7 +7,6 @@ import android.view.animation.AccelerateInterpolator;
 
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.utils.DensityUtils;
-import com.yzx.xiaomusic.utils.ToastUtils;
 
 import java.util.List;
 
@@ -18,11 +17,11 @@ import java.util.List;
 
 public class LocalMusicPresenter {
 
-    private final LocalMusicActivity mActivity;
     private final LocalMusicModel mModel;
+    private final LocalMusicFragment mFragment;
 
-    public LocalMusicPresenter(LocalMusicActivity activity) {
-        mActivity = activity;
+    public LocalMusicPresenter(LocalMusicFragment fragment) {
+        mFragment = fragment;
         mModel = new LocalMusicModel();
     }
 
@@ -30,20 +29,20 @@ public class LocalMusicPresenter {
         mModel.getLocalMusicInfo(context, new LocalMusicModel.CallBack() {
             @Override
             public void onSuccess(List<MusicInfo> list) {
-                mActivity.adapter.setDatas(list);
-                mActivity.tvScanningMusicName.animate().translationY(-DensityUtils.dip2px(50)).setDuration(1000).setInterpolator(new AccelerateInterpolator()).start();
+                mFragment.adapter.setDatas(list);
+                mFragment.tvScanningMusicName.animate().translationY(-DensityUtils.dip2px(50)).setDuration(1000).setInterpolator(new AccelerateInterpolator()).start();
             }
 
             @Override
             public void onNext(MusicInfo musicInfo) {
-                mActivity.tvScanningMusicName.setText(musicInfo.getName());
+                mFragment.tvScanningMusicName.setText(musicInfo.getName());
                 Log.i("lll", "onNext: "+musicInfo.getName());
             }
 
             @Override
             public void onFail(String errorMsg) {
-                mActivity.showToast(errorMsg, ToastUtils.TYPE_FAIL);
-                mActivity.tvScanningMusicName.setVisibility(View.INVISIBLE);
+//                mFragment.showToast(errorMsg, ToastUtils.TYPE_FAIL);
+                mFragment.tvScanningMusicName.setVisibility(View.INVISIBLE);
             }
         });
     }

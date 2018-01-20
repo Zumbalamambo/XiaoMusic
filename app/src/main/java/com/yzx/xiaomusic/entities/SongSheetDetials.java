@@ -1898,7 +1898,7 @@ public class  SongSheetDetials extends BaseResposeBody {
 
                 private String name;
                 private int id;
-                private int picId;
+                private long picId;
                 private int img1v1Id;
                 private String briefDesc;
                 private String picUrl;
@@ -1924,11 +1924,11 @@ public class  SongSheetDetials extends BaseResposeBody {
                     this.id = id;
                 }
 
-                public int getPicId() {
+                public long getPicId() {
                     return picId;
                 }
 
-                public void setPicId(int picId) {
+                public void setPicId(long picId) {
                     this.picId = picId;
                 }
 

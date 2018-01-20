@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/fragmentation/fragmentation.iml" filepath="$PROJECT_DIR$/fragmentation/fragmentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/fragmentation_core/fragmentation_core.iml" filepath="$PROJECT_DIR$/fragmentation_core/fragmentation_core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xrecyclerview/xrecyclerview.iml" filepath="$PROJECT_DIR$/xrecyclerview/xrecyclerview.iml" />
     </modules>
   </component>
 </project>

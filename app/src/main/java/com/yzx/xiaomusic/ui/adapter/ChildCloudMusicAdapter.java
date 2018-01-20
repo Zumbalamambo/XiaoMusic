@@ -1,8 +1,6 @@
 package com.yzx.xiaomusic.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +13,6 @@ import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.entities.SongSheet;
-import com.yzx.xiaomusic.ui.main.cloud.music.songsheet.SongSheetActivity;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.ResourceUtils;
 import com.zhouwei.mzbanner.MZBannerView;
@@ -43,6 +40,7 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
     private SongSheet songSheet;
     private ArrayList<Integer> theFourIcons;
     private ArrayList<Integer> theFourTitles;
+    private OnItemClickLsitener onItemClickListener;
 
     {
         theFourIcons = new ArrayList<>();
@@ -97,9 +95,6 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
             default:
                 break;
         }
-
-
-
     }
 
 
@@ -127,23 +122,14 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
      * @param holder
      * @param position
      */
-    private void setTheFourData(Holder holder, final int position) {
+    private void setTheFourData(final Holder holder, final int position) {
 
         GlideUtils.loadImg(holder.itemView.getContext(),theFourIcons.get(position),holder.ivIcon);
         holder.tvTitle.setText(ResourceUtils.parseString(theFourTitles.get(position)));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (position){
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                }
+               onItemClickListener.onItemClickListener(holder.itemView,position,null,TYPE_THE_FOUR);
             }
         });
     }
@@ -152,7 +138,7 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
      * @param holder
      * @param position
      */
-    private void setSongSheetData(Holder holder, int position) {
+    private void setSongSheetData(final Holder holder, final int position) {
         if (songSheet != null) {
             final SongSheet.PlaylistsBean playlistsBean = songSheet.getPlaylists().get(position);
             holder.tvSongSheetDes.setText(playlistsBean.getName());
@@ -168,11 +154,8 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, SongSheetActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(KEY_SONG_SHEET,playlistsBean);
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
+
+                    onItemClickListener.onItemClickListener(holder.itemView,position,playlistsBean, TYPE_SONG_SHEET);
                 }
             });
         }
@@ -193,6 +176,9 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
         notifyDataSetChanged();
     }
 
+    public void setOnItemClickListener(OnItemClickLsitener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
     //创建ViewHolder
    public class Holder extends RecyclerView.ViewHolder {
 
@@ -245,5 +231,9 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
             // 数据绑定
             GlideUtils.loadImg(context,data.getCoverImgUrl(),mImageView);
         }
+    }
+
+    public interface OnItemClickLsitener{
+        void onItemClickListener(View itemView, int position, SongSheet.PlaylistsBean playlistsBean, int type);
     }
 }

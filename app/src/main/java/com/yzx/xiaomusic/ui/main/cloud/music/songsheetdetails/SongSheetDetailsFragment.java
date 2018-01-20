@@ -1,6 +1,6 @@
-package com.yzx.xiaomusic.ui.main.cloud.music.songsheet;
+package com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
-import com.yzx.xiaomusic.common.BaseActivity;
+import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
 import com.yzx.xiaomusic.ui.adapter.ChildCloudMusicAdapter;
@@ -29,8 +29,9 @@ import butterknife.BindView;
  * Description  歌单详情
  */
 
-public class SongSheetActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener,SongSheetContract.View {
+public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayout.OnOffsetChangedListener,SongSheetDetailsContract.View {
     private static final String TAG = "yglSongSheetActivity";
+    private static SongSheetDetailsFragment songSheetFragment;
     @BindView(R.id.iv_songSheetBg)
     ImageView ivSongSheetBg;
     @BindView(R.id.iv_littleBg)
@@ -58,11 +59,20 @@ public class SongSheetActivity extends BaseActivity implements AppBarLayout.OnOf
     @BindView(R.id.tv_share_num)
     TextView tvShareNum;
 
-
-    private String songSheetId;
     private CloudMusicAdapter adapter;
-    private SongSheetPresenter mPresenter;
+    private SongSheetDetailsPresenter mPresenter;
     private String songSheetTitle;
+
+    @SuppressLint("ValidFragment")
+    private SongSheetDetailsFragment() {
+    }
+
+    public static SongSheetDetailsFragment getInstance(){
+        if (songSheetFragment==null){
+            songSheetFragment = new SongSheetDetailsFragment();
+        }
+        return songSheetFragment;
+    }
 
     @Override
     protected int getLayoutId() {
@@ -72,25 +82,23 @@ public class SongSheetActivity extends BaseActivity implements AppBarLayout.OnOf
     @Override
     public void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        SongSheet.PlaylistsBean playlistsBean = (SongSheet.PlaylistsBean) bundle.getSerializable(ChildCloudMusicAdapter.KEY_SONG_SHEET);
+
+        Bundle arguments = getArguments();
+        SongSheet.PlaylistsBean playlistsBean = (SongSheet.PlaylistsBean) arguments.getSerializable(ChildCloudMusicAdapter.KEY_SONG_SHEET);
         GlideUtils.loadImg(context, playlistsBean.getCoverImgUrl(), -1, GlideUtils.TRANSFORM_BLUR, ivSongSheetBg);
         GlideUtils.loadImg(context, playlistsBean.getCoverImgUrl(), -1, ivLittleBg);
         songSheetTitle = playlistsBean.getName();
-        showActionBarTitle(R.string.songSheet);
+
         tvTitle.setText(playlistsBean.getName());
-        mPresenter = new SongSheetPresenter(this);
+        mPresenter = new SongSheetDetailsPresenter(this);
         getSongSheetDetails(String.valueOf(playlistsBean.getId()));
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        setSupportActionBar(toolBar);
-        showBackArrow();
-        showActionBarTitle(R.string.songSheet);
+        setToolBar(toolBar,R.string.songSheet);
         collapasingToolBar.setTitleEnabled(false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CloudMusicAdapter();
         recyclerView.setAdapter(adapter);
         appBarLayout.addOnOffsetChangedListener(this);
@@ -103,9 +111,9 @@ public class SongSheetActivity extends BaseActivity implements AppBarLayout.OnOf
         float alpha = 1+(float) verticalOffset / (float) totalScrollRange;
         layoutSongSheetHead.animate().alpha(alpha).setInterpolator(new LinearInterpolator()).setDuration(0).start();
         if (Math.abs(verticalOffset)> totalScrollRange*0.2f){
-            showActionBarTitle(songSheetTitle);
+            setToolBar(toolBar,songSheetTitle);
         }else {
-            showActionBarTitle(R.string.songSheet);
+            setToolBar(toolBar,R.string.songSheet);
         }
     }
 
