@@ -16,6 +16,7 @@ import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.ui.adapter.LocalMusicAdapter;
+import com.yzx.xiaomusic.ui.main.MainActivity;
 import com.yzx.xiaomusic.utils.ScanMusicUtils;
 
 import java.lang.reflect.Method;
@@ -61,6 +62,7 @@ public class LocalMusicFragment extends BaseFragment {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+//        setToolBar(toolBar,R.string.localMusic);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new LocalMusicAdapter();
         recyclerView.setAdapter(adapter);
@@ -69,11 +71,9 @@ public class LocalMusicFragment extends BaseFragment {
             showScanAnimation();
         }
         adapter.setDatas(musicInfos);
+        ((MainActivity)getSupportDelegate().getActivity()).setSupportActionBar(toolBar);
         toolBar.setTitle(R.string.localMusic);
         toolBar.setNavigationIcon(R.drawable.ic_back);
-
-//        showActionBarTitle(R.string.localMusic);
-//        showBackArrow();
     }
 
     @Override
@@ -94,19 +94,6 @@ public class LocalMusicFragment extends BaseFragment {
         inflater.inflate(R.menu.menu_music_local_scan, menu);
     }
 
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getActivity().getMenuInflater().inflate(R.menu.menu_music_local_scan, menu);
-//        return true;
-//    }
-
-
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//    }
-
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
@@ -124,25 +111,10 @@ public class LocalMusicFragment extends BaseFragment {
         }
     }
 
-
-//    @SuppressLint("RestrictedApi")
-//    @Override
-//    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
-//        if (menu != null) {
-//            if ("MenuBuilder".equals(menu.getClass().getSimpleName())) {
-//                try {
-//                    @SuppressLint("PrivateApi")
-//                    Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
-//                    m.setAccessible(true);
-//                    m.invoke(menu, true);
-//                } catch (Exception e) {
-//                    Log.e(getClass().getSimpleName(), "onMenuOpened...unable to set icons for overflow menu", e);
-//                }
-//            }
-//        }
-//        return super.onPrepareOptionsPanel(view, menu);
-//    }
-
+    @Override
+    public boolean onBackPressedSupport() {
+        return super.onBackPressedSupport();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

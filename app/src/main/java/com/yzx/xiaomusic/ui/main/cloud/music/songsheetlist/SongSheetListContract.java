@@ -3,7 +3,6 @@ package com.yzx.xiaomusic.ui.main.cloud.music.songsheetlist;
 import com.yzx.xiaomusic.common.BaseActivity;
 import com.yzx.xiaomusic.common.observel.MvpObserver;
 import com.yzx.xiaomusic.entities.BaseResposeBody;
-import com.yzx.xiaomusic.entities.SongSheet;
 
 /**
  * Created by yzx on 2018/1/19.
@@ -24,11 +23,11 @@ public interface SongSheetListContract {
          */
         void getSongSheetList(String cat, String order, int offset, int limit, boolean total);
 
-        /**
-         * 设置数据
-         * @param songSheet
-         */
-        void setDatas(SongSheet songSheet);
+//        /**
+//         * 设置数据
+//         * @param songSheet
+//         */
+//        void setDatas(SongSheet songSheet);
     }
 
     interface Presenter{

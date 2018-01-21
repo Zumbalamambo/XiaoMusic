@@ -69,7 +69,7 @@ public class LoadingMoreFooter extends LinearLayout {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         progressView = new  AVLoadingIndicatorView(this.getContext());
-        progressView.setIndicatorColor(0xffB5B5B5);
+        progressView.setIndicatorColor(0xffff0000);
         progressView.setIndicatorId(ProgressStyle.BallSpinFadeLoader);
         progressCon.setView(progressView);
 
@@ -99,7 +99,7 @@ public class LoadingMoreFooter extends LinearLayout {
             progressCon.setView(new ProgressBar(getContext(), null, android.R.attr.progressBarStyle));
         }else{
             progressView = new  AVLoadingIndicatorView(this.getContext());
-            progressView.setIndicatorColor(0xffB5B5B5);
+            progressView.setIndicatorColor(0xffff0000);
             progressView.setIndicatorId(style);
             progressCon.setView(progressView);
         }

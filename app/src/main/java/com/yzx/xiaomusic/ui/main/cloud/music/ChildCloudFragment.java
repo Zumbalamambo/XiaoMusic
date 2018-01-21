@@ -57,6 +57,7 @@ public class ChildCloudFragment extends BaseFragment implements ChildCloudContra
     public void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         mPresenter = new ChildCloudPresenter(this);
+        getSongSheetList("全部","hot",0,6,true);
     }
 
     @Override
@@ -107,12 +108,6 @@ public class ChildCloudFragment extends BaseFragment implements ChildCloudContra
         adapters.add(songSheetAdapter);
         delegateAdapter.setAdapters(adapters);
 
-    }
-
-    @Override
-    public void loadData() {
-        super.loadData();
-        getSongSheetList("全部","hot",0,6,true);
     }
 
     @Override

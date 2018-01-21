@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yzx.xiaomusic.R;
+import com.yzx.xiaomusic.ui.main.MainActivity;
 import com.yzx.xiaomusic.utils.ResourceUtils;
 
 import butterknife.ButterKnife;
@@ -93,11 +94,14 @@ public abstract class BaseFragment extends SupportFragment {
     public void setToolBar(Toolbar toolBar, @StringRes int title){
         setToolBar(toolBar,title, R.drawable.ic_back);
     }
-    public void setToolBar(Toolbar toolBar, @StringRes int title, @DrawableRes int icon){
+    public void setToolBar(@NonNull Toolbar toolBar, @StringRes int title, @DrawableRes int icon){
         setToolBar(toolBar, ResourceUtils.parseString(title));
     }
-    public void setToolBar(Toolbar toolBar, String title, @DrawableRes int icon){
-        if (toolBar!=null){
+    public void setToolBar(@NonNull Toolbar toolBar, String title, @DrawableRes int icon){
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity!=null) {
+            mainActivity.setSupportActionBar(toolBar);
             toolBar.setTitle(title);
             toolBar.setNavigationIcon(icon);
         }

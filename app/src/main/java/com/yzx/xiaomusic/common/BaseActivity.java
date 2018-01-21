@@ -139,9 +139,11 @@ public abstract class BaseActivity extends SupportActivity implements BaseView {
 
         if (android.R.id.home == item.getItemId()) {
             if (Build.VERSION.SDK_INT>=21){
-                finishAfterTransition();
+//                finishAfterTransition();
+                onBackPressedSupport();
             }else {
-                finish();
+//                finish();
+                onBackPressedSupport();
             }
             return true;
         }

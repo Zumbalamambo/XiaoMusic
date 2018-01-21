@@ -28,3 +28,18 @@
 -keep class android.support.v7.widget.ChildHelper { *; }
 -keep class android.support.v7.widget.ChildHelper$Bucket { *; }
 -keep class android.support.v7.widget.RecyclerView$LayoutManager { *; }
+
+#腾讯bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+
+#网络请求
+# Retrofit okhttp
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontnote retrofit2.Platform
+-dontnote retrofit2.Platform$IOS$MainThreadExecutor
+-dontwarn retrofit2.Platform$Java8
+
+# Gson
+-keep class com.yzx.xiaomusic.model.entities.**{*;}

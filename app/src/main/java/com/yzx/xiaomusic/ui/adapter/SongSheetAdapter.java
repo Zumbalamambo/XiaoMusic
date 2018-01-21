@@ -13,6 +13,8 @@ import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.ResourceUtils;
 
+import java.util.List;
+
 /**
  * Created by yzx on 2018/1/20.
  * Description
@@ -21,7 +23,7 @@ import com.yzx.xiaomusic.utils.ResourceUtils;
 public class SongSheetAdapter extends RecyclerView.Adapter<SongSheetAdapter.Holder> {
 
     private OnItemClickLsitener onItemClickListener;
-    private SongSheet songSheet;
+    private List<SongSheet.PlaylistsBean> songSheets;
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -30,8 +32,8 @@ public class SongSheetAdapter extends RecyclerView.Adapter<SongSheetAdapter.Hold
 
     @Override
     public void onBindViewHolder(final Holder holder, final int position) {
-        if (songSheet != null) {
-            final SongSheet.PlaylistsBean playlistsBean = songSheet.getPlaylists().get(position);
+        if (songSheets != null) {
+            final SongSheet.PlaylistsBean playlistsBean = songSheets.get(position);
             holder.tvSongSheetDes.setText(playlistsBean.getName());
             if (playlistsBean.getPlayCount()>100000){
                 holder.tvSongSheetNum.setText(String.format("%s%s",
@@ -54,8 +56,12 @@ public class SongSheetAdapter extends RecyclerView.Adapter<SongSheetAdapter.Hold
         }
     }
 
-    public void setDatas(SongSheet songSheet) {
-        this.songSheet = songSheet;
+    public void setDatas(List<SongSheet.PlaylistsBean> songSheets) {
+        if (this.songSheets ==null){
+            this.songSheets = songSheets;
+        }else {
+            this.songSheets.addAll(songSheets);
+        }
         notifyDataSetChanged();
     }
 
@@ -65,7 +71,7 @@ public class SongSheetAdapter extends RecyclerView.Adapter<SongSheetAdapter.Hold
 
     @Override
     public int getItemCount() {
-        return (songSheet==null||songSheet.getPlaylists()==null)?0:songSheet.getPlaylists().size();
+        return (songSheets==null)?0:songSheets.size();
     }
 
     public class Holder extends RecyclerView.ViewHolder {
