@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:background="@color/colorGray"
+        android:scaleType="centerCrop"
+        android:id="@+id/iv_play_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include layout="@layout/layout_common_tool_bar_transparent" />
+
+    <LinearLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <!--歌词布局-->
+            <RelativeLayout
+                android:visibility="invisible"
+                android:id="@+id/layout_play_lyrics"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <!--控制音量-->
+                <LinearLayout
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/iv_voice_level"
+                        android:src="@drawable/ic_voice_level"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <android.support.v7.widget.AppCompatSeekBar
+                        android:id="@+id/seekBar_voice"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="我是歌词"
+                    android:textColor="@color/colorWhite"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <ImageView
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_music_play_more"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <!--黑胶片-->
+                <ImageView
+                    android:id="@+id/iv_play_card"
+                    android:src="@drawable/ic_music_play_card"
+                    android:layout_centerInParent="true"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp" />
+                <!--黑胶片上面的的白色东东-->
+                <ImageView
+                    android:id="@+id/iv_play_ear"
+                    android:translationY="-18dp"
+                    android:src="@drawable/ic_music_play_ear"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:paddingBottom="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--进度条-->
+            <LinearLayout
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!--音乐已经播放多久了-->
+                <TextView
+                    android:text="0:00"
+                    android:textSize="10sp"
+                    android:textColor="@color/colorWhite"
+                    android:id="@+id/tv_music_time_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="SmallSp" />
+                <android.support.v7.widget.AppCompatSeekBar
+                    android:id="@+id/seekBar_music_seek"
+                    android:padding="5dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <!--音乐已经还剩多久-->
+                <TextView
+                    android:text="3:00"
+                    android:textSize="10sp"
+                    android:textColor="@color/colorLightWhite"
+                    android:id="@+id/tv_music_time_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
+
+            <!--控制播放-->
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!---->
+                <ImageView
+                    android:src="@drawable/ic_music_play_mode_list_loop"
+                    android:id="@+id/iv_play_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:src="@drawable/ic_music_play_previous"
+                    android:id="@+id/iv_play_previous"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:src="@drawable/ic_music_play_play"
+                    android:id="@+id/iv_play"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:src="@drawable/ic_music_play_next"
+                    android:id="@+id/iv_play_next"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:src="@drawable/ic_music_play_play_list"
+                    android:id="@+id/iv_play_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -16,5 +16,9 @@
     <color name="colorBgToast">#88000000</color>
     <color name="colorRed">#f55063</color>
     <color name="colorDarkGray">#333333</color>
-    <color name="colorIconGray">#151111</color>
+
+
+    <color name="colorMusicNameGray">#2c2c2c</color>
+    <color name="colorMusicArtistGray">#8a8a8a</color>
+    <color name="colorIconGray">#8a8a8a</color>
 </resources>

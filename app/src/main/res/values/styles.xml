@@ -39,8 +39,8 @@
 
     <style name="style_radioButton" parent="waterEffect">
         <item name="android:button">@null</item>
-        <item name="android:layout_width">63dp</item>
-        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">25dp</item>
     </style>
 
     <style name="style_song_sheet" parent="waterEffect">

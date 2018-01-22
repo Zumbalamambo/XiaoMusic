@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.yzx.xiaomusic.R;
+import com.yzx.xiaomusic.entities.Banner;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.ResourceUtils;
@@ -20,6 +21,7 @@ import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by yzx on 2018/1/19.
@@ -41,6 +43,7 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
     private ArrayList<Integer> theFourIcons;
     private ArrayList<Integer> theFourTitles;
     private OnItemClickLsitener onItemClickListener;
+    private List<Banner.BannersBean> banners;
 
     {
         theFourIcons = new ArrayList<>();
@@ -105,9 +108,9 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
      */
     private void setBannerData(Holder holder, int position) {
 
-        if (songSheet!=null){
+        if (banners!=null){
 
-            holder.bannerView.setPages(songSheet.getPlaylists(), new MZHolderCreator<BannerViewHolder>() {
+            holder.bannerView.setPages(banners, new MZHolderCreator<BannerViewHolder>() {
                 @Override
                 public BannerViewHolder createViewHolder() {
                     return new BannerViewHolder();
@@ -171,8 +174,21 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
         return layoutHelper;
     }
 
-    public void setDatas(SongSheet songSheet) {
+    /**
+     * 设置歌单数据
+     * @param songSheet
+     */
+    public void setSongSheetDatas(SongSheet songSheet) {
         this.songSheet = songSheet;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 设置Banner数据
+     * @param banners
+     */
+    public void setBannerDatas(List<Banner.BannersBean> banners){
+        this.banners = banners;
         notifyDataSetChanged();
     }
 
@@ -216,7 +232,7 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
     }
 
 
-    public class BannerViewHolder implements MZViewHolder<SongSheet.PlaylistsBean> {
+    public class BannerViewHolder implements MZViewHolder<Banner.BannersBean> {
         private ImageView mImageView;
         @Override
         public View createView(Context context) {
@@ -227,9 +243,9 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
         }
 
         @Override
-        public void onBind(Context context, int position, SongSheet.PlaylistsBean data) {
+        public void onBind(Context context, int position, Banner.BannersBean data) {
             // 数据绑定
-            GlideUtils.loadImg(context,data.getCoverImgUrl(),mImageView);
+            GlideUtils.loadImg(context,data.getPic(),mImageView);
         }
     }
 

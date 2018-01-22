@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/layout_common_tool_bar" />
+
+    <RelativeLayout
+        android:layout_marginBottom="@dimen/playControlHeight"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:textColor="@color/colorWhite"
+            android:translationY="-50dp"
+            android:gravity="center"
+            android:background="@color/colorAccent"
+            android:id="@+id/tv_scanning_music_name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+    </RelativeLayout>
+
+    <include layout="@layout/layout_bottom_play"/>
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,7 @@
 package com.yzx.xiaomusic.network.api;
 
 
+import com.yzx.xiaomusic.entities.Banner;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
 
@@ -24,7 +25,7 @@ public interface MuiscApi {
      * @param limit
      * @return
      */
-    @GET("playlist/list")
+    @GET("top/playlist")
     Observable<SongSheet> getSongSheet(@Query("cat") String cat, @Query("order") String order, @Query("offset") int offset,
                                        @Query("total") boolean total, @Query("limit") int limit);
 
@@ -33,6 +34,13 @@ public interface MuiscApi {
      * @param id
      * @return
      */
-    @GET("playlist/detail")
+    @GET("http://music.163.com/api/playlist/detail")
     Observable<SongSheetDetials> getSongSheetDetails(@Query("id") String id);
+
+    /**
+     * 获取Banner
+     * @return
+     */
+    @GET("banner")
+    Observable<Banner> getBanner();
 }

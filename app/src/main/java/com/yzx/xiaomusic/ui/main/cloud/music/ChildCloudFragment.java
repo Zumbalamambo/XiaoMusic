@@ -34,8 +34,8 @@ public class ChildCloudFragment extends BaseFragment implements ChildCloudContra
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     private ChildCloudPresenter mPresenter;
-    private ChildCloudMusicAdapter songSheetAdapter;
-    private ChildCloudMusicAdapter bannerAdapter;
+    public ChildCloudMusicAdapter songSheetAdapter;
+    public ChildCloudMusicAdapter bannerAdapter;
 
     @SuppressLint("ValidFragment")
     private ChildCloudFragment() {
@@ -58,6 +58,7 @@ public class ChildCloudFragment extends BaseFragment implements ChildCloudContra
         super.initData(savedInstanceState);
         mPresenter = new ChildCloudPresenter(this);
         getSongSheetList("全部","hot",0,6,true);
+        getBanner();
     }
 
     @Override
@@ -116,10 +117,10 @@ public class ChildCloudFragment extends BaseFragment implements ChildCloudContra
     }
 
     @Override
-    public void setDatas(SongSheet songSheet) {
-        bannerAdapter.setDatas(songSheet);
-        songSheetAdapter.setDatas(songSheet);
+    public void getBanner() {
+        mPresenter.getBanner();
     }
+
 
     @Override
     public void onItemClickListener(View itemView, int position, SongSheet.PlaylistsBean playlistsBean, int type) {

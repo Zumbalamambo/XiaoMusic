@@ -5,8 +5,6 @@ import android.os.Bundle;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseActivity;
 
-import me.yokeyword.fragmentation.anim.FragmentAnimator;
-
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
 
@@ -22,10 +20,5 @@ public class MainActivity extends BaseActivity {
         if (fragment == null) {
             loadRootFragment(R.id.layout_container, new MainFragment());
         }
-    }
-
-    @Override
-    public FragmentAnimator onCreateFragmentAnimator() {
-        return super.onCreateFragmentAnimator();
     }
 }

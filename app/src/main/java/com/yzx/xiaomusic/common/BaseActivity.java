@@ -14,6 +14,7 @@ import com.yzx.xiaomusic.utils.ToastUtils;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 /**
  * Created by yzx on 2018/1/10.
@@ -39,6 +40,10 @@ public abstract class BaseActivity extends SupportActivity implements BaseView {
         initView(savedInstanceState);
     }
 
+    @Override
+    public FragmentAnimator onCreateFragmentAnimator() {
+        return super.onCreateFragmentAnimator();
+    }
     /**
      * setContentView之前的操作
      */

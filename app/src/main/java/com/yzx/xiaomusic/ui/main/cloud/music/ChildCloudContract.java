@@ -2,7 +2,7 @@ package com.yzx.xiaomusic.ui.main.cloud.music;
 
 import com.yzx.xiaomusic.common.BaseActivity;
 import com.yzx.xiaomusic.common.observel.MvpObserver;
-import com.yzx.xiaomusic.entities.BaseResposeBody;
+import com.yzx.xiaomusic.entities.Banner;
 import com.yzx.xiaomusic.entities.SongSheet;
 
 /**
@@ -25,10 +25,15 @@ public interface ChildCloudContract {
         void getSongSheetList(String cat,String order,int offset,int limit,boolean total);
 
         /**
-         * 设置数据
-         * @param songSheet
+         * 获取Banner数据
          */
-        void setDatas(SongSheet songSheet);
+        void getBanner();
+
+//        /**
+//         * 设置数据
+//         * @param songSheet
+//         */
+//        void setDatas(SongSheet songSheet);
     }
 
     interface Presenter{
@@ -41,9 +46,15 @@ public interface ChildCloudContract {
          * @param total
          */
         void getSongSheetDetails(String cat,String order,int offset,int limit,boolean total);
+
+
+        /**
+         * 获取Banner数据
+         */
+        void getBanner();
     }
 
-    interface Model<B extends BaseResposeBody,V extends BaseActivity>{
+    interface Model<V extends BaseActivity>{
         /**
          *
          * @param cat
@@ -53,6 +64,11 @@ public interface ChildCloudContract {
          * @param total
          * @param observer
          */
-        void getSongSheetDetails(String cat,String order,int offset,int limit,boolean total, MvpObserver<B> observer);
+        void getSongSheetDetails(String cat,String order,int offset,int limit,boolean total, MvpObserver<SongSheet> observer);
+
+        /**
+         * 获取Banner数据
+         */
+        void getBanner(MvpObserver<Banner> observer);
     }
 }

@@ -1,9 +1,12 @@
 package com.yzx.xiaomusic.ui.main;
 
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import com.yzx.xiaomusic.R;
@@ -34,6 +37,12 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
     ViewPager viewPager;
     @BindView(R.id.toolBar)
     Toolbar toolBar;
+    @BindView(R.id.layout_music_control)
+    LinearLayout layoutMusicControl;
+    @BindView(R.id.navigationView)
+    NavigationView navigationView;
+    @BindView(R.id.drawerLayout)
+    DrawerLayout drawerLayout;
 
     @Override
     protected int getLayoutId() {
@@ -42,7 +51,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-
+        initPlayWidget(layoutMusicControl,true);
         toolBar.setNavigationIcon(R.drawable.ic_menu);
         viewPager.setOffscreenPageLimit(3);
         MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(getChildFragmentManager());
@@ -94,4 +103,5 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
     public void onPageScrollStateChanged(int state) {
 
     }
+
 }

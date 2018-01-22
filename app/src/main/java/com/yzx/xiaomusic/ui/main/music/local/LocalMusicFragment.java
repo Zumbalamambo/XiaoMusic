@@ -9,29 +9,32 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
+import com.yzx.xiaomusic.common.OnItemClickLsitener;
 import com.yzx.xiaomusic.entities.MusicInfo;
-import com.yzx.xiaomusic.ui.adapter.LocalMusicAdapter;
-import com.yzx.xiaomusic.ui.main.MainActivity;
+import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
+import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.ScanMusicUtils;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.Unbinder;
 
 /**
- *
  * @author yzx
  * @date 2018/1/19
- * Description
+ * Description  本地音乐页面
  */
 
-public class LocalMusicFragment extends BaseFragment {
+public class LocalMusicFragment extends BaseFragment implements OnItemClickLsitener {
     private static LocalMusicFragment localMusicFragment;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -41,39 +44,27 @@ public class LocalMusicFragment extends BaseFragment {
     TextView tvScanningMusicName;
     @BindView(R.id.toolBar)
     Toolbar toolBar;
+    @BindView(R.id.layout_music_control)
+    LinearLayout layoutMusicControl;
+    Unbinder unbinder;
     private List<MusicInfo> musicInfos;
     private LocalMusicPresenter mPresenter;
-    public LocalMusicAdapter adapter;
+    public CommonMusicAdapter adapter;
 
     @SuppressLint("ValidFragment")
     private LocalMusicFragment() {
     }
 
-    public static LocalMusicFragment getInstance(){
-        if (localMusicFragment == null){
+    public static LocalMusicFragment getInstance() {
+        if (localMusicFragment == null) {
             localMusicFragment = new LocalMusicFragment();
         }
         return localMusicFragment;
     }
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_music_local;
-    }
 
     @Override
-    protected void initView(Bundle savedInstanceState) {
-//        setToolBar(toolBar,R.string.localMusic);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new LocalMusicAdapter();
-        recyclerView.setAdapter(adapter);
-        if (musicInfos == null) {//
-            mPresenter.getLocalMusicInfo(getContext());
-            showScanAnimation();
-        }
-        adapter.setDatas(musicInfos);
-        ((MainActivity)getSupportDelegate().getActivity()).setSupportActionBar(toolBar);
-        toolBar.setTitle(R.string.localMusic);
-        toolBar.setNavigationIcon(R.drawable.ic_back);
+    protected int getLayoutId() {
+        return R.layout.fragment_music_local;
     }
 
     @Override
@@ -81,6 +72,21 @@ public class LocalMusicFragment extends BaseFragment {
         super.initData(savedInstanceState);
         musicInfos = ScanMusicUtils.getLocalMusicInfoByPreference();
         mPresenter = new LocalMusicPresenter(this);
+    }
+
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        setToolBar(toolBar, R.string.localMusic);
+        initPlayWidget(layoutMusicControl,false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new CommonMusicAdapter();
+        adapter.setOnItemClickListener(this);
+        recyclerView.setAdapter(adapter);
+        if (musicInfos == null) {
+            mPresenter.getLocalMusicInfo(getContext());
+            showScanAnimation();
+        }
+        adapter.setDatas(CommonMusicAdapter.DATA_TYPE_LOCAL_MUSIC, musicInfos);
     }
 
 
@@ -112,11 +118,6 @@ public class LocalMusicFragment extends BaseFragment {
     }
 
     @Override
-    public boolean onBackPressedSupport() {
-        return super.onBackPressedSupport();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_scan:
@@ -126,5 +127,10 @@ public class LocalMusicFragment extends BaseFragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onItemClickListener(View itemView, int position, Object data, int type) {
+        start(PlayFragment.getInstance());
     }
 }

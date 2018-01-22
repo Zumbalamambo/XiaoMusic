@@ -7,5 +7,5 @@ package com.yzx.xiaomusic.network;
 
 class Constants {
 //    http://music.163.com/api/playlist/list
-    public static final String BASE_URL = "http://music.163.com/api/";
+    public static final String BASE_URL = "http://musicapi.leanapp.cn/";
 }

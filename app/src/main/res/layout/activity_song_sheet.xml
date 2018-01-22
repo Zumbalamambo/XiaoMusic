@@ -41,7 +41,7 @@
                     android:src="@drawable/zhanweitu" />
 
                 <TextView
-                    android:id="@+id/tv_title"
+                    android:id="@+id/tv_song_sheet_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -54,7 +54,7 @@
                     style="@style/waterEffect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_title"
+                    android:layout_below="@id/tv_song_sheet_title"
                     android:layout_marginTop="20dp"
                     android:layout_toEndOf="@id/iv_littleBg"
                     android:gravity="center_vertical"
@@ -147,19 +147,56 @@
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolBar"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
+                app:layout_collapseMode="pin"
                 android:layout_marginTop="25dp"
-                android:background="@color/colorTransparent"
-                app:layout_collapseMode="pin" />
+                app:popupTheme="@style/popMenu_under_actionBar"
+                app:title="@null"
+                android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:navigationIcon="@drawable/ic_back"
+                android:id="@+id/toolBar"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:text="我是标题"
+                        android:id="@+id/tv_title"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:layout_marginTop="5dp"
+                        android:text="我是标题"
+                        android:id="@+id/tv_subtitle"
+                        android:textSize="10sp"
+                        android:textColor="@color/colorLightWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="SmallSp" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginBottom="@dimen/playControlHeight"
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <include layout="@layout/layout_bottom_play"/>
 
 </android.support.design.widget.CoordinatorLayout>

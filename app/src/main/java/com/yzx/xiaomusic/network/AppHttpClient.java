@@ -57,6 +57,7 @@ public class AppHttpClient {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
+        Log.i(TAG, "AppHttpClient: 请求"+Constants.BASE_URL);
 
 //        LogUtils.d(AppHttpClient.class, "BaseUrl" + (configInfo == null ? Constants.BASE_URL : configInfo.getF_APIUrl()));
     }

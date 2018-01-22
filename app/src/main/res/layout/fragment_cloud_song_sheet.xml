@@ -4,21 +4,15 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.design.widget.AppBarLayout
-        android:paddingTop="25dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v7.widget.Toolbar
-            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
-            android:id="@+id/toolBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </android.support.design.widget.AppBarLayout>
+    <include layout="@layout/layout_common_tool_bar"/>
 
     <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:layout_marginBottom="@dimen/playControlHeight"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <include layout="@layout/layout_bottom_play"/>
 
 </android.support.design.widget.CoordinatorLayout>

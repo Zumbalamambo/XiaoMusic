@@ -47,8 +47,6 @@
             android:theme="@style/AppTheme.TranslucentTranslucent"/>
         <activity android:name=".ui.login.RegisterActivity"
             android:theme="@style/AppTheme.TranslucentTranslucent"/>
-        <activity android:name=".ui.main.play.PlayActivity"
-            android:theme="@style/AppTheme.TranslucentTranslucent"/>
     </application>
 
 </manifest>

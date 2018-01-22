@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.widget.AppBarLayout
+        android:paddingTop="25dp"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"/>
+
+            <RadioGroup
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <RadioButton
+                    android:layout_marginEnd="20dp"
+                    android:id="@+id/rb_music"
+                    android:checked="true"
+                    android:background="@drawable/ic_muisc"
+                    style="@style/style_radioButton" />
+                <RadioButton
+                    android:id="@+id/rb_cloud"
+                    android:background="@drawable/ic_cloud"
+                    style="@style/style_radioButton" />
+                <RadioButton
+                    android:layout_marginStart="20dp"
+                    android:id="@+id/rb_friend"
+                    android:background="@drawable/ic_friends"
+                    style="@style/style_radioButton" />
+            </RadioGroup>
+        </RelativeLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/viewPager"
+        android:layout_marginBottom="@dimen/playControlHeight"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <include layout="@layout/layout_bottom_play"
+        android:layout_gravity="bottom"
+        tools:ignore="IncludeLayoutParam" />
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.yzx.xiaomusic.R;
@@ -19,7 +20,6 @@ import com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails.SongSheetDetailsFr
 import com.yzx.xiaomusic.utils.DensityUtils;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 
 /**
  * Created by yzx on 2018/1/12.
@@ -34,7 +34,8 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
     XRecyclerView recyclerView;
     @BindView(R.id.toolBar)
     Toolbar toolBar;
-    Unbinder unbinder;
+    @BindView(R.id.layout_music_control)
+    LinearLayout layoutMusicControl;
     private SongSheetListPresenter mPresenter;
     public SongSheetAdapter adapter;
     public int offset;
@@ -63,7 +64,8 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        setToolBar(toolBar,R.string.songSheet);
+        setToolBar(toolBar, R.string.songSheet);
+        initPlayWidget(layoutMusicControl,false);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
         View headView = getLayoutInflater().inflate(R.layout.head_song_sheet, null);
 
