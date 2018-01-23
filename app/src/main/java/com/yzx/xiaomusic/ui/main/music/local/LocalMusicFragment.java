@@ -18,15 +18,14 @@ import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.common.OnItemClickLsitener;
 import com.yzx.xiaomusic.entities.MusicInfo;
+import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
-import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.ScanMusicUtils;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 
 /**
  * @author yzx
@@ -34,11 +33,11 @@ import butterknife.Unbinder;
  * Description  本地音乐页面
  */
 
-public class LocalMusicFragment extends BaseFragment implements OnItemClickLsitener {
+public class LocalMusicFragment extends BaseFragment implements OnItemClickLsitener{
+    private static final String TAG = "yglLocalMusicFragment";
     private static LocalMusicFragment localMusicFragment;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-
     public static final String MUSIC_INFO = "musicInfo";
     @BindView(R.id.tv_scanning_music_name)
     TextView tvScanningMusicName;
@@ -46,7 +45,6 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
     Toolbar toolBar;
     @BindView(R.id.layout_music_control)
     LinearLayout layoutMusicControl;
-    Unbinder unbinder;
     private List<MusicInfo> musicInfos;
     private LocalMusicPresenter mPresenter;
     public CommonMusicAdapter adapter;
@@ -77,7 +75,7 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
     @Override
     protected void initView(Bundle savedInstanceState) {
         setToolBar(toolBar, R.string.localMusic);
-        initPlayWidget(layoutMusicControl,false);
+        initPlayWidget(layoutMusicControl);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CommonMusicAdapter();
         adapter.setOnItemClickListener(this);
@@ -131,6 +129,10 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
 
     @Override
     public void onItemClickListener(View itemView, int position, Object data, int type) {
-        start(PlayFragment.getInstance());
+        updatePlayWidgetData(data,type);
+        getPlayService().play((MusicInfo) data, PlayService.TYPE_LOCAL);
+
     }
+
+
 }

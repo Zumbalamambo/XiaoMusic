@@ -65,7 +65,7 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
     @Override
     protected void initView(Bundle savedInstanceState) {
         setToolBar(toolBar, R.string.songSheet);
-        initPlayWidget(layoutMusicControl,false);
+        initPlayWidget(layoutMusicControl);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
         View headView = getLayoutInflater().inflate(R.layout.head_song_sheet, null);
 

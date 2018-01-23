@@ -51,7 +51,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        initPlayWidget(layoutMusicControl,true);
+        initPlayWidget(layoutMusicControl);
         toolBar.setNavigationIcon(R.drawable.ic_menu);
         viewPager.setOffscreenPageLimit(3);
         MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(getChildFragmentManager());

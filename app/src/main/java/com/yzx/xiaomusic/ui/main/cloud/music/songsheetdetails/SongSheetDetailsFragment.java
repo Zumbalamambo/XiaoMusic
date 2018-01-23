@@ -23,10 +23,11 @@ import com.yzx.xiaomusic.entities.SongSheetDetials;
 import com.yzx.xiaomusic.ui.adapter.ChildCloudMusicAdapter;
 import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
 import com.yzx.xiaomusic.ui.mv.MvFragment;
-import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.GlideUtils;
 
 import butterknife.BindView;
+
+import static com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter.DATA_TYPE_SONG_SHEET_MUSIC;
 
 /**
  * @author yzx
@@ -105,7 +106,7 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
     @Override
     protected void initView(Bundle savedInstanceState) {
         setToolBar(toolBar, R.string.songSheet);
-        initPlayWidget(layoutMusicControl,false);
+        initPlayWidget(layoutMusicControl);
         collapasingToolBar.setTitleEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CommonMusicAdapter();
@@ -120,11 +121,6 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
         int totalScrollRange = appBarLayout.getTotalScrollRange();
         float alpha = 1 + (float) verticalOffset / (float) totalScrollRange;
         layoutSongSheetHead.animate().alpha(alpha).setInterpolator(new LinearInterpolator()).setDuration(0).start();
-        if (Math.abs(verticalOffset) > totalScrollRange * 0.2f) {
-            setToolBar(toolBar, songSheetTitle, subTitle);
-        } else {
-            setToolBar(toolBar, R.string.songSheet);
-        }
     }
 
     @Override
@@ -138,7 +134,7 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
 
         GlideUtils.loadImg(context, detials.getResult().getCreator().getAvatarUrl(), GlideUtils.TYPE_HEAD, GlideUtils.TRANSFORM_CIRCLE, ivHeadAuthor);
         tvNameAuthor.setText(detials.getResult().getCreator().getNickname());
-        adapter.setDatas(CommonMusicAdapter.DATA_TYPE_SONG_SHEET_MUSIC, detials.getResult().getTracks());
+        adapter.setDatas(DATA_TYPE_SONG_SHEET_MUSIC, detials.getResult().getTracks());
         tvCollectionNum.setText(String.valueOf(detials.getResult().getSubscribedCount()));
         tvEvaluteNum.setText(String.valueOf(detials.getResult().getCommentCount()));
         tvShareNum.setText(String.valueOf(detials.getResult().getShareCount()));
@@ -160,7 +156,11 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
                 start(MvFragment.getInstance());
                 break;
             default:
-                start(PlayFragment.getInstance());
+                SongSheetDetials.ResultBean.TracksBean tracksBean = (SongSheetDetials.ResultBean.TracksBean) data;
+                updatePlayWidgetData(data,DATA_TYPE_SONG_SHEET_MUSIC);
+//                getPlayService().play(tracksBean, PlayService.TYPE_NET);
+                Log.i(TAG, "onItemClickListener: "+tracksBean.getId());
+                mPresenter.getMusicAddress(String.valueOf(tracksBean.getId()));
                 break;
         }
     }

@@ -56,7 +56,15 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> i
                 holder.ivMv.setVisibility(View.GONE);
                 holder.tvName.setText(musicInfo.getName());
                 holder.tvArtist.setText(musicInfo.getArtist());
-                holder.itemView.setOnClickListener(this);
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener!=null){
+
+                            onItemClickListener.onItemClickListener(holder.itemView,i,musicInfo,DATA_TYPE_LOCAL_MUSIC);
+                        }
+                    }
+                });
                 holder.ivMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -84,6 +92,14 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> i
                         args.putSerializable(MUSIC_INFO,bean);
                         dialog.setArguments(args);
                         dialog.show(((AppCompatActivity)context).getSupportFragmentManager(),"cloud");
+                    }
+                });
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener!=null){
+                            onItemClickListener.onItemClickListener(holder.itemView,i,bean,DATA_TYPE_SONG_SHEET_MUSIC);
+                        }
                     }
                 });
                 break;

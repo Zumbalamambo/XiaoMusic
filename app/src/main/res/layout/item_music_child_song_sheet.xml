@@ -9,9 +9,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="130dp">
+            android:layout_height="wrap_content">
             <!--歌单背景-->
-            <ImageView
+            <com.yzx.xiaomusic.widget.SquareImageView
                 android:id="@+id/iv_songSheetBg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

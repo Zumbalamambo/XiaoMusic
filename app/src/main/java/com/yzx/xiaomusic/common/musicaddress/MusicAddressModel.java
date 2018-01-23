@@ -1,8 +1,7 @@
-package com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails;
+package com.yzx.xiaomusic.common.musicaddress;
 
-import com.yzx.xiaomusic.common.musicaddress.MusicAddressModel;
 import com.yzx.xiaomusic.common.observel.MvpObserver;
-import com.yzx.xiaomusic.entities.SongSheetDetials;
+import com.yzx.xiaomusic.entities.MusicAddress;
 import com.yzx.xiaomusic.network.AppHttpClient;
 import com.yzx.xiaomusic.network.api.MuiscApi;
 
@@ -10,18 +9,19 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by yzx on 2018/1/19.
+ *
+ * @author yzx
+ * @date 2018/1/23
  * Description
  */
 
-public class SongSheetDetailsModel extends MusicAddressModel implements SongSheetDetailsContract.Model<SongSheetDetials> {
-
+public class MusicAddressModel implements MusicAddressContract.Model {
     @Override
-    public void getSongSheetDetails(String id, MvpObserver<SongSheetDetials> observer) {
+    public void getMusicAddress(String id, MvpObserver<MusicAddress> observer) {
         AppHttpClient
                 .getInstance()
                 .getService(MuiscApi.class)
-                .getSongSheetDetails(id)
+                .getMusicAddress("song",id,"320000")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

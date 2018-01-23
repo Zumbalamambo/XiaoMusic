@@ -41,4 +41,5 @@
     <string name="EUSA">欧美</string>
     <string name="rock">摇滚</string>
     <string name="electric">电子</string>
+    <string name="noThisMusic">暂无此曲</string>
 </resources>

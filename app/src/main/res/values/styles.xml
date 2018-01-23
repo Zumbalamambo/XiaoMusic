@@ -64,7 +64,7 @@
 
 <!--中心缩放宽高为40的图片-->
     <style name="style_img_centercrop_40">
-        <item name="android:tint">@color/colorWhite</item>
+        <item name="android:tint">@color/color_state</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_height">20dp</item>

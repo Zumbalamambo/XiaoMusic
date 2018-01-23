@@ -129,7 +129,7 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
 
         GlideUtils.loadImg(holder.itemView.getContext(),theFourIcons.get(position),holder.ivIcon);
         holder.tvTitle.setText(ResourceUtils.parseString(theFourTitles.get(position)));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.ivIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                onItemClickListener.onItemClickListener(holder.itemView,position,null,TYPE_THE_FOUR);
@@ -226,19 +226,20 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
         protected void finalize() throws Throwable {
             existing--;
             super.finalize();
-
-
         }
     }
 
 
     public class BannerViewHolder implements MZViewHolder<Banner.BannersBean> {
         private ImageView mImageView;
+        private TextView bannerType;
+
         @Override
         public View createView(Context context) {
             // 返回页面布局
             View view = LayoutInflater.from(context).inflate(R.layout.banner_item,null);
             mImageView = (ImageView) view.findViewById(R.id.banner_image);
+            bannerType = (TextView) view.findViewById(R.id.tv_banner_type);
             return view;
         }
 
@@ -246,6 +247,7 @@ public class ChildCloudMusicAdapter extends DelegateAdapter.Adapter<ChildCloudMu
         public void onBind(Context context, int position, Banner.BannersBean data) {
             // 数据绑定
             GlideUtils.loadImg(context,data.getPic(),mImageView);
+            bannerType.setText(data.getTypeTitle());
         }
     }
 

@@ -47,6 +47,8 @@
             android:theme="@style/AppTheme.TranslucentTranslucent"/>
         <activity android:name=".ui.login.RegisterActivity"
             android:theme="@style/AppTheme.TranslucentTranslucent"/>
+        <!--playService-->
+        <service android:name=".service.PlayService"/>
     </application>
 
 </manifest>

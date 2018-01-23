@@ -16,13 +16,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
+import com.yzx.xiaomusic.entities.MusicInfo;
+import com.yzx.xiaomusic.entities.SongSheetDetials;
+import com.yzx.xiaomusic.service.PlayService;
+import com.yzx.xiaomusic.service.PlayServiceManager;
 import com.yzx.xiaomusic.ui.main.MainActivity;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.ResourceUtils;
 
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportFragment;
+
+import static com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter.DATA_TYPE_LOCAL_MUSIC;
+import static com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter.DATA_TYPE_SONG_SHEET_MUSIC;
 
 /**
  * Created by yzx on 2018/1/12.
@@ -35,12 +44,17 @@ public abstract class BaseFragment extends SupportFragment {
     private Unbinder bind;
     public Context context;
     public boolean isFirstLoad;
+    private ImageView musicPoster;
+    private TextView musicName;
+    private TextView musicArtist;
+    private RelativeLayout layoutPlay;
+    private ImageView ivMusicMenu;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         context = getContext();
-//        Log.i(TAG, "onCreate: "+this.getClass().getSimpleName());
     }
 
     @Nullable
@@ -127,24 +141,48 @@ public abstract class BaseFragment extends SupportFragment {
     /**
      * 初始化底部的音乐播放控制控件
      * @param musicControl 音乐控件
-     * @param main 是否是主页面，用来区分跳转方式
+     *
      */
-    public void initPlayWidget(LinearLayout musicControl, final boolean main){
-        ImageView musicPoster = (ImageView) musicControl.findViewById(R.id.iv_music_poster);
-        TextView musicName = (TextView) musicControl.findViewById(R.id.tv_music_name);
-        TextView musicArtist = (TextView) musicControl.findViewById(R.id.tv_music_artist);
-        RelativeLayout layoutPlay = (RelativeLayout) musicControl.findViewById(R.id.layout_play);
-        ImageView ivMusicMenu = (ImageView) musicControl.findViewById(R.id.iv_music_menu);
+    public void initPlayWidget(LinearLayout musicControl){
+        musicPoster = (ImageView) musicControl.findViewById(R.id.iv_music_poster);
+        musicName = (TextView) musicControl.findViewById(R.id.tv_music_name);
+        musicArtist = (TextView) musicControl.findViewById(R.id.tv_music_artist);
+        layoutPlay = (RelativeLayout) musicControl.findViewById(R.id.layout_play);
+        ivMusicMenu = (ImageView) musicControl.findViewById(R.id.iv_music_menu);
         musicControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (main){
-                    start(PlayFragment.getInstance());
-                }else {
-                    start(PlayFragment.getInstance());
-                }
+                start(PlayFragment.getInstance());
             }
         });
+    }
+
+    public void updatePlayWidgetData(Object data,int type){
+        switch (type){
+            case DATA_TYPE_LOCAL_MUSIC:
+                MusicInfo localMusicInfo = (MusicInfo) data;
+                musicName.setText(localMusicInfo.getName());
+                musicArtist.setText(localMusicInfo.getArtist());
+                break;
+            case DATA_TYPE_SONG_SHEET_MUSIC:
+                SongSheetDetials.ResultBean.TracksBean tracksBean = (SongSheetDetials.ResultBean.TracksBean) data;
+                musicName.setText(tracksBean.getName());
+                List<SongSheetDetials.ResultBean.TracksBean.ArtistsBeanX> artists = tracksBean.getArtists();
+                musicArtist.setText(artists.size()>0?artists.get(0).getName():null);
+                break;
+        }
+    }
+
+    /**
+     * 获取playService
+     * @return
+     */
+    public PlayService getPlayService(){
+        PlayService playService = PlayServiceManager.getInstance().getPlayService();
+        if (playService==null){
+            throw new NullPointerException("playService can't be null");
+        }
+        return playService;
     }
     @Override
     public void onDestroy() {
