@@ -8,18 +8,18 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.service.PlayServiceManager;
 import com.yzx.xiaomusic.ui.main.MainActivity;
-import com.yzx.xiaomusic.ui.play.PlayFragment;
+import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.LoadingUtils;
 import com.yzx.xiaomusic.utils.ResourceUtils;
 import com.yzx.xiaomusic.utils.ToastUtils;
@@ -28,22 +28,19 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportFragment;
 
+import static com.yzx.xiaomusic.service.PlayService.STATE_PLAYING;
+
 /**
  * Created by yzx on 2018/1/12.
  * Description
  */
 
-public abstract class BaseFragment extends SupportFragment implements View.OnClickListener ,BaseView{
+public abstract class BaseFragment extends SupportFragment implements BaseView {
 
     private static final String TAG = "yglBaseFragment";
     private Unbinder bind;
     public Context context;
     public boolean isFirstLoad;
-    private ImageView musicPoster;
-    private TextView musicName;
-    private TextView musicArtist;
-    private ImageView ivMusicPlay;
-    private ImageView ivMusicMenu;
     public ProgressDialog progressDialog;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +59,6 @@ public abstract class BaseFragment extends SupportFragment implements View.OnCli
         bind = ButterKnife.bind(this, rootView);
         initData(savedInstanceState);
         initView(savedInstanceState);
-//        Log.i(TAG, "onCreateView: "+this.getClass().getSimpleName());
         return rootView;
     }
 
@@ -70,7 +66,6 @@ public abstract class BaseFragment extends SupportFragment implements View.OnCli
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
-//        Log.i(TAG, "onLazyInitView: "+this.getClass().getSimpleName());
     }
 
     @Override
@@ -168,49 +163,7 @@ public abstract class BaseFragment extends SupportFragment implements View.OnCli
         }
     }
 
-    /**
-     * 初始化底部的音乐播放控制控件
-     * @param musicControl 音乐控件
-     *
-     */
-    public void initPlayWidget(LinearLayout musicControl){
-        musicPoster = (ImageView) musicControl.findViewById(R.id.iv_music_poster);
-        musicName = (TextView) musicControl.findViewById(R.id.tv_music_name);
-        musicName.setSelected(true);
-        musicArtist = (TextView) musicControl.findViewById(R.id.tv_music_artist);
-        ivMusicPlay = (ImageView) musicControl.findViewById(R.id.iv_music_play);
-        ivMusicMenu = (ImageView) musicControl.findViewById(R.id.iv_music_menu);
-        ivMusicPlay.setOnClickListener(this);
-        musicControl.setOnClickListener(this);
-        ivMusicMenu.setOnClickListener(this);
-        musicName.setText(getPlayService().getMusicName());
-        musicArtist.setText(getPlayService().getArtist());
-        getPlayService().setOnPlayStateChangeLIstener(new PlayService.OnPlayStateChangeListener() {
-            @Override
-            public void onPlay() {
-                ivMusicPlay.setImageResource(R.drawable.ic_bottom_play);
-            }
 
-            @Override
-            public void onPause() {
-                ivMusicPlay.setImageResource(R.drawable.ic_bottom_pause);
-            }
-        });
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.layout_music_control:
-                start(PlayFragment.getInstance());
-                break;
-            case R.id.iv_music_play://暂停播放
-                getPlayService().playMusic();
-                break;
-            case R.id.iv_music_menu://歌单
-                break;
-        }
-    }
 
     /**
      * 获取playService
@@ -223,10 +176,17 @@ public abstract class BaseFragment extends SupportFragment implements View.OnCli
         }
         return playService;
     }
+
+    public void setUpBottomPlayControl(TextView tvMusicName, TextView tvMusicArtist, ImageView ivMusicPlay, ImageView ivMusicPoster) {
+        tvMusicName.setText(getPlayService().getMusicName());
+        tvMusicArtist.setText(getPlayService().getArtist());
+        ivMusicPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_bottom_play:R.drawable.ic_bottom_pause);
+        GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onDestroy: "+this.getClass().getSimpleName());
         bind.unbind();
     }
-
 }

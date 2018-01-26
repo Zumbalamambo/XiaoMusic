@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseActivity;
 import com.yzx.xiaomusic.ui.main.MainActivity;
-import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.ToastUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -35,8 +35,9 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
 
-        GlideUtils.loadImg(this, R.drawable.img1, GlideUtils.TRANSFORM_BLUR,ivSplash);
+//        GlideUtils.loadImg(this, R.drawable.img1, GlideUtils.TRANSFORM_BLUR,ivSplash);
 
+        Glide.with(context).load(R.drawable.splash_girl).into(ivSplash);
         RxPermissions rxPermissions=new RxPermissions(this);
         rxPermissions.setLogging(true);
         rxPermissions
@@ -58,7 +59,7 @@ public class SplashActivity extends BaseActivity {
 
     private void toMainActivity() {
         Observable
-                .timer(1, TimeUnit.SECONDS)
+                .timer(5, TimeUnit.SECONDS)
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {

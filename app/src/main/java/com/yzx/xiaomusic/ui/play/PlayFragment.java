@@ -12,11 +12,18 @@ import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
+import com.yzx.xiaomusic.service.PlayEvent;
 import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.utils.GlideUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.yzx.xiaomusic.service.PlayService.STATE_PLAYING;
 
 /**
  *
@@ -90,12 +97,9 @@ public class PlayFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+
         PlayService playService = getPlayService();
-        if (PlayService.STATE_PLAYING == playService.getState()){
-            ivPlay.setImageResource(R.drawable.ic_music_play_play);
-        }else {
-            ivPlay.setImageResource(R.drawable.ic_music_play_pause);
-        }
+        ivPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_music_play_play:R.drawable.ic_music_play_pause);
         GlideUtils.loadImg(context,playService.getPoster(),-1 ,GlideUtils.TRANSFORM_BLUR,ivPlayBg);
         seekBarMusicSeek.setMax((int) playService.getMusicTotalTime());
         setToolBar(toolBar,playService.getMusicName(),playService.getArtist());
@@ -118,11 +122,6 @@ public class PlayFragment extends BaseFragment {
                 getPlayService().previous();
                 break;
             case R.id.iv_play:
-                if (PlayService.STATE_PLAYING == getPlayService().getState()){
-                    ivPlay.setImageResource(R.drawable.ic_music_play_pause);
-                }else {
-                    ivPlay.setImageResource(R.drawable.ic_music_play_play);
-                }
                 getPlayService().playMusic();
                 break;
             case R.id.iv_play_next:
@@ -132,10 +131,36 @@ public class PlayFragment extends BaseFragment {
                 break;
         }
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy: ");
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(PlayEvent event) {
+        switch (event.type){
+            case PlayEvent.TYPE_CHANGE:
+                tvTitle.setText(getPlayService().getMusicName());
+                tvSubtitle.setText(getPlayService().getArtist());
+                ivPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_music_play_play:R.drawable.ic_music_play_pause);
+                GlideUtils.loadImg(context,getPlayService().getPoster(),-1 ,GlideUtils.TRANSFORM_BLUR,ivPlayBg);
+                Log.i(TAG, "onMessageEvent: "+getPlayService().getMusicName());
+                break;
+            case PlayEvent.TYPE_PLAY:
+                ivPlay.setImageResource(R.drawable.ic_music_play_play);
+                break;
+            case PlayEvent.TYPE_PAUSE:
+                ivPlay.setImageResource(R.drawable.ic_music_play_pause);
+                break;
+            default:
+                break;
+        }
+
+    };
 }

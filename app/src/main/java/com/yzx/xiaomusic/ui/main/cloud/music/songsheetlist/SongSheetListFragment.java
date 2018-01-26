@@ -7,26 +7,36 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.entities.SongSheet;
+import com.yzx.xiaomusic.service.PlayEvent;
 import com.yzx.xiaomusic.ui.adapter.ChildCloudMusicAdapter;
 import com.yzx.xiaomusic.ui.adapter.SongSheetAdapter;
 import com.yzx.xiaomusic.ui.main.MainFragment;
 import com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails.SongSheetDetailsFragment;
 import com.yzx.xiaomusic.utils.DensityUtils;
+import com.yzx.xiaomusic.utils.GlideUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+
+import static com.yzx.xiaomusic.service.PlayService.STATE_PLAYING;
 
 /**
  * Created by yzx on 2018/1/12.
  * Description  歌单列表
  */
 
-public class SongSheetListFragment extends BaseFragment implements SongSheetListContract.View, ChildCloudMusicAdapter.OnItemClickLsitener, XRecyclerView.LoadingListener {
+public class SongSheetListFragment extends BaseFragment implements SongSheetListContract.View, ChildCloudMusicAdapter.OnItemClickLsitener, XRecyclerView.LoadingListener{
     private static final String TAG = "yglSongSheetListFragment";
     private static final String KEY_SONG_SHEET = "songSheet";
     private static SongSheetListFragment childCloudFragment;
@@ -36,6 +46,14 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
     Toolbar toolBar;
     @BindView(R.id.layout_music_control)
     LinearLayout layoutMusicControl;
+    @BindView(R.id.iv_music_poster)
+    ImageView ivMusicPoster;
+    @BindView(R.id.tv_music_name)
+    TextView tvMusicName;
+    @BindView(R.id.tv_music_artist)
+    TextView tvMusicArtist;
+    @BindView(R.id.iv_music_play)
+    ImageView ivMusicPlay;
     private SongSheetListPresenter mPresenter;
     public SongSheetAdapter adapter;
     public int offset;
@@ -65,7 +83,6 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
     @Override
     protected void initView(Bundle savedInstanceState) {
         setToolBar(toolBar, R.string.songSheet);
-        initPlayWidget(layoutMusicControl);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
         View headView = getLayoutInflater().inflate(R.layout.head_song_sheet, null);
 
@@ -92,7 +109,6 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
         recyclerView.setPullRefreshEnabled(false);
         recyclerView.setLoadingListener(this);
         recyclerView.setAdapter(adapter);
-
         offset = 0;
         getSongSheetList("全部", "hot", offset, 10, true);
     }
@@ -122,5 +138,42 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
     public void onLoadMore() {
         getSongSheetList("全部", "hot", offset, 10, true);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUpBottomPlayControl(tvMusicName,tvMusicArtist,ivMusicPlay,ivMusicPoster);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(PlayEvent event) {
+        switch (event.type){
+            case PlayEvent.TYPE_CHANGE:
+                tvMusicName.setText(getPlayService().getMusicName());
+                tvMusicArtist.setText(getPlayService().getArtist());
+                ivMusicPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_bottom_play:R.drawable.ic_bottom_pause);
+                GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
+                break;
+            case PlayEvent.TYPE_PLAY:
+                ivMusicPlay.setImageResource(R.drawable.ic_bottom_play);
+                break;
+            case PlayEvent.TYPE_PAUSE:
+                ivMusicPlay.setImageResource(R.drawable.ic_bottom_pause);
+                break;
+            default:
+                break;
+        }
+
+    };
 
 }

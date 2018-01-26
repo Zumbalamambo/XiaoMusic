@@ -10,9 +10,13 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
 import com.yzx.xiaomusic.utils.PreferenceUtil;
+import com.yzx.xiaomusic.utils.ResourceUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,7 +57,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     public MediaPlayer mediaPlayer=new MediaPlayer();
 
     private int mediaPlayerCurrentPosition;
-    private OnPlayStateChangeListener onPlayStateChangeListener;
     private long musicTotalTime;//歌曲总时长
     private String musicName;//歌名
     private String artist;//歌手
@@ -85,6 +88,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         mediaPlayer.setOnBufferingUpdateListener(this);
         mediaPlayer.setOnSeekCompleteListener(this);
     }
+
 
     private void prepareCloudMusic() {
         try {
@@ -156,6 +160,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 }else {
                     musicInfo = localMusicList.get(getPlayListPosition());
                 }
+                setPoster(musicInfo.getPoster());
+                setMusicName(musicInfo.getName());
+                setArtist(musicInfo.getArtist());
+                setMusicTotalTime(musicInfo.getDuration());
                 playLocalMusic(musicInfo);
             }
         }else if (TYPE_NET == musicType){
@@ -172,6 +180,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 }else {
                     tracksBean = songSheetMusicList.get(getPlayListPosition());
                 }
+                setPoster(tracksBean.getAlbum().getPicUrl());
+                setMusicName(tracksBean.getName());
+                setArtist(tracksBean.getArtists().size()>0?tracksBean.getArtists().get(0).getName(): ResourceUtils.parseString(R.string.unKnow));
+                setMusicTotalTime(tracksBean.getDuration());
                 playSongSheetMusic(tracksBean);
             }
         }
@@ -185,9 +197,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         Log.i(TAG, "play: "+mediaPlayerCurrentPosition);
         mediaPlayer.seekTo(mediaPlayerCurrentPosition);
         setState(STATE_PLAYING);
-        if (onPlayStateChangeListener!=null){
-            onPlayStateChangeListener.onPlay();
-        }
 
     }
 
@@ -197,12 +206,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     public void pause() {
         if (mediaPlayer.isPlaying()){
             mediaPlayer.pause();
+            EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_PAUSE,null));
             mediaPlayerCurrentPosition = mediaPlayer.getCurrentPosition();
             Log.i(TAG, "pause: 暂停时进度："+mediaPlayerCurrentPosition);
             setState(STATE_PAUSE);
-            if (onPlayStateChangeListener!=null){
-                onPlayStateChangeListener.onPause();
-            }
         }
     }
 
@@ -212,17 +219,14 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     public void previous(){
         setPlayListPosition(getPlayListPosition()-1);
         start();
-        Log.i(TAG, "previous: "+getPlayListPosition());
     }
 
     /**
      * 下一曲
      */
     public void next(){
-
         setPlayListPosition(getPlayListPosition()+1);
         start();
-        Log.i(TAG, "next: "+getPlayListPosition());
     }
 
     /**
@@ -235,7 +239,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     }
 
     public void playCloudMusic(String url){
-        Log.i(TAG, "playCloudMusic: ");
         mediaPlayer.reset();
         try {
             mediaPlayer.setDataSource(getBaseContext(),Uri.parse(url));
@@ -250,7 +253,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
      * @param musicInfo
      */
     private void playLocalMusic(MusicInfo musicInfo) {
-        Log.i(TAG, "playLocalMusic: ");
         mediaPlayer.reset();
         try {
             mediaPlayer.setDataSource(musicInfo.path);
@@ -265,10 +267,9 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         state = STATE_BEFORE_PREPARED;
         if (isPrepared()){
             mp.start();
+            //更新数据
             setState(STATE_PLAYING);
-            if (onPlayStateChangeListener!=null){
-                onPlayStateChangeListener.onPlay();
-            }
+            EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_CHANGE,new MusicMessage(getMusicName(),getArtist(),getPoster(),getMusicTotalTime(),getMediaPlayerCurrentPosition())));
         }
     }
 
@@ -283,26 +284,12 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     @Override
     public void onSeekComplete(MediaPlayer mp) {
         mediaPlayerCurrentPosition=mp.getCurrentPosition();
-        Log.i(TAG, "onSeekComplete: "+mediaPlayerCurrentPosition);
-        onPlayStateChangeListener.onPlay();
         setState(STATE_PLAYING);
-        if (onPlayStateChangeListener!=null){
-            onPlayStateChangeListener.onPlay();
-        }
         mp.start();
+        EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_PLAY,null));
     }
 
-    public void setOnPlayStateChangeLIstener(OnPlayStateChangeListener onPlayStateChangeListener){
-        this.onPlayStateChangeListener = onPlayStateChangeListener;
-    }
 
-    /**
-     * 播放状态改变监听
-     */
-    public interface OnPlayStateChangeListener {
-        void onPlay();
-        void onPause();
-    }
 
     public int getState() {
         return state;

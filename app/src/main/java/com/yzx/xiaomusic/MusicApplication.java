@@ -67,5 +67,4 @@ public class MusicApplication extends Application {
     public static MusicApplication getApplication() {
         return musicApplication;
     }
-
 }

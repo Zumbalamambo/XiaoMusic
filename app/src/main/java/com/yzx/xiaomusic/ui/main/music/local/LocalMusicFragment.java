@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,15 +19,25 @@ import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.common.OnItemClickLsitener;
 import com.yzx.xiaomusic.entities.MusicInfo;
+import com.yzx.xiaomusic.service.PlayEvent;
 import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
+import com.yzx.xiaomusic.ui.play.PlayFragment;
+import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.ScanMusicUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
+import static com.yzx.xiaomusic.service.PlayService.STATE_PLAYING;
 import static com.yzx.xiaomusic.service.PlayService.TYPE_LOCAL;
 
 /**
@@ -47,6 +58,17 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
     Toolbar toolBar;
     @BindView(R.id.layout_music_control)
     LinearLayout layoutMusicControl;
+    @BindView(R.id.iv_music_poster)
+    ImageView ivMusicPoster;
+    @BindView(R.id.tv_music_name)
+    TextView tvMusicName;
+    @BindView(R.id.tv_music_artist)
+    TextView tvMusicArtist;
+    @BindView(R.id.iv_music_play)
+    ImageView ivMusicPlay;
+    @BindView(R.id.iv_music_menu)
+    ImageView ivMusicMenu;
+    Unbinder unbinder;
     private List<MusicInfo> musicInfos;
     private LocalMusicPresenter mPresenter;
     public CommonMusicAdapter adapter;
@@ -77,7 +99,6 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
     @Override
     protected void initView(Bundle savedInstanceState) {
         setToolBar(toolBar, R.string.localMusic);
-        initPlayWidget(layoutMusicControl);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CommonMusicAdapter();
         adapter.setOnItemClickListener(this);
@@ -129,14 +150,30 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
         }
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUpBottomPlayControl(tvMusicName,tvMusicArtist,ivMusicPlay,ivMusicPoster);
+    }
+
     @Override
     public void onItemClickListener(View itemView, int position, Object data, int type) {
         MusicInfo musicInfo = (MusicInfo) data;
         PlayService playService = getPlayService();
-        playService.setArtist(musicInfo.getArtist());
-        playService.setMusicName(musicInfo.getName());
-        playService.setMusicTotalTime(musicInfo.getDuration());
-        if (TYPE_LOCAL != getPlayService().getMusicType()||!musicInfo.getMd5().equals(getPlayService().getMd5())){
+
+        if (TYPE_LOCAL != getPlayService().getMusicType() || !musicInfo.getMd5().equals(getPlayService().getMd5())) {
             getPlayService().setState(PlayService.STATE_IDLE);
             getPlayService().setMusicType(PlayService.TYPE_LOCAL);
             getPlayService().setMd5(musicInfo.md5);
@@ -144,5 +181,37 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
         playService.playMusic();
     }
 
+    @OnClick({R.id.iv_music_play, R.id.iv_music_menu,R.id.layout_music_control})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_music_play:
+                getPlayService().playMusic();
+                break;
+            case R.id.iv_music_menu:
+                break;
+            case R.id.layout_music_control:
+                start(PlayFragment.getInstance());
+                break;
+        }
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(PlayEvent event) {
+        switch (event.type){
+            case PlayEvent.TYPE_CHANGE:
+                tvMusicName.setText(getPlayService().getMusicName());
+                tvMusicArtist.setText(getPlayService().getArtist());
+                ivMusicPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_bottom_play:R.drawable.ic_bottom_pause);
+                GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
+                break;
+            case PlayEvent.TYPE_PLAY:
+                ivMusicPlay.setImageResource(R.drawable.ic_bottom_play);
+                break;
+            case PlayEvent.TYPE_PAUSE:
+                ivMusicPlay.setImageResource(R.drawable.ic_bottom_pause);
+                break;
+            default:
+                break;
+        }
+    };
 }
