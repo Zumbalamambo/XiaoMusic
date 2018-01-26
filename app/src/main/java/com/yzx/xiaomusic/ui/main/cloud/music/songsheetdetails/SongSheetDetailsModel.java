@@ -14,14 +14,16 @@ import io.reactivex.schedulers.Schedulers;
  * Description
  */
 
-public class SongSheetDetailsModel extends MusicAddressModel implements SongSheetDetailsContract.Model<SongSheetDetials> {
+public class SongSheetDetailsModel extends MusicAddressModel implements SongSheetDetailsContract.Model<SongSheetDetailsFragment,SongSheetDetials> {
+
 
     @Override
-    public void getSongSheetDetails(String id, MvpObserver<SongSheetDetials> observer) {
+    public void getSongSheetDetails(SongSheetDetailsFragment songSheetDetailsFragment, String id, MvpObserver<SongSheetDetials> observer) {
         AppHttpClient
                 .getInstance()
                 .getService(MuiscApi.class)
                 .getSongSheetDetails(id)
+                .compose(songSheetDetailsFragment.<SongSheetDetials>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

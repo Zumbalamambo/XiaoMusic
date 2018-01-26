@@ -6,7 +6,9 @@ import com.yzx.xiaomusic.common.observel.MvpObserver;
 import com.yzx.xiaomusic.entities.SongSheet;
 
 /**
- * Created by yzx on 2018/1/19.
+ *
+ * @author yzx
+ * @date 2018/1/19
  * Description
  */
 
@@ -23,7 +25,7 @@ public class SongSheetListPresenter implements SongSheetListContract.Presenter {
     @Override
     public void getSongSheetDetails(String cat, String order, final int offset, int limit, boolean total) {
 
-        mModel.getSongSheetDetails(cat, order, offset, limit, true, new MvpObserver<SongSheet>() {
+        mModel.getSongSheetDetails(mFragment,cat, order, offset, limit, true, new MvpObserver<SongSheet>() {
             @Override
             protected void onSuccess(SongSheet songSheet) {
                 mFragment.adapter.setDatas(songSheet.getPlaylists());

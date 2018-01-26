@@ -42,4 +42,5 @@
     <string name="rock">摇滚</string>
     <string name="electric">电子</string>
     <string name="noThisMusic">暂无此曲</string>
+    <string name="unKnow">未知</string>
 </resources>

@@ -3,6 +3,7 @@ package com.yzx.xiaomusic.ui.main.music.local;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.utils.FileUtils;
@@ -28,6 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 public class LocalMusicModel {
 
     public static final String LOCAL_MUSIC_INFO = "localMusicInfo";
+    private static final String TAG = "yglLocalMusicModel";
 
     interface CallBack{
         void onSuccess(List<MusicInfo> list);
@@ -50,18 +52,19 @@ public class LocalMusicModel {
                   musicInfo.duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));//歌曲时间
                   musicInfo.size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));//歌曲大小
                   musicInfo.poster = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));//海报
-                  musicInfo.sha1 = FileUtils.fileToSHA1(musicInfo.getPath());
+                  musicInfo.md5 = FileUtils.fileToMD5(musicInfo.getPath());//文件Md5
                   if (musicInfo.size > 1024 * 1024 * 3) {
                       // 注释部分是切割标题，分离出歌曲名和歌手 （本地媒体库读取的歌曲信息不规范）
-                      if (musicInfo.allName.contains("-")) {
-                          String[] str = musicInfo.allName.split("-");
-                          musicInfo.artist = str[0];
-                          if (str[1].endsWith(".mp3") || str[1].endsWith(".ape") || str[1].endsWith(".mp3") || str[1].endsWith(".wav") || str[1].endsWith(".flac")) {
-                              musicInfo.name = str[1].trim().substring(0, str[1].length() - 5);
-                          } else {
-                              musicInfo.name = str[1].trim();
-                          }
+                      if (musicInfo.allName.endsWith(".mp3") || musicInfo.allName.endsWith(".ape")
+                              || musicInfo.allName.endsWith(".mp3") || musicInfo.allName.endsWith(".wav")
+                              || musicInfo.allName.endsWith(".flac")){
+                          //去掉MP3等后缀
+                          musicInfo.allName = musicInfo.allName.trim().substring(0, musicInfo.allName.length() - 4);
+                          dealMusicName(musicInfo);
+                      }else {
+                          dealMusicName(musicInfo);
                       }
+
                       e.onNext(musicInfo);
                   }
               }
@@ -93,6 +96,25 @@ public class LocalMusicModel {
                     PreferenceUtil.put(LOCAL_MUSIC_INFO, JsonUtils.objectToString(list));
                 }
             });
+        }
+    }
+
+    /**
+     * 处理歌名和歌手
+     * @param musicInfo
+     */
+    private void dealMusicName(MusicInfo musicInfo) {
+        Log.i(TAG, "subscribe: "+musicInfo.getAllName());
+        if (musicInfo.allName.contains("-")) {
+            String[] str = musicInfo.allName.split("-");
+            musicInfo.setArtist(str[0].trim());
+            musicInfo.setName(str[1].trim());
+        }else if (musicInfo.allName.contains("_")){
+            String[] str = musicInfo.allName.split("_");
+            musicInfo.setArtist(str[1].trim());
+            musicInfo.setName(str[0].trim());
+        }else {
+            musicInfo.setName(musicInfo.getAllName().trim());
         }
     }
 }

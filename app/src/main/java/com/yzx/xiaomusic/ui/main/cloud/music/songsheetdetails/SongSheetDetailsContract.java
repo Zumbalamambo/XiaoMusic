@@ -1,5 +1,6 @@
 package com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails;
 
+import com.yzx.xiaomusic.common.BaseView;
 import com.yzx.xiaomusic.common.observel.MvpObserver;
 import com.yzx.xiaomusic.entities.BaseResposeBody;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
@@ -11,7 +12,7 @@ import com.yzx.xiaomusic.entities.SongSheetDetials;
 
 public interface SongSheetDetailsContract {
 
-    interface View{
+    interface View extends BaseView{
 
         /**
          * 获取歌单详情
@@ -34,12 +35,13 @@ public interface SongSheetDetailsContract {
         void getSongSheetDetails(String id);
     }
 
-    interface Model<B extends BaseResposeBody>{
+    interface Model<V extends BaseView,B extends BaseResposeBody>{
         /**
          * 获取歌单详情
+         * @param v
          * @param id
          * @param observer
          */
-        void getSongSheetDetails(String id, MvpObserver<B> observer);
+        void getSongSheetDetails(V v,String id, MvpObserver<B> observer);
     }
 }

@@ -27,6 +27,8 @@ import java.util.List;
 
 import butterknife.BindView;
 
+import static com.yzx.xiaomusic.service.PlayService.TYPE_LOCAL;
+
 /**
  * @author yzx
  * @date 2018/1/19
@@ -129,9 +131,17 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
 
     @Override
     public void onItemClickListener(View itemView, int position, Object data, int type) {
-        updatePlayWidgetData(data,type);
-        getPlayService().play((MusicInfo) data, PlayService.TYPE_LOCAL);
-
+        MusicInfo musicInfo = (MusicInfo) data;
+        PlayService playService = getPlayService();
+        playService.setArtist(musicInfo.getArtist());
+        playService.setMusicName(musicInfo.getName());
+        playService.setMusicTotalTime(musicInfo.getDuration());
+        if (TYPE_LOCAL != getPlayService().getMusicType()||!musicInfo.getMd5().equals(getPlayService().getMd5())){
+            getPlayService().setState(PlayService.STATE_IDLE);
+            getPlayService().setMusicType(PlayService.TYPE_LOCAL);
+            getPlayService().setMd5(musicInfo.md5);
+        }
+        playService.playMusic();
     }
 
 

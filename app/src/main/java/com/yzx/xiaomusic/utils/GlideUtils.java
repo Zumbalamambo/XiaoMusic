@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.yzx.xiaomusic.R;
 
@@ -47,6 +48,8 @@ public class GlideUtils {
                 options.transform(new BlurTransformation( 20, 50));
                 break;
         }
+
+        options.diskCacheStrategy(DiskCacheStrategy.RESOURCE);
         options.dontAnimate();
 
         Glide.with(context)

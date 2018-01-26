@@ -108,19 +108,16 @@ public abstract class BaseActivity extends SupportActivity implements BaseView {
         ToastUtils.showToast(msg,type);
     }
 
-    @Override
     public void showActionBarTitle(int title) {
         showActionBarTitle(ResourceUtils.parseString(title));
     }
 
-    @Override
     public void showActionBarTitle(String title) {
         if (getSupportActionBar()!=null){
             getSupportActionBar().setTitle(title);
         }
     }
 
-    @Override
     public void showBackArrow() {
         if (getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

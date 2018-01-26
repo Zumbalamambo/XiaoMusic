@@ -65,6 +65,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/layout_play_card"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <!--黑胶片-->

@@ -17,8 +17,8 @@ public interface BaseView {
     void showToast(@StringRes int msg);
     void showToast(String msg, int type);
     void showToast(String msg);
-    void showActionBarTitle(@StringRes int title);
-    void showActionBarTitle(String title);
-    void showBackArrow();
+//    void showActionBarTitle(@StringRes int title);
+//    void showActionBarTitle(String title);
+//    void showBackArrow();
 
 }

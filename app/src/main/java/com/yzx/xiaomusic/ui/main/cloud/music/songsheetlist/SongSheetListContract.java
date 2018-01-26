@@ -1,6 +1,6 @@
 package com.yzx.xiaomusic.ui.main.cloud.music.songsheetlist;
 
-import com.yzx.xiaomusic.common.BaseActivity;
+import com.yzx.xiaomusic.common.BaseView;
 import com.yzx.xiaomusic.common.observel.MvpObserver;
 import com.yzx.xiaomusic.entities.BaseResposeBody;
 
@@ -42,9 +42,9 @@ public interface SongSheetListContract {
         void getSongSheetDetails(String cat, String order, int offset, int limit, boolean total);
     }
 
-    interface Model<B extends BaseResposeBody,V extends BaseActivity>{
+    interface Model<V extends BaseView,B extends BaseResposeBody>{
         /**
-         *
+         *@param v
          * @param cat
          * @param order
          * @param offset
@@ -52,6 +52,6 @@ public interface SongSheetListContract {
          * @param total
          * @param observer
          */
-        void getSongSheetDetails(String cat, String order, int offset, int limit, boolean total, MvpObserver<B> observer);
+        void getSongSheetDetails(V v,String cat, String order, int offset, int limit, boolean total, MvpObserver<B> observer);
     }
 }

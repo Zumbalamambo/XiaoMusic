@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
+import com.yzx.xiaomusic.service.PlayService;
+import com.yzx.xiaomusic.service.PlayServiceManager;
 import com.yzx.xiaomusic.ui.dialog.CloudMusicDialog;
 import com.yzx.xiaomusic.ui.dialog.LocalMusicDialog;
 
@@ -59,8 +61,10 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> i
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        PlayServiceManager.getInstance().setLocalMusicList(localMusicInfo);
+                        PlayServiceManager.getInstance().getPlayService().setMusicType(PlayService.TYPE_LOCAL);
+                        PlayServiceManager.getInstance().getPlayService().setPlayListPosition(i);
                         if (onItemClickListener!=null){
-
                             onItemClickListener.onItemClickListener(holder.itemView,i,musicInfo,DATA_TYPE_LOCAL_MUSIC);
                         }
                     }
@@ -97,6 +101,9 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> i
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        PlayServiceManager.getInstance().setSongSheetMusicList(songSheetData);
+                        PlayServiceManager.getInstance().getPlayService().setMusicType(PlayService.TYPE_NET);
+                        PlayServiceManager.getInstance().getPlayService().setPlayListPosition(i);
                         if (onItemClickListener!=null){
                             onItemClickListener.onItemClickListener(holder.itemView,i,bean,DATA_TYPE_SONG_SHEET_MUSIC);
                         }

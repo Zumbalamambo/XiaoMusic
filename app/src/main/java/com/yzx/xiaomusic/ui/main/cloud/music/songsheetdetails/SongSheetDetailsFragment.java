@@ -20,6 +20,7 @@ import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.common.OnItemClickLsitener;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
+import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.ui.adapter.ChildCloudMusicAdapter;
 import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
 import com.yzx.xiaomusic.ui.mv.MvFragment;
@@ -27,6 +28,7 @@ import com.yzx.xiaomusic.utils.GlideUtils;
 
 import butterknife.BindView;
 
+import static com.yzx.xiaomusic.service.PlayService.TYPE_NET;
 import static com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter.DATA_TYPE_SONG_SHEET_MUSIC;
 
 /**
@@ -157,10 +159,14 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
                 break;
             default:
                 SongSheetDetials.ResultBean.TracksBean tracksBean = (SongSheetDetials.ResultBean.TracksBean) data;
-                updatePlayWidgetData(data,DATA_TYPE_SONG_SHEET_MUSIC);
-//                getPlayService().play(tracksBean, PlayService.TYPE_NET);
-                Log.i(TAG, "onItemClickListener: "+tracksBean.getId());
-                mPresenter.getMusicAddress(String.valueOf(tracksBean.getId()));
+                getPlayService().setMusicName(tracksBean.getName());
+                getPlayService().setPoster(tracksBean.getAlbum().getPicUrl());
+                if (TYPE_NET != getPlayService().getMusicType()||!String.valueOf(tracksBean.getId()).equals(getPlayService().getMusicId())){
+                    getPlayService().setState(PlayService.STATE_IDLE);
+                    getPlayService().setMusicType(PlayService.TYPE_NET);
+                    getPlayService().setMusicId(String.valueOf(tracksBean.getId()));
+                }
+                getPlayService().playMusic();
                 break;
         }
     }

@@ -45,7 +45,7 @@ public class ScanMusicUtils {
                            musicInfo.duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
                            musicInfo.size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
                            musicInfo.poster = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
-                           musicInfo.sha1 = FileUtils.fileToSHA1(musicInfo.getPath());
+                           musicInfo.md5 = FileUtils.fileToMD5(musicInfo.getPath());
                            if (musicInfo.size > 1024 * 1024 * 3) {
                                // 注释部分是切割标题，分离出歌曲名和歌手 （本地媒体库读取的歌曲信息不规范）
                                if (musicInfo.name.contains("-")) {
