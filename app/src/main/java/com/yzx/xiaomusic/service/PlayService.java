@@ -66,10 +66,13 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     private String musicId;
     private String poster;//海报
     private int playListPosition;//当前歌单position，用来播放上一首下一首
+    private MediaSessionManager mediaSessionManager;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
+        mediaSessionManager = new MediaSessionManager(this);
         int musicType = PreferenceUtil.getInt(MUSIC_TYPE, 1);
         setMusicAddress(PreferenceUtil.getString(MUSIC_ADDRESS,null));
         setMusicName(PreferenceUtil.getString(MUSIC_NAME,null));
@@ -160,6 +163,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 }else {
                     musicInfo = localMusicList.get(getPlayListPosition());
                 }
+                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(),getMusicTotalTime(),getMediaPlayerCurrentPosition()));
+                mediaSessionManager.updatePlaybackState();
                 setPoster(musicInfo.getPoster());
                 setMusicName(musicInfo.getName());
                 setArtist(musicInfo.getArtist());
@@ -180,6 +185,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 }else {
                     tracksBean = songSheetMusicList.get(getPlayListPosition());
                 }
+                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(),getMusicTotalTime(),getMediaPlayerCurrentPosition()));
+                mediaSessionManager.updatePlaybackState();
                 setPoster(tracksBean.getAlbum().getPicUrl());
                 setMusicName(tracksBean.getName());
                 setArtist(tracksBean.getArtists().size()>0?tracksBean.getArtists().get(0).getName(): ResourceUtils.parseString(R.string.unKnow));
@@ -197,6 +204,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         Log.i(TAG, "play: "+mediaPlayerCurrentPosition);
         mediaPlayer.seekTo(mediaPlayerCurrentPosition);
         setState(STATE_PLAYING);
+        mediaSessionManager.updatePlaybackState();
 
     }
 
@@ -210,6 +218,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             mediaPlayerCurrentPosition = mediaPlayer.getCurrentPosition();
             Log.i(TAG, "pause: 暂停时进度："+mediaPlayerCurrentPosition);
             setState(STATE_PAUSE);
+            mediaSessionManager.updatePlaybackState();
         }
     }
 
@@ -286,6 +295,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         mediaPlayerCurrentPosition=mp.getCurrentPosition();
         setState(STATE_PLAYING);
         mp.start();
+        mediaSessionManager.updatePlaybackState();
         EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_PLAY,null));
     }
 
@@ -392,6 +402,14 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         PreferenceUtil.put(MUSIC_TYPE,getMusicType());
         PreferenceUtil.put(MUSIC_ADDRESS,getMusicAddress());
         PreferenceUtil.put(MUSIC_PLAY_STATE,getState());
+    }
+
+    public boolean isPlaying() {
+        return state ==STATE_PLAYING;
+    }
+
+    public boolean isPreparing() {
+        return state==STATE_PLAYING;
     }
 
     public class PlayBinder extends Binder{
