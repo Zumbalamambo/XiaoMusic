@@ -3,6 +3,7 @@ package com.yzx.xiaomusic.network.api;
 
 import com.yzx.xiaomusic.entities.Banner;
 import com.yzx.xiaomusic.entities.MusicAddress;
+import com.yzx.xiaomusic.entities.MvData;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
 
@@ -45,6 +46,17 @@ public interface MuiscApi {
     @GET("banner")
     Observable<Banner> getBanner();
 
+
     @GET("https://api.imjad.cn/cloudmusic/?type=song&id=483671599&br=198000")
     Observable<MusicAddress> getMusicAddress(@Query("type") String type,@Query("id") String id,@Query("br") String br);
+
+    /**
+     *
+     * @param type
+     * @param id
+     * @param br
+     * @return
+     */
+    @GET("https://api.imjad.cn/cloudmusic/?type=song&id=483671599&br=198000")
+    Observable<MvData> getMusicMv(@Query("type") String type, @Query("id") String id, @Query("br") String br);
 }

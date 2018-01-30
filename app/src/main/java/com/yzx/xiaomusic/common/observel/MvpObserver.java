@@ -54,6 +54,7 @@ public abstract class MvpObserver<B extends BaseResposeBody> implements Observer
     public void onNext(B value) {
 
         if (200!=value.getCode()){
+            Log.i(TAG, "onNext: "+value.getCode());
             onFail(ResourceUtils.parseString(R.string.error_get_data));
         }else {
             onSuccess(value);

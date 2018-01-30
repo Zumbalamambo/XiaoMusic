@@ -7,6 +7,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -47,6 +48,7 @@ import static com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter.DATA_TYPE_SONG_SHE
 
 public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayout.OnOffsetChangedListener, SongSheetDetailsContract.View, OnItemClickLsitener {
     private static final String TAG = "yglSongSheetActivity";
+    public static final String KEY_MV_ID = "mvId";
     private static SongSheetDetailsFragment songSheetFragment;
     @BindView(R.id.iv_songSheetBg)
     ImageView ivSongSheetBg;
@@ -172,13 +174,19 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
      */
     @Override
     public void onItemClickListener(View itemView, int position, Object data, int type) {
-
+        SongSheetDetials.ResultBean.TracksBean tracksBean = (SongSheetDetials.ResultBean.TracksBean) data;
         switch (itemView.getId()) {
             case R.id.iv_mv:
-                start(MvFragment.getInstance());
+                MvFragment mvFragment = MvFragment.getInstance();
+                Log.i(TAG, "onItemClickListener: "+tracksBean.getMvid());
+                if (!TextUtils.isEmpty(String.valueOf(tracksBean.getMvid()))){
+                    Bundle args =new Bundle();
+                    args.putString(KEY_MV_ID, String.valueOf(tracksBean.getMvid()));
+                    mvFragment.setArguments(args);
+                    start(mvFragment);
+                }
                 break;
             default:
-                SongSheetDetials.ResultBean.TracksBean tracksBean = (SongSheetDetials.ResultBean.TracksBean) data;
                 PlayService playService = getPlayService();
                 tvMusicName.setText(playService.getMusicName());
                 tvMusicArtist.setText(playService.getArtist());

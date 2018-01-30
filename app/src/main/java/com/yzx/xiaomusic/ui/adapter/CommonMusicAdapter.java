@@ -31,7 +31,7 @@ import static com.yzx.xiaomusic.ui.main.music.local.LocalMusicFragment.MUSIC_INF
  * Description 音乐列表共同Adapter
  */
 
-public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> implements View.OnClickListener {
+public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
 
     public static final int DATA_TYPE_LOCAL_MUSIC = 1;//本地音乐类型
     public static final int DATA_TYPE_SONG_SHEET_MUSIC = 2;//歌单音乐类型
@@ -86,8 +86,14 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> i
                 holder.tvSerialNumber.setText(String.valueOf(i+1));
                 holder.ivMv.setVisibility(bean.getMvid()>0 ? View.VISIBLE:View.GONE);
                 holder.tvArtist.setText(bean.getArtists().get(0).getName());
-                holder.itemView.setOnClickListener(this);
-                holder.ivMv.setOnClickListener(this);
+                holder.ivMv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onItemClickListener!=null){
+                            onItemClickListener.onItemClickListener(holder.ivMv,i,bean,DATA_TYPE_SONG_SHEET_MUSIC);
+                        }
+                    }
+                });
                 holder.ivMore.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -139,10 +145,10 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> i
         notifyDataSetChanged();
     }
 
-    @Override
-    public void onClick(View v) {
-        onItemClickListener.onItemClickListener(v,0,null,1);
-    }
+//    @Override
+//    public void onClick(View v) {
+//        onItemClickListener.onItemClickListener(v,0,null,1);
+//    }
 
     class Holder extends RecyclerView.ViewHolder {
 

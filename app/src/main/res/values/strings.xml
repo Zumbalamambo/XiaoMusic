@@ -43,4 +43,5 @@
     <string name="electric">电子</string>
     <string name="noThisMusic">暂无此曲</string>
     <string name="unKnow">未知</string>
+    <string name="error_data">数据异常，请稍后再试</string>
 </resources>
