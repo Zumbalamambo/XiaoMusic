@@ -60,6 +60,11 @@ public final class PreferenceUtil {
     putFloat(key, value);
   }
 
+  public static void put(String key, long value) {
+
+    putLong(key, value);
+  }
+
   public static void put(String key, boolean value) {
 
     putBoolean(key, value);

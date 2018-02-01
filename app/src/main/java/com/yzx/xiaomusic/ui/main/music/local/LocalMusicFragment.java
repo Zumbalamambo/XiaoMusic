@@ -21,10 +21,12 @@ import com.yzx.xiaomusic.common.OnItemClickLsitener;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.service.PlayEvent;
 import com.yzx.xiaomusic.service.PlayService;
+import com.yzx.xiaomusic.service.ProgressInfo;
 import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.ScanMusicUtils;
+import com.yzx.xiaomusic.widget.CircleProgress;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,7 +39,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static com.yzx.xiaomusic.service.PlayService.STATE_PLAYING;
 import static com.yzx.xiaomusic.service.PlayService.TYPE_LOCAL;
 
 /**
@@ -64,8 +65,8 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
     TextView tvMusicName;
     @BindView(R.id.tv_music_artist)
     TextView tvMusicArtist;
-    @BindView(R.id.iv_music_play)
-    ImageView ivMusicPlay;
+    @BindView(R.id.circleProgress)
+    CircleProgress circleProgress;
     @BindView(R.id.iv_music_menu)
     ImageView ivMusicMenu;
     Unbinder unbinder;
@@ -165,11 +166,11 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
     @Override
     public void onResume() {
         super.onResume();
-        setUpBottomPlayControl(tvMusicName,tvMusicArtist,ivMusicPlay,ivMusicPoster);
+        setUpBottomPlayControl(tvMusicName,tvMusicArtist, circleProgress, ivMusicPoster);
     }
 
     @Override
-    public void onItemClickListener(View itemView, int position, Object data, int type) {
+    public void onItemClickListener(View itemView, int position, Object data) {
         MusicInfo musicInfo = (MusicInfo) data;
         PlayService playService = getPlayService();
 
@@ -181,10 +182,10 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
         playService.playMusic();
     }
 
-    @OnClick({R.id.iv_music_play, R.id.iv_music_menu,R.id.layout_music_control})
+    @OnClick({R.id.circleProgress, R.id.iv_music_menu,R.id.layout_music_control})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_music_play:
+            case R.id.circleProgress:
                 getPlayService().playMusic();
                 break;
             case R.id.iv_music_menu:
@@ -201,14 +202,20 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
             case PlayEvent.TYPE_CHANGE:
                 tvMusicName.setText(getPlayService().getMusicName());
                 tvMusicArtist.setText(getPlayService().getArtist());
-                ivMusicPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_bottom_play:R.drawable.ic_bottom_pause);
                 GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
                 break;
             case PlayEvent.TYPE_PLAY:
-                ivMusicPlay.setImageResource(R.drawable.ic_bottom_play);
+                circleProgress.setState(CircleProgress.STATE_PLAY);
                 break;
             case PlayEvent.TYPE_PAUSE:
-                ivMusicPlay.setImageResource(R.drawable.ic_bottom_pause);
+                circleProgress.setState(CircleProgress.STATE_PAUSE);
+                break;
+            case PlayEvent.TYPE_PROCESS:
+
+                ProgressInfo progressInfo = (ProgressInfo) event.getData();
+//                Log.i(TAG, progressInfo.getProcess()+"onMessageEvent: "+progressInfo.getDuration());
+                circleProgress.setMax((int) progressInfo.getDuration());
+                circleProgress.setProgress(progressInfo.getProcess());
                 break;
             default:
                 break;

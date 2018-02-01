@@ -10,6 +10,7 @@ public class PlayEvent {
     public static final int TYPE_CHANGE =0;
     public static final int TYPE_PLAY =1;
     public static final int TYPE_PAUSE =2;
+    public static final int TYPE_PROCESS =3;
 
     public PlayEvent(int type, Object data) {
         this.type = type;
@@ -35,3 +36,4 @@ public class PlayEvent {
         this.data = data;
     }
 }
+

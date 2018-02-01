@@ -23,11 +23,13 @@ import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
 import com.yzx.xiaomusic.service.PlayEvent;
 import com.yzx.xiaomusic.service.PlayService;
+import com.yzx.xiaomusic.service.ProgressInfo;
 import com.yzx.xiaomusic.ui.adapter.ChildCloudMusicAdapter;
 import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
 import com.yzx.xiaomusic.ui.mv.MvFragment;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.GlideUtils;
+import com.yzx.xiaomusic.widget.CircleProgress;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,7 +38,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.yzx.xiaomusic.service.PlayService.STATE_PLAYING;
 import static com.yzx.xiaomusic.service.PlayService.TYPE_NET;
 import static com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter.DATA_TYPE_SONG_SHEET_MUSIC;
 
@@ -90,9 +91,8 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
     TextView tvTitle;
     @BindView(R.id.tv_subtitle)
     TextView tvSubtitle;
-    @BindView(R.id.iv_music_play)
-    ImageView ivMusicPlay;
-
+    @BindView(R.id.circleProgress)
+    CircleProgress circleProgress;
     private CommonMusicAdapter adapter;
     private SongSheetDetailsPresenter mPresenter;
     private String songSheetTitle;
@@ -170,10 +170,9 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
      * @param itemView
      * @param position
      * @param data     需要的数据
-     * @param type     类型
      */
     @Override
-    public void onItemClickListener(View itemView, int position, Object data, int type) {
+    public void onItemClickListener(View itemView, int position, Object data) {
         SongSheetDetials.ResultBean.TracksBean tracksBean = (SongSheetDetials.ResultBean.TracksBean) data;
         switch (itemView.getId()) {
             case R.id.iv_mv:
@@ -190,7 +189,6 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
                 PlayService playService = getPlayService();
                 tvMusicName.setText(playService.getMusicName());
                 tvMusicArtist.setText(playService.getArtist());
-                ivMusicPlay.setImageResource(playService.getState()==STATE_PLAYING?R.drawable.ic_bottom_play:R.drawable.ic_bottom_pause);
                 if (TYPE_NET != getPlayService().getMusicType() || !String.valueOf(tracksBean.getId()).equals(getPlayService().getMusicId())) {
                     getPlayService().setState(PlayService.STATE_IDLE);
                     playService.setMusicType(PlayService.TYPE_NET);
@@ -203,10 +201,10 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
 
 
 
-    @OnClick({R.id.iv_music_play, R.id.iv_music_menu,R.id.layout_music_control})
+    @OnClick({R.id.circleProgress, R.id.iv_music_menu,R.id.layout_music_control})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_music_play:
+            case R.id.circleProgress:
                 getPlayService().playMusic();
                 break;
             case R.id.iv_music_menu:
@@ -231,7 +229,7 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
     @Override
     public void onResume() {
         super.onResume();
-        setUpBottomPlayControl(tvMusicName,tvMusicArtist,ivMusicPlay,ivMusicPoster);
+        setUpBottomPlayControl(tvMusicName,tvMusicArtist,circleProgress,ivMusicPoster);
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(PlayEvent event) {
@@ -239,14 +237,20 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
             case PlayEvent.TYPE_CHANGE:
                 tvMusicName.setText(getPlayService().getMusicName());
                 tvMusicArtist.setText(getPlayService().getArtist());
-                ivMusicPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_bottom_play:R.drawable.ic_bottom_pause);
                 GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
                 break;
             case PlayEvent.TYPE_PLAY:
-                ivMusicPlay.setImageResource(R.drawable.ic_bottom_play);
+                circleProgress.setState(CircleProgress.STATE_PLAY);
                 break;
             case PlayEvent.TYPE_PAUSE:
-                ivMusicPlay.setImageResource(R.drawable.ic_bottom_pause);
+                circleProgress.setState(CircleProgress.STATE_PAUSE);
+                break;
+            case PlayEvent.TYPE_PROCESS:
+
+                ProgressInfo progressInfo = (ProgressInfo) event.getData();
+//                Log.i(TAG, progressInfo.getProcess()+"onMessageEvent: "+progressInfo.getDuration());
+                circleProgress.setMax((int) progressInfo.getDuration());
+                circleProgress.setProgress(progressInfo.getProcess());
                 break;
             default:
                 break;

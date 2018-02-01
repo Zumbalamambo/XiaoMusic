@@ -14,7 +14,9 @@ import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.service.PlayEvent;
 import com.yzx.xiaomusic.service.PlayService;
+import com.yzx.xiaomusic.service.ProgressInfo;
 import com.yzx.xiaomusic.utils.GlideUtils;
+import com.yzx.xiaomusic.utils.TimeUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -101,8 +103,10 @@ public class PlayFragment extends BaseFragment {
         PlayService playService = getPlayService();
         ivPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_music_play_play:R.drawable.ic_music_play_pause);
         GlideUtils.loadImg(context,playService.getPoster(),-1 ,GlideUtils.TRANSFORM_BLUR,ivPlayBg);
-        seekBarMusicSeek.setMax((int) playService.getMusicTotalTime());
+        seekBarMusicSeek.setMax((int) playService.getDuration());
         setToolBar(toolBar,playService.getMusicName(),playService.getArtist());
+        tvMusicTimePlay.setText(TimeUtils.parseTime(playService.getProgress()));
+        tvMusicTimeLeft.setText(TimeUtils.parseTime(playService.getDuration()-playService.getProgress()));
     }
 
     @OnClick({R.id.layout_play_lyrics, R.id.layout_play_card, R.id.iv_play_mode, R.id.iv_play_previous, R.id.iv_play, R.id.iv_play_next, R.id.iv_play_list})
@@ -144,6 +148,7 @@ public class PlayFragment extends BaseFragment {
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(PlayEvent event) {
+
         switch (event.type){
             case PlayEvent.TYPE_CHANGE:
                 tvTitle.setText(getPlayService().getMusicName());
@@ -157,6 +162,16 @@ public class PlayFragment extends BaseFragment {
                 break;
             case PlayEvent.TYPE_PAUSE:
                 ivPlay.setImageResource(R.drawable.ic_music_play_pause);
+                break;
+            case PlayEvent.TYPE_PROCESS:
+
+                ProgressInfo progressInfo = (ProgressInfo) event.getData();
+                Log.i(TAG, progressInfo.getProcess()+"onMessageEvent: "+progressInfo.getDuration());
+//                ivPlay.setImageResource(R.drawable.ic_music_play_pause);
+                tvMusicTimePlay.setText(TimeUtils.parseTime(progressInfo.getProcess()));
+                tvMusicTimeLeft.setText(TimeUtils.parseTime(progressInfo.getDuration()-progressInfo.getProcess()));
+                seekBarMusicSeek.setMax((int) progressInfo.getDuration());
+                seekBarMusicSeek.setProgress(progressInfo.getProcess());
                 break;
             default:
                 break;

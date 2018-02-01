@@ -14,12 +14,14 @@ import android.widget.TextView;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.service.PlayEvent;
+import com.yzx.xiaomusic.service.ProgressInfo;
 import com.yzx.xiaomusic.ui.adapter.MainFragmentPagerAdapter;
 import com.yzx.xiaomusic.ui.main.cloud.CloudFragment;
 import com.yzx.xiaomusic.ui.main.friend.FriendFragment;
 import com.yzx.xiaomusic.ui.main.music.MusicFragment;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.GlideUtils;
+import com.yzx.xiaomusic.widget.CircleProgress;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,8 +31,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.yzx.xiaomusic.service.PlayService.STATE_PLAYING;
 
 /**
  * Created by yzx on 2018/1/19.
@@ -61,10 +61,10 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
     TextView tvMusicName;
     @BindView(R.id.tv_music_artist)
     TextView tvMusicArtist;
-    @BindView(R.id.iv_music_play)
-    ImageView ivMusicPlay;
     @BindView(R.id.iv_music_menu)
     ImageView ivMusicMenu;
+    @BindView(R.id.circleProgress)
+    CircleProgress circleProgress;
 
     @Override
     protected int getLayoutId() {
@@ -85,7 +85,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
         viewPager.addOnPageChangeListener(this);
     }
 
-    @OnClick({R.id.rb_music, R.id.rb_cloud, R.id.rb_friend,R.id.iv_music_play, R.id.iv_music_menu,R.id.layout_music_control})
+    @OnClick({R.id.rb_music, R.id.rb_cloud, R.id.rb_friend,R.id.circleProgress,R.id.iv_music_menu,R.id.layout_music_control})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rb_music:
@@ -97,7 +97,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
             case R.id.rb_friend:
                 viewPager.setCurrentItem(2);
                 break;
-            case R.id.iv_music_play:
+            case R.id.circleProgress:
                 getPlayService().playMusic();
                 break;
             case R.id.iv_music_menu:
@@ -147,7 +147,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
     @Override
     public void onResume() {
         super.onResume();
-        setUpBottomPlayControl(tvMusicName,tvMusicArtist,ivMusicPlay,ivMusicPoster);
+        setUpBottomPlayControl(tvMusicName,tvMusicArtist, circleProgress, ivMusicPoster);
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(PlayEvent event) {
@@ -155,14 +155,20 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
             case PlayEvent.TYPE_CHANGE:
                 tvMusicName.setText(getPlayService().getMusicName());
                 tvMusicArtist.setText(getPlayService().getArtist());
-                ivMusicPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_bottom_play:R.drawable.ic_bottom_pause);
                 GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
                 break;
             case PlayEvent.TYPE_PLAY:
-                ivMusicPlay.setImageResource(R.drawable.ic_bottom_play);
+                circleProgress.setState(CircleProgress.STATE_PLAY);
                 break;
             case PlayEvent.TYPE_PAUSE:
-                ivMusicPlay.setImageResource(R.drawable.ic_bottom_pause);
+                circleProgress.setState(CircleProgress.STATE_PAUSE);
+                break;
+            case PlayEvent.TYPE_PROCESS:
+
+                ProgressInfo progressInfo = (ProgressInfo) event.getData();
+//                Log.i(TAG, progressInfo.getProcess()+"onMessageEvent: "+progressInfo.getDuration());
+                circleProgress.setMax((int) progressInfo.getDuration());
+                circleProgress.setProgress(progressInfo.getProcess());
                 break;
             default:
                 break;

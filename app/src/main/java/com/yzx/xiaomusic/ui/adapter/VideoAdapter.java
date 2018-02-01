@@ -54,7 +54,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.Holder> impl
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null) {
-                    onItemClickListener.onItemClickListener(holder.itemView, position, dataBean, -1);
+                    onItemClickListener.onItemClickListener(holder.itemView, position, dataBean);
                 }
             }
         });
@@ -67,7 +67,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.Holder> impl
                     notifyDataSetChanged();
                     smallVideoHelper.setPlayPositionAndTag(position, TAG);
                     holder.ivPlayPause.setVisibility(View.INVISIBLE);
-                    onItemClickListener.onItemClickListener(holder.ivCover, position, dataBean, -1);
+                    onItemClickListener.onItemClickListener(holder.ivCover, position, dataBean);
                 }
             }
         });

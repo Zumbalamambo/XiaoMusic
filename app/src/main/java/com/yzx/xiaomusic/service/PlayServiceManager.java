@@ -17,8 +17,10 @@ public class PlayServiceManager {
     private static PlayServiceManager playServiceManager;
     private PlayService playService;
     private MusicApplication.PlayServiceConnection serviceConnection;
-    private List<MusicInfo> localMusicList;
-    private List<SongSheetDetials.ResultBean.TracksBean> songSheetMusicList;
+    private List<MusicInfo> localMusicList;//本地歌曲列表
+    private List<SongSheetDetials.ResultBean.TracksBean> songSheetMusicList;//当前歌单
+    private CommonMusicInfo commonMusicInfo;
+
     private PlayServiceManager() {
     }
 
@@ -73,6 +75,10 @@ public class PlayServiceManager {
      * @param commonMusicInfo
      */
     public void setCommonMusicInfo(CommonMusicInfo commonMusicInfo) {
+        this.commonMusicInfo = commonMusicInfo;
+    }
 
+    public CommonMusicInfo getCommonMusicInfo() {
+        return commonMusicInfo;
     }
 }

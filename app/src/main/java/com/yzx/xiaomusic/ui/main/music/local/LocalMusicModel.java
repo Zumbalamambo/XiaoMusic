@@ -3,7 +3,6 @@ package com.yzx.xiaomusic.ui.main.music.local;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.utils.FileUtils;
@@ -104,7 +103,7 @@ public class LocalMusicModel {
      * @param musicInfo
      */
     private void dealMusicName(MusicInfo musicInfo) {
-        Log.i(TAG, "subscribe: "+musicInfo.getAllName());
+//        Log.i(TAG, "subscribe: "+musicInfo.getAllName());
         if (musicInfo.allName.contains("-")) {
             String[] str = musicInfo.allName.split("-");
             musicInfo.setArtist(str[0].trim());

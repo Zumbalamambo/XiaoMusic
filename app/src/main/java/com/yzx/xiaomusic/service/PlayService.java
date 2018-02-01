@@ -22,6 +22,11 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 import static com.yzx.xiaomusic.ui.main.music.local.LocalMusicModel.LOCAL_MUSIC_INFO;
 
@@ -47,8 +52,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     private static final String MUSIC_CURRENT_TIME = "currentTime";
     private static final String MUSIC_TYPE = "musicType";
     private static final String MUSIC_ADDRESS = "musicAddress";
-    private static final String MUSIC_PLAY_STATE = "playState";
-
+    private  static final String MUSIC_PLAY_STATE = "playState";
+    private static final String MUSIC_POSTION_IN_LIST ="positionInList";
     public static final int STATE_BEFORE_PREPARED =0;//准备之前
     public static final int STATE_PLAYING =1;//正在播放
     public static final int STATE_PAUSE =2;//暂停
@@ -56,12 +61,11 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
     private int state = STATE_IDLE;
 
-
     private static final String TAG = "yglPlayService";
     public MediaPlayer mediaPlayer=new MediaPlayer();
 
-    private int mediaPlayerCurrentPosition;
-    private long musicTotalTime;//歌曲总时长
+    private int progress;//歌曲播放进度
+    private long duration;//歌曲总时长
     private String musicName;//歌名
     private String artist;//歌手
     private int musicType;//本地或者网络歌曲
@@ -71,6 +75,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     private String poster;//海报
     private int playListPosition;//当前歌单position，用来播放上一首下一首
     private MediaSessionManager mediaSessionManager;
+    private Disposable disposable;
+
 
     @Override
     public void onCreate() {
@@ -81,15 +87,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         setMusicAddress(PreferenceUtil.getString(MUSIC_ADDRESS,null));
         setMusicName(PreferenceUtil.getString(MUSIC_NAME,null));
         setArtist(PreferenceUtil.getString(MUSIC_ARTIST,null));
-//        setMusicTotalTime(PreferenceUtil.getLong(MUSIC_TOTOL_TIME,0));
-        setMediaPlayerCurrentPosition(PreferenceUtil.getInt(MUSIC_CURRENT_TIME,0));
-//        if(!TextUtils.isEmpty(getMusicAddress())){
-//            if (musicType==1){
-//                prepareLocalMusic();
-//            }else {
-//                prepareCloudMusic();
-//            }
-//        }
+        setDuration(PreferenceUtil.getLong(MUSIC_TOTOL_TIME,0));
+        setProgress(PreferenceUtil.getInt(MUSIC_CURRENT_TIME,0));
         if (musicType==1){//设置本地音乐数据
             String localMusicList = PreferenceUtil.getString(LOCAL_MUSIC_INFO, null);
             if (!TextUtils.isEmpty(localMusicList)){
@@ -102,30 +101,13 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         }else {//
 
         }
+
         mediaPlayer.setOnCompletionListener(this);
         mediaPlayer.setOnPreparedListener(this);
         mediaPlayer.setOnBufferingUpdateListener(this);
         mediaPlayer.setOnSeekCompleteListener(this);
     }
 
-
-//    private void prepareCloudMusic() {
-//        try {
-//            mediaPlayer.setDataSource(getMusicAddress());
-//            mediaPlayer.prepareAsync();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private void prepareLocalMusic() {
-//        try {
-//            mediaPlayer.setDataSource(getBaseContext(),Uri.parse(getMusicAddress()));
-//            mediaPlayer.prepareAsync();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     @Nullable
     @Override
@@ -179,12 +161,12 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 }else {
                     musicInfo = localMusicList.get(getPlayListPosition());
                 }
-                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(),getMusicTotalTime(),getMediaPlayerCurrentPosition()));
+                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getDuration(), getProgress()));
                 mediaSessionManager.updatePlaybackState();
                 setPoster(musicInfo.getPoster());
                 setMusicName(musicInfo.getName());
                 setArtist(musicInfo.getArtist());
-                setMusicTotalTime(musicInfo.getDuration());
+                setDuration(musicInfo.getDuration());
                 playLocalMusic(musicInfo);
             }
         }else if (TYPE_NET == musicType){
@@ -201,12 +183,12 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 }else {
                     tracksBean = songSheetMusicList.get(getPlayListPosition());
                 }
-                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(),getMusicTotalTime(),getMediaPlayerCurrentPosition()));
+                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getDuration(), getProgress()));
                 mediaSessionManager.updatePlaybackState();
                 setPoster(tracksBean.getAlbum().getPicUrl());
                 setMusicName(tracksBean.getName());
                 setArtist(tracksBean.getArtists().size()>0?tracksBean.getArtists().get(0).getName(): ResourceUtils.parseString(R.string.unKnow));
-                setMusicTotalTime(tracksBean.getDuration());
+                setDuration(tracksBean.getDuration());
                 playSongSheetMusic(tracksBean);
             }
         }
@@ -217,11 +199,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
      */
     public void play() {
 
-        Log.i(TAG, "play: "+mediaPlayerCurrentPosition);
-        mediaPlayer.seekTo(mediaPlayerCurrentPosition);
+        Log.i(TAG, "play: "+ progress);
+        mediaPlayer.seekTo(progress);
         setState(STATE_PLAYING);
         mediaSessionManager.updatePlaybackState();
-
     }
 
     /**
@@ -231,12 +212,15 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         if (mediaPlayer.isPlaying()){
             mediaPlayer.pause();
             EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_PAUSE,null));
-            mediaPlayerCurrentPosition = mediaPlayer.getCurrentPosition();
-            Log.i(TAG, "pause: 暂停时进度："+mediaPlayerCurrentPosition);
+            progress = mediaPlayer.getCurrentPosition();
+            Log.i(TAG, "pause: 暂停时进度："+ progress);
             setState(STATE_PAUSE);
+            stopUpdataProgress();
             mediaSessionManager.updatePlaybackState();
         }
     }
+
+
 
     /**
      * 上一曲
@@ -263,6 +247,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         MusicAddressModel.getInstance().getMusicAddress(String.valueOf(tracksBean.getId()));
     }
 
+    /**
+     * 播放网络音乐
+     * @param url
+     */
     public void playCloudMusic(String url){
         mediaPlayer.reset();
         try {
@@ -288,15 +276,55 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     }
 
     @Override
-    public void onPrepared(MediaPlayer mp) {
+    public void onPrepared(final MediaPlayer mp) {
         state = STATE_BEFORE_PREPARED;
         if (isPrepared()){
             mp.start();
             //保存数据
             saveCurrentMusicInfo();
+
+            startUpdataProgress();
             //更新数据
             setState(STATE_PLAYING);
-            EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_CHANGE,new MusicMessage(getMusicName(),getArtist(),getPoster(),getMusicTotalTime(),getMediaPlayerCurrentPosition())));
+            EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_CHANGE,new MusicMessage(getMusicName(),getArtist(),getPoster(), getDuration(), getProgress())));
+        }
+    }
+
+    /**
+     * 更新进度条
+     */
+    private void startUpdataProgress() {
+        Observable
+                .interval(500, TimeUnit.MILLISECONDS)
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+                        EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_PROCESS,new ProgressInfo(getDuration(),mediaPlayer.getCurrentPosition())));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        Log.i(TAG, "onError: ");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    /**
+     * 停止更新
+     */
+    private void stopUpdataProgress() {
+        if (disposable!=null){
+            disposable.dispose();
         }
     }
 
@@ -310,9 +338,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
     @Override
     public void onSeekComplete(MediaPlayer mp) {
-        mediaPlayerCurrentPosition=mp.getCurrentPosition();
+        progress =mp.getCurrentPosition();
         setState(STATE_PLAYING);
         mp.start();
+        startUpdataProgress();
         mediaSessionManager.updatePlaybackState();
         EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_PLAY,null));
     }
@@ -325,12 +354,12 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     public void setState(int state) {
         this.state = state;
     }
-    public void setMusicTotalTime(long musicTotalTime){
-        this.musicTotalTime = musicTotalTime;
+    public void setDuration(long duration){
+        this.duration = duration;
     }
 
-    public long getMusicTotalTime() {
-        return musicTotalTime;
+    public long getDuration() {
+        return duration;
     }
 
     public String getMusicName() {
@@ -349,12 +378,12 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         this.artist = artist;
     }
 
-    public int getMediaPlayerCurrentPosition() {
-        return mediaPlayerCurrentPosition;
+    public int getProgress() {
+        return progress;
     }
 
-    public void setMediaPlayerCurrentPosition(int mediaPlayerCurrentPosition) {
-        this.mediaPlayerCurrentPosition = mediaPlayerCurrentPosition;
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 
     public int getMusicType() {
@@ -407,13 +436,15 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
      * 保存播放信息到本地
      */
     private void saveCurrentMusicInfo() {
+        Log.i(TAG, "saveCurrentMusicInfo: "+getDuration());
         PreferenceUtil.put(MUSIC_NAME,getMusicName());
         PreferenceUtil.put(MUSIC_ARTIST,getArtist());
-        PreferenceUtil.put(MUSIC_TOTOL_TIME, getMusicTotalTime());
-        PreferenceUtil.put(MUSIC_CURRENT_TIME,getMediaPlayerCurrentPosition());
+        PreferenceUtil.put(MUSIC_TOTOL_TIME,getDuration());
+        PreferenceUtil.put(MUSIC_CURRENT_TIME, getProgress());
         PreferenceUtil.put(MUSIC_TYPE,getMusicType());
         PreferenceUtil.put(MUSIC_ADDRESS,getMusicAddress());
         PreferenceUtil.put(MUSIC_PLAY_STATE,getState());
+        PreferenceUtil.put(MUSIC_POSTION_IN_LIST,getPlayListPosition());
     }
 
     public boolean isPlaying() {
@@ -431,4 +462,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         }
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
 }

@@ -10,7 +10,9 @@ import java.util.List;
 public class CommonMusicInfo {
 
 
-    public CommonMusicInfo(String id, String md5, String name, String artist, String poster, int playState, int musicTye, int positionInList, int process, long totalTime, List<MusicInfo> localMusicList, List<SongSheetDetials.ResultBean.TracksBean> songSheetList) {
+    public CommonMusicInfo(String id, String md5, String name, String artist, String poster, int playState,
+                           int musicTye, int positionInList, int process, long duration, List<MusicInfo> localMusicList,
+                           List<SongSheetDetials.ResultBean.TracksBean> songSheetList) {
         this.id = id;
         this.md5 = md5;
         this.name = name;
@@ -20,7 +22,7 @@ public class CommonMusicInfo {
         this.musicTye = musicTye;
         this.positionInList = positionInList;
         this.process = process;
-        this.totalTime = totalTime;
+        this.duration = duration;
         this.localMusicList = localMusicList;
         this.songSheetList = songSheetList;
     }
@@ -38,7 +40,7 @@ public class CommonMusicInfo {
     int musicTye;//音乐类型   1---本地音乐   2----网络音乐
     int positionInList;//该歌曲在歌单中的位置
     int process;//退出时播放进度
-    long totalTime;//歌曲总时长
+    long duration;//歌曲总时长
     List<MusicInfo> localMusicList; //本地音乐列表
     List<SongSheetDetials.ResultBean.TracksBean> songSheetList;//歌单列表
 
@@ -92,12 +94,12 @@ public class CommonMusicInfo {
     public int getMusicTye() {
         return musicTye;
     }
-    public long getTotalTime() {
-        return totalTime;
+    public long getDuration() {
+        return duration;
     }
 
-    public void setTotalTime(long totalTime) {
-        this.totalTime = totalTime;
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
     public void setMusicTye(int musicTye) {
         this.musicTye = musicTye;

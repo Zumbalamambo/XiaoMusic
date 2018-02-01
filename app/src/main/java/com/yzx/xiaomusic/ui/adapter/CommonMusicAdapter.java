@@ -19,6 +19,7 @@ import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.service.PlayServiceManager;
 import com.yzx.xiaomusic.ui.dialog.CloudMusicDialog;
 import com.yzx.xiaomusic.ui.dialog.LocalMusicDialog;
+import com.yzx.xiaomusic.utils.SongSheetDataUtils;
 
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
                                         musicInfo.poster,PlayService.STATE_IDLE, Constants.TYPE_MUSIC_LOCAL,i,0, musicInfo.getDuration(),
                                         localMusicInfo,null));
                         if (onItemClickListener!=null){
-                            onItemClickListener.onItemClickListener(holder.itemView,i,musicInfo,DATA_TYPE_LOCAL_MUSIC);
+                            onItemClickListener.onItemClickListener(holder.itemView,i,musicInfo);
                         }
                     }
                 });
@@ -88,16 +89,16 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
                 });
                 break;
             case DATA_TYPE_SONG_SHEET_MUSIC:
-                final SongSheetDetials.ResultBean.TracksBean bean = songSheetData.get(i);
-                holder.tvName.setText(bean.getName());
+                final SongSheetDetials.ResultBean.TracksBean songSheetMusicInfo = songSheetData.get(i);
+                holder.tvName.setText(songSheetMusicInfo.getName());
                 holder.tvSerialNumber.setText(String.valueOf(i+1));
-                holder.ivMv.setVisibility(bean.getMvid()>0 ? View.VISIBLE:View.GONE);
-                holder.tvArtist.setText(bean.getArtists().get(0).getName());
+                holder.ivMv.setVisibility(songSheetMusicInfo.getMvid()>0 ? View.VISIBLE:View.GONE);
+                holder.tvArtist.setText(songSheetMusicInfo.getArtists().get(0).getName());
                 holder.ivMv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (onItemClickListener!=null){
-                            onItemClickListener.onItemClickListener(holder.ivMv,i,bean,DATA_TYPE_SONG_SHEET_MUSIC);
+                            onItemClickListener.onItemClickListener(holder.ivMv,i,songSheetMusicInfo);
                         }
                     }
                 });
@@ -106,7 +107,7 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
                     public void onClick(View v) {
                         CloudMusicDialog dialog=new CloudMusicDialog();
                         Bundle args =new Bundle();
-                        args.putSerializable(MUSIC_INFO,bean);
+                        args.putSerializable(MUSIC_INFO,songSheetMusicInfo);
                         dialog.setArguments(args);
                         dialog.show(((AppCompatActivity)context).getSupportFragmentManager(),"cloud");
                     }
@@ -117,12 +118,20 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
                         PlayServiceManager.getInstance().setSongSheetMusicList(songSheetData);
                         PlayServiceManager.getInstance().getPlayService().setMusicType(PlayService.TYPE_NET);
                         PlayServiceManager.getInstance().getPlayService().setPlayListPosition(i);
+                        PlayServiceManager.getInstance()
+                                .setCommonMusicInfo(
+                                        new CommonMusicInfo(null,null,songSheetMusicInfo.getName(), SongSheetDataUtils.getSongArtist(songSheetMusicInfo),
+                                                SongSheetDataUtils.getSongPoster(songSheetMusicInfo),PlayService.STATE_IDLE, Constants.TYPE_MUSIC_SONGSHEET,
+                                                i,0, songSheetMusicInfo.getDuration(),
+                                                localMusicInfo,songSheetData));
                         if (onItemClickListener!=null){
-                            onItemClickListener.onItemClickListener(holder.itemView,i,bean,DATA_TYPE_SONG_SHEET_MUSIC);
+                            onItemClickListener.onItemClickListener(holder.itemView,i,songSheetMusicInfo);
                         }
                     }
                 });
                 break;
+                default:
+                    break;
         }
 
     }
@@ -152,10 +161,6 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
         notifyDataSetChanged();
     }
 
-//    @Override
-//    public void onClick(View v) {
-//        onItemClickListener.onItemClickListener(v,0,null,1);
-//    }
 
     class Holder extends RecyclerView.ViewHolder {
 

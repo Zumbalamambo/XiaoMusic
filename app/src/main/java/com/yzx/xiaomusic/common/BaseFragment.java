@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +22,11 @@ import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.LoadingUtils;
 import com.yzx.xiaomusic.utils.ResourceUtils;
 import com.yzx.xiaomusic.utils.ToastUtils;
+import com.yzx.xiaomusic.widget.CircleProgress;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportFragment;
-
-import static com.yzx.xiaomusic.service.PlayService.STATE_PLAYING;
 
 /**
  * Created by yzx on 2018/1/12.
@@ -177,16 +175,16 @@ public abstract class BaseFragment extends SupportFragment implements BaseView {
         return playService;
     }
 
-    public void setUpBottomPlayControl(TextView tvMusicName, TextView tvMusicArtist, ImageView ivMusicPlay, ImageView ivMusicPoster) {
+    public void setUpBottomPlayControl(TextView tvMusicName, TextView tvMusicArtist, CircleProgress circleProgress, ImageView ivMusicPoster) {
         tvMusicName.setText(getPlayService().getMusicName());
         tvMusicArtist.setText(getPlayService().getArtist());
-        ivMusicPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_bottom_play:R.drawable.ic_bottom_pause);
+        circleProgress.setState(PlayService.STATE_PLAYING==getPlayService().getState()?CircleProgress.STATE_PLAY:CircleProgress.STATE_PAUSE);
         GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
     }
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy: "+this.getClass().getSimpleName());
+//        Log.i(TAG, "onDestroy: "+this.getClass().getSimpleName());
         bind.unbind();
     }
 }

@@ -42,7 +42,7 @@ public class MediaSessionManager {
         mediaSessionCompat.setPlaybackState(
                 new PlaybackStateCompat.Builder()
                         .setActions(MEDIA_SESSION_ACTIONS)
-                        .setState(state, playService.getMediaPlayerCurrentPosition(), 1)
+                        .setState(state, playService.getProgress(), 1)
                         .build());
     }
 
@@ -116,7 +116,7 @@ public class MediaSessionManager {
         public void onSeekTo(long pos) {
 //            mPlayService.seekTo((int) pos);
             Log.i(TAG, "onSeekTo: "+pos);
-            playService.setMediaPlayerCurrentPosition((int) pos);
+            playService.setProgress((int) pos);
             playService.previous();
         }
 

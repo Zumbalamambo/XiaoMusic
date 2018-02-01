@@ -204,7 +204,7 @@ public class VideoCloudFragment extends BaseFragment implements VideoCloudContra
     }
 
     @Override
-    public void onItemClickListener(View itemView, int position, Object data, int type) {
+    public void onItemClickListener(View itemView, int position, Object data) {
         VideoList.DataBean videoData = (VideoList.DataBean) data;
         switch (itemView.getId()){
             case R.id.iv_cover:

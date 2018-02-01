@@ -12,7 +12,6 @@ public interface OnItemClickLsitener{
      * @param itemView
      * @param position
      * @param data   需要的数据
-     * @param type    类型
      */
-        void onItemClickListener(View itemView, int position, Object data, int type);
+        void onItemClickListener(View itemView, int position, Object data);
     }
