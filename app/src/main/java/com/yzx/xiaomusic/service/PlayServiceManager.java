@@ -1,6 +1,7 @@
 package com.yzx.xiaomusic.service;
 
 import com.yzx.xiaomusic.MusicApplication;
+import com.yzx.xiaomusic.entities.CommonMusicInfo;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
 
@@ -65,5 +66,13 @@ public class PlayServiceManager {
 
     public void setSongSheetMusicList(List<SongSheetDetials.ResultBean.TracksBean> songSheetMusicList) {
         this.songSheetMusicList = songSheetMusicList;
+    }
+
+    /**
+     * 设置音乐信息
+     * @param commonMusicInfo
+     */
+    public void setCommonMusicInfo(CommonMusicInfo commonMusicInfo) {
+
     }
 }

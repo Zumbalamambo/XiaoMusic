@@ -6,6 +6,7 @@ import com.yzx.xiaomusic.entities.MusicAddress;
 import com.yzx.xiaomusic.entities.MvData;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
+import com.yzx.xiaomusic.entities.VideoList;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -59,4 +60,15 @@ public interface MuiscApi {
      */
     @GET("https://api.imjad.cn/cloudmusic/?type=song&id=483671599&br=198000")
     Observable<MvData> getMusicMv(@Query("type") String type, @Query("id") String id, @Query("br") String br);
+
+
+    /**
+     * 获取
+     * @param offset
+     * @param limit
+     * @return
+     */
+    @GET("http://musicapi.leanapp.cn/top/mv")
+    Observable<VideoList> getVideoList(@Query("offset") int offset, @Query("limit") int limit);
+
 }

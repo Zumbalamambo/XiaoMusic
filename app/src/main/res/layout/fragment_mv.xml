@@ -5,28 +5,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.design.widget.AppBarLayout
-        android:paddingTop="25dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.Toolbar
+                android:layout_marginTop="25dp"
                 android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
                 android:background="@color/colorTransparent"
                 app:title="Mv名字"
+                app:layout_collapseMode="pin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <TextView
-                android:gravity="center"
-                android:text="我是Mv"
-                android:textColor="@color/colorWhite"
+            <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax"
+                android:id="@+id/videoPlayer"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:layout_height="220dp"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
+import com.yzx.xiaomusic.common.Constants;
+import com.yzx.xiaomusic.entities.CommonMusicInfo;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
 import com.yzx.xiaomusic.service.PlayService;
@@ -64,6 +66,11 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
                         PlayServiceManager.getInstance().setLocalMusicList(localMusicInfo);
                         PlayServiceManager.getInstance().getPlayService().setMusicType(PlayService.TYPE_LOCAL);
                         PlayServiceManager.getInstance().getPlayService().setPlayListPosition(i);
+                        PlayServiceManager.getInstance()
+                                .setCommonMusicInfo(
+                                        new CommonMusicInfo(null,musicInfo.getMd5(),musicInfo.getName(),musicInfo.getArtist(),
+                                        musicInfo.poster,PlayService.STATE_IDLE, Constants.TYPE_MUSIC_LOCAL,i,0, musicInfo.getDuration(),
+                                        localMusicInfo,null));
                         if (onItemClickListener!=null){
                             onItemClickListener.onItemClickListener(holder.itemView,i,musicInfo,DATA_TYPE_LOCAL_MUSIC);
                         }

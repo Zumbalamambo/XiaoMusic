@@ -13,13 +13,17 @@ import android.util.Log;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
+import com.yzx.xiaomusic.utils.JsonUtils;
 import com.yzx.xiaomusic.utils.PreferenceUtil;
 import com.yzx.xiaomusic.utils.ResourceUtils;
+import com.yzx.xiaomusic.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.List;
+
+import static com.yzx.xiaomusic.ui.main.music.local.LocalMusicModel.LOCAL_MUSIC_INFO;
 
 /**
  *
@@ -73,18 +77,30 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         super.onCreate();
 
         mediaSessionManager = new MediaSessionManager(this);
-        int musicType = PreferenceUtil.getInt(MUSIC_TYPE, 1);
+        setMusicType(PreferenceUtil.getInt(MUSIC_TYPE, 1));
         setMusicAddress(PreferenceUtil.getString(MUSIC_ADDRESS,null));
         setMusicName(PreferenceUtil.getString(MUSIC_NAME,null));
         setArtist(PreferenceUtil.getString(MUSIC_ARTIST,null));
-        setMusicTotalTime(PreferenceUtil.getLong(MUSIC_TOTOL_TIME,0));
+//        setMusicTotalTime(PreferenceUtil.getLong(MUSIC_TOTOL_TIME,0));
         setMediaPlayerCurrentPosition(PreferenceUtil.getInt(MUSIC_CURRENT_TIME,0));
-        if(!TextUtils.isEmpty(getMusicAddress())){
-            if (musicType==1){
-                prepareLocalMusic();
+//        if(!TextUtils.isEmpty(getMusicAddress())){
+//            if (musicType==1){
+//                prepareLocalMusic();
+//            }else {
+//                prepareCloudMusic();
+//            }
+//        }
+        if (musicType==1){//设置本地音乐数据
+            String localMusicList = PreferenceUtil.getString(LOCAL_MUSIC_INFO, null);
+            if (!TextUtils.isEmpty(localMusicList)){
+                List<MusicInfo> musicInfos = JsonUtils.stringToList(localMusicList, MusicInfo.class);
+                PlayServiceManager.getInstance().setLocalMusicList(musicInfos);
             }else {
-                prepareCloudMusic();
+                ToastUtils.showToast("本地数据音乐列表获取异常");
             }
+
+        }else {//
+
         }
         mediaPlayer.setOnCompletionListener(this);
         mediaPlayer.setOnPreparedListener(this);
@@ -93,23 +109,23 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     }
 
 
-    private void prepareCloudMusic() {
-        try {
-            mediaPlayer.setDataSource(getMusicAddress());
-            mediaPlayer.prepareAsync();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void prepareLocalMusic() {
-        try {
-            mediaPlayer.setDataSource(getBaseContext(),Uri.parse(getMusicAddress()));
-            mediaPlayer.prepareAsync();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void prepareCloudMusic() {
+//        try {
+//            mediaPlayer.setDataSource(getMusicAddress());
+//            mediaPlayer.prepareAsync();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    private void prepareLocalMusic() {
+//        try {
+//            mediaPlayer.setDataSource(getBaseContext(),Uri.parse(getMusicAddress()));
+//            mediaPlayer.prepareAsync();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Nullable
     @Override
@@ -149,7 +165,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
      * 开始播放
      */
     public void start() {
-        Log.i(TAG, "start: ");
+        Log.i(TAG, "start: "+getMusicType());
         if (TYPE_LOCAL == musicType){
             List<MusicInfo> localMusicList = PlayServiceManager.getInstance().getLocalMusicList();
             if (localMusicList!=null&&localMusicList.size()>0){
@@ -276,6 +292,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         state = STATE_BEFORE_PREPARED;
         if (isPrepared()){
             mp.start();
+            //保存数据
+            saveCurrentMusicInfo();
             //更新数据
             setState(STATE_PLAYING);
             EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_CHANGE,new MusicMessage(getMusicName(),getArtist(),getPoster(),getMusicTotalTime(),getMediaPlayerCurrentPosition())));
@@ -385,12 +403,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     public void setPlayListPosition(int playListPosition) {
         this.playListPosition = playListPosition;
     }
-    @Override
-    public void onDestroy() {
-        saveCurrentMusicInfo();
-        super.onDestroy();
-    }
-
     /**
      * 保存播放信息到本地
      */

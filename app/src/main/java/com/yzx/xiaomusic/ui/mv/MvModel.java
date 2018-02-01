@@ -13,16 +13,16 @@ import io.reactivex.schedulers.Schedulers;
  * Description
  */
 
-public class MvModel {
+public class MvModel implements MvContract.Model<MvFragment,MvData>{
 
-    public void getMvData(String mvId, MvpObserver<MvData> observer){
-
+    @Override
+    public void getMvAddress(MvFragment fragment, String mvId, MvpObserver<MvData> observer) {
         AppHttpClient.getInstance()
                 .getService(MuiscApi.class)
                 .getMusicMv("mv",mvId,"")
+                .compose(fragment.<MvData>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
-
     }
 }
