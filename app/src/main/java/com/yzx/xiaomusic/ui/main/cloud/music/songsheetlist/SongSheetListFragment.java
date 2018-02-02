@@ -15,6 +15,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.entities.SongSheet;
+import com.yzx.xiaomusic.service.MusicMessage;
 import com.yzx.xiaomusic.service.PlayEvent;
 import com.yzx.xiaomusic.service.ProgressInfo;
 import com.yzx.xiaomusic.ui.adapter.ChildCloudMusicAdapter;
@@ -159,9 +160,10 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
     public void onMessageEvent(PlayEvent event) {
         switch (event.type){
             case PlayEvent.TYPE_CHANGE:
-                tvMusicName.setText(getPlayService().getMusicName());
-                tvMusicArtist.setText(getPlayService().getArtist());
-                GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
+                MusicMessage musicMessage = (MusicMessage) event.getData();
+                tvMusicName.setText(musicMessage.getName());
+                tvMusicArtist.setText(musicMessage.getArtist());
+                GlideUtils.loadImg(context,musicMessage.getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
                 break;
             case PlayEvent.TYPE_PLAY:
                 circleProgress.setState(CircleProgress.STATE_PLAY);

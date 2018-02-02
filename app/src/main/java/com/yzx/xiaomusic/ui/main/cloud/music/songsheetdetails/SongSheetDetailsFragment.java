@@ -21,6 +21,7 @@ import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.common.OnItemClickLsitener;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
+import com.yzx.xiaomusic.service.MusicMessage;
 import com.yzx.xiaomusic.service.PlayEvent;
 import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.service.ProgressInfo;
@@ -29,6 +30,7 @@ import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
 import com.yzx.xiaomusic.ui.mv.MvFragment;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.GlideUtils;
+import com.yzx.xiaomusic.utils.MusicDataUtils;
 import com.yzx.xiaomusic.widget.CircleProgress;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,9 +39,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.yzx.xiaomusic.service.PlayService.TYPE_NET;
-import static com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter.DATA_TYPE_SONG_SHEET_MUSIC;
 
 /**
  * @author yzx
@@ -158,7 +157,7 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
 
         GlideUtils.loadImg(context, detials.getResult().getCreator().getAvatarUrl(), GlideUtils.TYPE_HEAD, GlideUtils.TRANSFORM_CIRCLE, ivHeadAuthor);
         tvNameAuthor.setText(detials.getResult().getCreator().getNickname());
-        adapter.setDatas(DATA_TYPE_SONG_SHEET_MUSIC, detials.getResult().getTracks());
+        adapter.setDatas(detials);
         tvCollectionNum.setText(String.valueOf(detials.getResult().getSubscribedCount()));
         tvEvaluteNum.setText(String.valueOf(detials.getResult().getCommentCount()));
         tvShareNum.setText(String.valueOf(detials.getResult().getShareCount()));
@@ -177,7 +176,6 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
         switch (itemView.getId()) {
             case R.id.iv_mv:
                 MvFragment mvFragment = MvFragment.getInstance();
-                Log.i(TAG, "onItemClickListener: "+tracksBean.getMvid());
                 if (!TextUtils.isEmpty(String.valueOf(tracksBean.getMvid()))){
                     Bundle args =new Bundle();
                     args.putString(KEY_MV_ID, String.valueOf(tracksBean.getMvid()));
@@ -187,12 +185,9 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
                 break;
             default:
                 PlayService playService = getPlayService();
-                tvMusicName.setText(playService.getMusicName());
-                tvMusicArtist.setText(playService.getArtist());
-                if (TYPE_NET != getPlayService().getMusicType() || !String.valueOf(tracksBean.getId()).equals(getPlayService().getMusicId())) {
+                if (MusicDataUtils.TYPE_SONG_SHEET !=MusicDataUtils.getMusicType()||playService.getPlayListPosition()!=position){
                     getPlayService().setState(PlayService.STATE_IDLE);
-                    playService.setMusicType(PlayService.TYPE_NET);
-                    playService.setMusicId(String.valueOf(tracksBean.getId()));
+                    getPlayService().setPlayListPosition(position);
                 }
                 playService.playMusic();
                 break;
@@ -235,9 +230,10 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
     public void onMessageEvent(PlayEvent event) {
         switch (event.type){
             case PlayEvent.TYPE_CHANGE:
-                tvMusicName.setText(getPlayService().getMusicName());
-                tvMusicArtist.setText(getPlayService().getArtist());
-                GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
+                MusicMessage musicMessage = (MusicMessage) event.getData();
+                tvMusicName.setText(musicMessage.getName());
+                tvMusicArtist.setText(musicMessage.getArtist());
+                GlideUtils.loadImg(context,musicMessage.getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
                 break;
             case PlayEvent.TYPE_PLAY:
                 circleProgress.setState(CircleProgress.STATE_PLAY);

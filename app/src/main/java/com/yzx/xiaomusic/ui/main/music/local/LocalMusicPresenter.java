@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
 import com.yzx.xiaomusic.entities.MusicInfo;
-import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
 import com.yzx.xiaomusic.utils.DensityUtils;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class LocalMusicPresenter {
         mModel.getLocalMusicInfo(context, new LocalMusicModel.CallBack() {
             @Override
             public void onSuccess(List<MusicInfo> list) {
-                mFragment.adapter.setDatas(CommonMusicAdapter.DATA_TYPE_LOCAL_MUSIC,list);
+                mFragment.adapter.setDatas(list);
                 mFragment.tvScanningMusicName.animate().translationY(-DensityUtils.dip2px(50)).setDuration(1000).setInterpolator(new AccelerateInterpolator()).start();
             }
 

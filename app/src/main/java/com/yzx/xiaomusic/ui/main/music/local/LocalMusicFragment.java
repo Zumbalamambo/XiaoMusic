@@ -19,12 +19,14 @@ import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.common.OnItemClickLsitener;
 import com.yzx.xiaomusic.entities.MusicInfo;
+import com.yzx.xiaomusic.service.MusicMessage;
 import com.yzx.xiaomusic.service.PlayEvent;
 import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.service.ProgressInfo;
 import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.GlideUtils;
+import com.yzx.xiaomusic.utils.MusicDataUtils;
 import com.yzx.xiaomusic.utils.ScanMusicUtils;
 import com.yzx.xiaomusic.widget.CircleProgress;
 
@@ -37,8 +39,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.yzx.xiaomusic.service.PlayService.TYPE_LOCAL;
 
 /**
  * @author yzx
@@ -106,7 +106,7 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
             mPresenter.getLocalMusicInfo(getContext());
             showScanAnimation();
         }
-        adapter.setDatas(CommonMusicAdapter.DATA_TYPE_LOCAL_MUSIC, musicInfos);
+        adapter.setDatas( musicInfos);
     }
 
 
@@ -169,15 +169,14 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
 
     @Override
     public void onItemClickListener(View itemView, int position, Object data) {
-        MusicInfo musicInfo = (MusicInfo) data;
+//        Log.i(TAG, "onItemClickListener: "+MusicDataUtils.getMusicType());
         PlayService playService = getPlayService();
-
-        if (TYPE_LOCAL != getPlayService().getMusicType() || !musicInfo.getMd5().equals(getPlayService().getMd5())) {
+        if (playService.getPlayListPosition()!=position&&MusicDataUtils.TYPE_LOCAL ==MusicDataUtils.getMusicType()){
             getPlayService().setState(PlayService.STATE_IDLE);
-            getPlayService().setMusicType(PlayService.TYPE_LOCAL);
-            getPlayService().setMd5(musicInfo.md5);
+            getPlayService().setPlayListPosition(position);
         }
         playService.playMusic();
+
     }
 
     @OnClick({R.id.circleProgress, R.id.iv_music_menu,R.id.layout_music_control})
@@ -198,9 +197,10 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
     public void onMessageEvent(PlayEvent event) {
         switch (event.type){
             case PlayEvent.TYPE_CHANGE:
-                tvMusicName.setText(getPlayService().getMusicName());
-                tvMusicArtist.setText(getPlayService().getArtist());
-                GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
+                MusicMessage musicMessage = (MusicMessage) event.getData();
+                tvMusicName.setText(musicMessage.getName());
+                tvMusicArtist.setText(musicMessage.getArtist());
+                GlideUtils.loadImg(context,musicMessage.getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
                 break;
             case PlayEvent.TYPE_PLAY:
                 circleProgress.setState(CircleProgress.STATE_PLAY);

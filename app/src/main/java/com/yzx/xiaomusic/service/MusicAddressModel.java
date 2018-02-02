@@ -22,10 +22,9 @@ import io.reactivex.schedulers.Schedulers;
 public class MusicAddressModel{
 
     private static MusicAddressModel musicAddressModel;
-    private final PlayService playService;
 
     private MusicAddressModel() {
-        playService = PlayServiceManager.getInstance().getPlayService();
+
     }
 
     public static MusicAddressModel getInstance() {
@@ -46,19 +45,13 @@ public class MusicAddressModel{
                     protected void onSuccess(MusicAddress musicAddress) {
                         if (musicAddress.getData().size()>0){
                             MusicAddress.DataBean dataBean = musicAddress.getData().get(0);
-                            playService.setMusicAddress(dataBean.getUrl());
-                            if (TextUtils.isEmpty(dataBean.getMd5())){
-                                ToastUtils.showToast(R.string.noThisMusic,ToastUtils.TYPE_NOTICE);
+                            if (TextUtils.isEmpty(dataBean.getUrl())){
+                                ToastUtils.showToast(R.string.error_get_music,ToastUtils.TYPE_NOTICE);
                             }else {
-                                if (dataBean.getMd5().equals(playService.getMd5())){
-                                    playService.playMusic();
-                                }else {
-                                    playService.playCloudMusic(dataBean.getUrl());
-                                    playService.setMd5(dataBean.getMd5());
-                                }
+                                PlayServiceManager.getInstance().getPlayService().playCloudMusic(dataBean.getUrl());
                             }
                         }else {
-                            ToastUtils.showToast(R.string.noThisMusic,ToastUtils.TYPE_NOTICE);
+                            ToastUtils.showToast(R.string.error_get_music,ToastUtils.TYPE_NOTICE);
                         }
                     }
 

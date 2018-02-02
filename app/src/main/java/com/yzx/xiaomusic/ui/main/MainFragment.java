@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
+import com.yzx.xiaomusic.service.MusicMessage;
 import com.yzx.xiaomusic.service.PlayEvent;
 import com.yzx.xiaomusic.service.ProgressInfo;
 import com.yzx.xiaomusic.ui.adapter.MainFragmentPagerAdapter;
@@ -153,9 +154,10 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
     public void onMessageEvent(PlayEvent event) {
         switch (event.type){
             case PlayEvent.TYPE_CHANGE:
-                tvMusicName.setText(getPlayService().getMusicName());
-                tvMusicArtist.setText(getPlayService().getArtist());
-                GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
+                MusicMessage musicMessage = (MusicMessage) event.getData();
+                tvMusicName.setText(musicMessage.getName());
+                tvMusicArtist.setText(musicMessage.getArtist());
+                GlideUtils.loadImg(context,musicMessage.getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
                 break;
             case PlayEvent.TYPE_PLAY:
                 circleProgress.setState(CircleProgress.STATE_PLAY);
@@ -166,7 +168,6 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
             case PlayEvent.TYPE_PROCESS:
 
                 ProgressInfo progressInfo = (ProgressInfo) event.getData();
-//                Log.i(TAG, progressInfo.getProcess()+"onMessageEvent: "+progressInfo.getDuration());
                 circleProgress.setMax((int) progressInfo.getDuration());
                 circleProgress.setProgress(progressInfo.getProcess());
                 break;

@@ -20,6 +20,7 @@ import com.yzx.xiaomusic.service.PlayServiceManager;
 import com.yzx.xiaomusic.ui.main.MainActivity;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.LoadingUtils;
+import com.yzx.xiaomusic.utils.MusicDataUtils;
 import com.yzx.xiaomusic.utils.ResourceUtils;
 import com.yzx.xiaomusic.utils.ToastUtils;
 import com.yzx.xiaomusic.widget.CircleProgress;
@@ -176,10 +177,11 @@ public abstract class BaseFragment extends SupportFragment implements BaseView {
     }
 
     public void setUpBottomPlayControl(TextView tvMusicName, TextView tvMusicArtist, CircleProgress circleProgress, ImageView ivMusicPoster) {
-        tvMusicName.setText(getPlayService().getMusicName());
-        tvMusicArtist.setText(getPlayService().getArtist());
+
+        tvMusicName.setText(MusicDataUtils.getMusicName());
+        tvMusicArtist.setText(MusicDataUtils.getMusicArtist());
         circleProgress.setState(PlayService.STATE_PLAYING==getPlayService().getState()?CircleProgress.STATE_PLAY:CircleProgress.STATE_PAUSE);
-        GlideUtils.loadImg(context,getPlayService().getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
+        GlideUtils.loadImg(context,MusicDataUtils.getMusicPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
     }
     @Override
     public void onDestroy() {

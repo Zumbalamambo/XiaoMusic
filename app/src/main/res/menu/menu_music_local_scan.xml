@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menu_scan" android:title="@string/scanMusic" android:icon="@drawable/ic_head"/>
+    <item android:id="@+id/menu_search" android:title="@string/search" android:icon="@drawable/ic_search" app:showAsAction="always"/>
+    <item android:id="@+id/menu_scan" android:title="@string/scanMusic" android:icon="@drawable/ic_scan_local_music"/>
+    <item android:id="@+id/menu_sort" android:title="@string/sortModel" android:icon="@drawable/ic_sort"/>
+    <item android:id="@+id/menu_get_lyrics" android:title="@string/getPosterLyrics" android:icon="@drawable/ic_lyrics"/>
+    <item android:id="@+id/menu_update_music" android:title="@string/updateMusic" android:icon="@drawable/ic_update_music_level"/>
 </menu>

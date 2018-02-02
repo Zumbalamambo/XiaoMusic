@@ -44,4 +44,9 @@
     <string name="noThisMusic">暂无此曲</string>
     <string name="unKnow">未知</string>
     <string name="error_data">数据异常，请稍后再试</string>
+    <string name="search">搜索</string>
+    <string name="sortModel">排序方式</string>
+    <string name="getPosterLyrics">获取封面歌词</string>
+    <string name="updateMusic">升级音质</string>
+    <string name="error_get_music">该歌曲获取失败</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.yzx.xiaomusic.utils;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
 
@@ -17,8 +16,6 @@ public class TimeUtils {
     public static String parseTime(long data){
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
-        String format = dateFormat.format(data);
-        Log.i(TAG, "parseTime: "+format);
-        return format;
+        return dateFormat.format(data);
     }
 }
