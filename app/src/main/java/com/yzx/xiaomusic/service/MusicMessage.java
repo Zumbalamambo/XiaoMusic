@@ -8,14 +8,16 @@ package com.yzx.xiaomusic.service;
 public class MusicMessage {
     String name;
     String artist;
-    String posetr;
+    String poster;
+    String artistId;
     long totalTime;
     long currentProgress;
 
-    public MusicMessage(String name, String artist, String posetr, long totalTime, long currentProgress) {
+    public MusicMessage(String name, String artist, String poster, String artistId, long totalTime, long currentProgress) {
         this.name = name;
         this.artist = artist;
-        this.posetr = posetr;
+        this.poster = poster;
+        this.artistId = artistId;
         this.totalTime = totalTime;
         this.currentProgress = currentProgress;
     }
@@ -35,12 +37,20 @@ public class MusicMessage {
     public void setArtist(String artist) {
         this.artist = artist;
     }
-    public String getPosetr() {
-        return posetr;
+    public String getPoster() {
+        return poster;
     }
 
-    public void setPosetr(String posetr) {
-        this.posetr = posetr;
+    public String getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(String artistId) {
+        this.artistId = artistId;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 
     public long getTotalTime() {

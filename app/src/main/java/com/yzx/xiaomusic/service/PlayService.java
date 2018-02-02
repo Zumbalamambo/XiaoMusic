@@ -68,6 +68,16 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     private long duration;//歌曲总时长
     private String musicName;//歌名
     private String artist;//歌手
+
+    public String getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(String artistId) {
+        this.artistId = artistId;
+    }
+
+    private String artistId;//歌手id
     private int musicType;//本地或者网络歌曲
     private String musicAddress;//歌曲路径
     private String md5;
@@ -119,7 +129,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     @Override
     public void onCompletion(MediaPlayer mp) {
         next();
-        Log.i(TAG, "onCompletion: ");
     }
 
     /**
@@ -161,7 +170,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 }else {
                     musicInfo = localMusicList.get(getPlayListPosition());
                 }
-                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getDuration(), getProgress()));
+                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(),getArtistId(), getDuration(), getProgress()));
                 mediaSessionManager.updatePlaybackState();
                 setPoster(musicInfo.getPoster());
                 setMusicName(musicInfo.getName());
@@ -183,7 +192,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 }else {
                     tracksBean = songSheetMusicList.get(getPlayListPosition());
                 }
-                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getDuration(), getProgress()));
+                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getArtistId(),getDuration(), getProgress()));
                 mediaSessionManager.updatePlaybackState();
                 setPoster(tracksBean.getAlbum().getPicUrl());
                 setMusicName(tracksBean.getName());
@@ -286,7 +295,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             startUpdataProgress();
             //更新数据
             setState(STATE_PLAYING);
-            EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_CHANGE,new MusicMessage(getMusicName(),getArtist(),getPoster(), getDuration(), getProgress())));
+            EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_CHANGE,new MusicMessage(getMusicName(),getArtist(),getPoster(),getArtistId(), getDuration(), getProgress())));
+            EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_PLAY,null));
         }
     }
 

@@ -37,7 +37,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 import static com.yzx.xiaomusic.service.PlayService.TYPE_LOCAL;
 
@@ -69,7 +68,6 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
     CircleProgress circleProgress;
     @BindView(R.id.iv_music_menu)
     ImageView ivMusicMenu;
-    Unbinder unbinder;
     private List<MusicInfo> musicInfos;
     private LocalMusicPresenter mPresenter;
     public CommonMusicAdapter adapter;

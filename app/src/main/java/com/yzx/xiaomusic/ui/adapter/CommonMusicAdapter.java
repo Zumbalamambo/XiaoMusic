@@ -118,6 +118,7 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
                         PlayServiceManager.getInstance().setSongSheetMusicList(songSheetData);
                         PlayServiceManager.getInstance().getPlayService().setMusicType(PlayService.TYPE_NET);
                         PlayServiceManager.getInstance().getPlayService().setPlayListPosition(i);
+                        PlayServiceManager.getInstance().getPlayService().setArtistId(SongSheetDataUtils.getSongArtistId(songSheetMusicInfo));
                         PlayServiceManager.getInstance()
                                 .setCommonMusicInfo(
                                         new CommonMusicInfo(null,null,songSheetMusicInfo.getName(), SongSheetDataUtils.getSongArtist(songSheetMusicInfo),
