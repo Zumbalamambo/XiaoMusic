@@ -24,9 +24,11 @@ public class ChildCloudPresenter implements ChildCloudContract.Presenter {
     @Override
     public void getSongSheetDetails(String cat, String order, int offset, int limit, boolean total) {
 
+        mFragment.stateView.showLoading();
         mModel.getSongSheetDetails(cat, order, offset, limit, true, new MvpObserver<SongSheet>() {
             @Override
             protected void onSuccess(SongSheet songSheet) {
+                mFragment.stateView.showContent();
                 mFragment.songSheetAdapter.setSongSheetDatas(songSheet);
                 Log.i(TAG, "onSuccess: 获取歌单成功");
             }
@@ -34,6 +36,7 @@ public class ChildCloudPresenter implements ChildCloudContract.Presenter {
             @Override
             protected void onFail(String errorMsg) {
                 super.onFail(errorMsg);
+                mFragment.stateView.showRetry();
             }
         });
     }
@@ -49,6 +52,7 @@ public class ChildCloudPresenter implements ChildCloudContract.Presenter {
             @Override
             protected void onFail(String errorMsg) {
                 super.onFail(errorMsg);
+                mFragment.stateView.showRetry();
                 Log.i(TAG, "onFail: 获取banner数据失败"+errorMsg);
             }
         });

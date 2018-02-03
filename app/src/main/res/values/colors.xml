@@ -4,9 +4,9 @@
     <!--<color name="colorPrimaryDark">#FF009688</color>-->
     <!--<color name="colorAccent">#FF009688</color>-->
 
-    <color name="colorPrimary">@color/colorRed</color>
-    <color name="colorPrimaryDark">@color/colorRed</color>
-    <color name="colorAccent">@color/colorRed</color>
+    <color name="colorPrimary">@color/colorToolBar</color>
+    <color name="colorPrimaryDark">@color/colorToolBar</color>
+    <color name="colorAccent">@color/colorToolBar</color>
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorLightWhite">#AAFFFFFF</color>
@@ -16,7 +16,7 @@
     <color name="colorBgToast">#88000000</color>
     <color name="colorRed">#f55063</color>
     <color name="colorDarkGray">#333333</color>
-
+    <color name="colorToolBar">#FF009688</color>
 
     <color name="colorMusicNameGray">#2c2c2c</color>
     <color name="colorMusicArtistGray">#8a8a8a</color>

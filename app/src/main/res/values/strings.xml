@@ -50,4 +50,7 @@
     <string name="updateMusic">升级音质</string>
     <string name="error_get_music">该歌曲获取失败</string>
     <string name="no_artist_id">无歌手id</string>
+    <string name="text_empty">暂无数据</string>
+    <string name="Loading">加载中...</string>
+    <string name="text_retry">点击重试</string>
 </resources>

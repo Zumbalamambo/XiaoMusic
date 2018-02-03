@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -27,6 +28,7 @@ import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.DensityUtils;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.widget.CircleProgress;
+import com.yzx.xiaomusic.widget.StateView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,7 +42,7 @@ import butterknife.OnClick;
  * Description  歌单列表
  */
 
-public class SongSheetListFragment extends BaseFragment implements SongSheetListContract.View, ChildCloudMusicAdapter.OnItemClickLsitener, XRecyclerView.LoadingListener{
+public class SongSheetListFragment extends BaseFragment implements SongSheetListContract.View, ChildCloudMusicAdapter.OnItemClickLsitener, XRecyclerView.LoadingListener, StateView.OnRetryClickListener {
     private static final String TAG = "yglSongSheetListFragment";
     private static final String KEY_SONG_SHEET = "songSheet";
     private static SongSheetListFragment childCloudFragment;
@@ -58,9 +60,12 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
     TextView tvMusicArtist;
     @BindView(R.id.circleProgress)
     CircleProgress circleProgress;
+    @BindView(R.id.layout_state_container)
+    RelativeLayout layoutStateContainer;
     private SongSheetListPresenter mPresenter;
     public SongSheetAdapter adapter;
     public int offset;
+    public StateView stateView;
 
     @SuppressLint("ValidFragment")
     private SongSheetListFragment() {
@@ -81,6 +86,8 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
     @Override
     public void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
+        stateView = StateView.inject(layoutStateContainer);
+        stateView.setOnRetryClickListener(this);
         mPresenter = new SongSheetListPresenter(this);
     }
 
@@ -202,5 +209,10 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
         }
 
     };
+
+    @Override
+    public void onRetryClick() {
+        getSongSheetList("全部", "hot", offset, 10, true);
+    }
 
 }

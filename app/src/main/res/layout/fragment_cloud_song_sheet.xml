@@ -6,12 +6,18 @@
 
     <include layout="@layout/layout_common_tool_bar"/>
 
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
+    <RelativeLayout
+        android:id="@+id/layout_state_container"
         android:layout_marginBottom="@dimen/playControlHeight"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
 
     <include layout="@layout/layout_bottom_play"/>
 

@@ -9,6 +9,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:tint="@color/colorAccent"
         android:id="@+id/iv_icon"
         android:scaleType="centerCrop"
         android:layout_width="50dp"

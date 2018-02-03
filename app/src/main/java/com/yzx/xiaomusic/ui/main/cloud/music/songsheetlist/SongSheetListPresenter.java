@@ -24,10 +24,15 @@ public class SongSheetListPresenter implements SongSheetListContract.Presenter {
 
     @Override
     public void getSongSheetDetails(String cat, String order, final int offset, int limit, boolean total) {
-
+        if (offset==0){
+            mFragment.stateView.showLoading();
+        }
         mModel.getSongSheetDetails(mFragment,cat, order, offset, limit, true, new MvpObserver<SongSheet>() {
             @Override
             protected void onSuccess(SongSheet songSheet) {
+                if (offset==0){
+                    mFragment.stateView.showContent();
+                }
                 mFragment.adapter.setDatas(songSheet.getPlaylists());
                 mFragment.recyclerView.loadMoreComplete();
                 mFragment.offset += 10;
@@ -39,6 +44,9 @@ public class SongSheetListPresenter implements SongSheetListContract.Presenter {
                 super.onFail(errorMsg);
                 mFragment.offset--;
                 mFragment.recyclerView.loadMoreComplete();
+                if (offset==0){
+                    mFragment.stateView.showRetry();
+                }
             }
         });
     }

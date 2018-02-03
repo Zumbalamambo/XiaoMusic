@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
@@ -16,6 +17,7 @@ import com.yzx.xiaomusic.ui.adapter.ChildCloudMusicAdapter;
 import com.yzx.xiaomusic.ui.main.MainFragment;
 import com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails.SongSheetDetailsFragment;
 import com.yzx.xiaomusic.ui.main.cloud.music.songsheetlist.SongSheetListFragment;
+import com.yzx.xiaomusic.widget.StateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +29,18 @@ import butterknife.BindView;
  * Description  cloudMusic----music
  */
 
-public class ChildCloudFragment extends BaseFragment implements ChildCloudContract.View, ChildCloudMusicAdapter.OnItemClickLsitener {
+public class ChildCloudFragment extends BaseFragment implements ChildCloudContract.View, ChildCloudMusicAdapter.OnItemClickLsitener, StateView.OnRetryClickListener {
     private static final String TAG = "yglChildCloudFragment";
     private static final String KEY_SONG_SHEET = "songSheet";
     private static ChildCloudFragment childCloudFragment;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.layout_state_container)
+    RelativeLayout layoutStateContainer;
     private ChildCloudPresenter mPresenter;
     public ChildCloudMusicAdapter songSheetAdapter;
     public ChildCloudMusicAdapter bannerAdapter;
+    public StateView stateView;
 
     @SuppressLint("ValidFragment")
     private ChildCloudFragment() {
@@ -56,6 +61,8 @@ public class ChildCloudFragment extends BaseFragment implements ChildCloudContra
     @Override
     public void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
+        stateView = StateView.inject(layoutStateContainer);
+        stateView.setOnRetryClickListener(this);
         mPresenter = new ChildCloudPresenter(this);
         getSongSheetList("全部","hot",0,6,true);
         getBanner();
@@ -150,4 +157,9 @@ public class ChildCloudFragment extends BaseFragment implements ChildCloudContra
         }
     }
 
+    @Override
+    public void onRetryClick() {
+        getSongSheetList("全部","hot",0,6,true);
+        getBanner();
+    }
 }

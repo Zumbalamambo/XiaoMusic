@@ -20,34 +20,20 @@ public class SongSheetDetailsPresenter implements SongSheetDetailsContract.Prese
 
     @Override
     public void getSongSheetDetails(String id) {
+        mFragment.stateView.showLoading();
         mModel.getSongSheetDetails(mFragment,id, new MvpObserver<SongSheetDetials>() {
             @Override
             protected void onSuccess(SongSheetDetials songSheetDetials) {
                 mFragment.setDatas(songSheetDetials);
+                mFragment.stateView.showContent();
             }
 
             @Override
             protected void onFail(String errorMsg) {
                 super.onFail(errorMsg);
-
+                mFragment.stateView.showRetry();
             }
         });
     }
 
-//    @Override
-//    public void getMusicAddress(String id) {
-//        mModel.getMusicAddress(id, new MvpObserver<MusicAddress>() {
-//            @Override
-//            protected void onSuccess(MusicAddress musicAddress) {
-//                Log.i(TAG, "onSuccess: 网络音乐");
-//                mFragment.getPlayService().play(musicAddress, PlayService.TYPE_NET);
-//            }
-//
-//            @Override
-//            protected void onFail(String errorMsg) {
-//                super.onFail(errorMsg);
-//
-//            }
-//        });
-//    }
 }

@@ -33,6 +33,7 @@ import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.MusicDataUtils;
 import com.yzx.xiaomusic.widget.CircleProgress;
+import com.yzx.xiaomusic.widget.StateView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,7 +48,7 @@ import butterknife.OnClick;
  * Description  歌单详情
  */
 
-public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayout.OnOffsetChangedListener, SongSheetDetailsContract.View, OnItemClickLsitener {
+public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayout.OnOffsetChangedListener, SongSheetDetailsContract.View, OnItemClickLsitener, StateView.OnRetryClickListener {
     private static final String TAG = "yglSongSheetActivity";
     public static final String KEY_MV_ID = "mvId";
     private static SongSheetDetailsFragment songSheetFragment;
@@ -93,10 +94,14 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
     TextView tvSubtitle;
     @BindView(R.id.circleProgress)
     CircleProgress circleProgress;
+    @BindView(R.id.layout_state_container)
+    RelativeLayout layoutStateContainer;
     private CommonMusicAdapter adapter;
     private SongSheetDetailsPresenter mPresenter;
     private String songSheetTitle;
     private String subTitle;
+    public StateView stateView;
+    private String songSheetId;
 
     @SuppressLint("ValidFragment")
     private SongSheetDetailsFragment() {
@@ -111,12 +116,14 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_song_sheet;
+        return R.layout.fragment_song_sheet;
     }
 
     @Override
     public void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
+        stateView = StateView.inject(layoutStateContainer);
+        stateView.setOnRetryClickListener(this);
         Bundle arguments = getArguments();
         SongSheet.PlaylistsBean playlistsBean = (SongSheet.PlaylistsBean) arguments.getSerializable(ChildCloudMusicAdapter.KEY_SONG_SHEET);
         GlideUtils.loadImg(context, playlistsBean.getCoverImgUrl(), -1, GlideUtils.TRANSFORM_BLUR, ivSongSheetBg);
@@ -125,7 +132,8 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
         subTitle = playlistsBean.getDescription();
         tvSongSheetTitle.setText(playlistsBean.getName());
         mPresenter = new SongSheetDetailsPresenter(this);
-        getSongSheetDetails(String.valueOf(playlistsBean.getId()));
+        songSheetId = String.valueOf(playlistsBean.getId());
+        getSongSheetDetails(songSheetId);
     }
 
     @Override
@@ -137,6 +145,7 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
         appBarLayout.addOnOffsetChangedListener(this);
+
     }
 
     @Override
@@ -256,4 +265,9 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
         }
 
     };
+
+    @Override
+    public void onRetryClick() {
+        getSongSheetDetails(songSheetId);
+    }
 }
