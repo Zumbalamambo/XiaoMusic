@@ -17,4 +17,8 @@ public class Constants {
      * 歌单音乐
      */
     public static final int TYPE_MUSIC_SONGSHEET = 2;
+    /**
+     * 歌手Id
+     */
+    public static final String KEY_ARTIST_ID = "artistId";
 }

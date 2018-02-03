@@ -1,4 +1,4 @@
-package com.yzx.xiaomusic.service;
+package com.yzx.xiaomusic.entities;
 
 /**
  * 进度信息，主要是用来设置音乐播放进度的

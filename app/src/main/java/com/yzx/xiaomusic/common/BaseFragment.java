@@ -151,11 +151,15 @@ public abstract class BaseFragment extends SupportFragment implements BaseView {
             TextView tvSubTitle = (TextView) toolBar.findViewById(R.id.tv_subtitle);
             tvTitle.setText(title);
             if (TextUtils.isEmpty(subTitle)){
-                tvSubTitle.setVisibility(View.GONE);
+                if (tvSubTitle!=null){
+                    tvSubTitle.setVisibility(View.GONE);
+                }
                 tvTitle.setTextSize(16);
             }else {
-                tvSubTitle.setVisibility(View.VISIBLE);
-                tvSubTitle.setText(subTitle);
+                if (tvSubTitle!=null){
+                    tvSubTitle.setVisibility(View.VISIBLE);
+                    tvSubTitle.setText(subTitle);
+                }
                 tvTitle.setTextSize(14);
             }
 
@@ -178,10 +182,11 @@ public abstract class BaseFragment extends SupportFragment implements BaseView {
 
     public void setUpBottomPlayControl(TextView tvMusicName, TextView tvMusicArtist, CircleProgress circleProgress, ImageView ivMusicPoster) {
 
-        tvMusicName.setText(MusicDataUtils.getMusicName());
-        tvMusicArtist.setText(MusicDataUtils.getMusicArtist());
+        Object musicInfo = getPlayService().getMusicInfo();
+        tvMusicName.setText(MusicDataUtils.getMusicName(musicInfo));
+        tvMusicArtist.setText(MusicDataUtils.getMusicArtist(musicInfo));
         circleProgress.setState(PlayService.STATE_PLAYING==getPlayService().getState()?CircleProgress.STATE_PLAY:CircleProgress.STATE_PAUSE);
-        GlideUtils.loadImg(context,MusicDataUtils.getMusicPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
+        GlideUtils.loadImg(context,MusicDataUtils.getMusicPoster(musicInfo),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
     }
     @Override
     public void onDestroy() {

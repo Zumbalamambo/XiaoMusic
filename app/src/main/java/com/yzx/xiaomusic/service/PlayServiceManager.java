@@ -1,6 +1,7 @@
 package com.yzx.xiaomusic.service;
 
 import com.yzx.xiaomusic.MusicApplication;
+import com.yzx.xiaomusic.entities.ArtistCenterInfo;
 import com.yzx.xiaomusic.entities.CommonMusicInfo;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
@@ -20,6 +21,7 @@ public class PlayServiceManager {
     private List<MusicInfo> localMusicList;//本地歌曲列表
     private List<SongSheetDetials.ResultBean.TracksBean> songSheetMusicList;//当前歌单
     private CommonMusicInfo commonMusicInfo;
+    private List<ArtistCenterInfo.HotSongsBean> hotSongs;
 
     private PlayServiceManager() {
     }
@@ -80,5 +82,13 @@ public class PlayServiceManager {
 
     public CommonMusicInfo getCommonMusicInfo() {
         return commonMusicInfo;
+    }
+
+    public void setArtistCenterMusicList(List<ArtistCenterInfo.HotSongsBean> hotSongs) {
+        this.hotSongs = hotSongs;
+    }
+
+    public List<ArtistCenterInfo.HotSongsBean> getHotSongs() {
+        return hotSongs;
     }
 }

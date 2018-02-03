@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
+import com.yzx.xiaomusic.entities.ArtistCenterInfo;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
 import com.yzx.xiaomusic.service.PlayService;
@@ -82,6 +83,33 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
                     }
                 }
             });
+        }else if (data instanceof ArtistCenterInfo){//歌手中心
+            final List<ArtistCenterInfo.HotSongsBean> hotSongs = ((ArtistCenterInfo) data).getHotSongs();
+            final ArtistCenterInfo.HotSongsBean hotSongsBean = hotSongs.get(i);
+            holder.tvName.setText(hotSongsBean.getName());
+            holder.tvSerialNumber.setText(String.valueOf(i+1));
+            holder.ivMv.setVisibility(hotSongsBean.getMv()>0 ? View.VISIBLE:View.GONE);
+            holder.tvArtist.setText(hotSongsBean.getAr().get(0).getName());
+            holder.ivMv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener!=null){
+                        onItemClickListener.onItemClickListener(holder.ivMv,i,hotSongsBean);
+                    }
+                }
+            });
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PlayServiceManager.getInstance().setArtistCenterMusicList(hotSongs);
+                    PlayService playService = PlayServiceManager.getInstance().getPlayService();
+                    playService.setMusicInfo(hotSongsBean);
+                    if (onItemClickListener!=null){
+                        onItemClickListener.onItemClickListener(holder.itemView,i,hotSongsBean);
+                    }
+                }
+            });
         }else {//本地音乐
 
             final List<MusicInfo> localMusicInfo = (List<MusicInfo>)data;
@@ -120,6 +148,9 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
         if (data instanceof SongSheetDetials){//歌单数据
             List<SongSheetDetials.ResultBean.TracksBean> songSheetInfo = ((SongSheetDetials) data).getResult().getTracks();
             return songSheetInfo ==null?0:songSheetInfo.size();
+        }else if (data instanceof ArtistCenterInfo){
+            List<ArtistCenterInfo.HotSongsBean> hotSongs = ((ArtistCenterInfo) data).getHotSongs();
+            return hotSongs ==null?0:hotSongs.size();
         }else {//本地音乐
             @SuppressWarnings("unchecked")
             List<MusicInfo> localMusicInfo = (List<MusicInfo>)data;

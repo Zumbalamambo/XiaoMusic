@@ -49,4 +49,5 @@
     <string name="getPosterLyrics">获取封面歌词</string>
     <string name="updateMusic">升级音质</string>
     <string name="error_get_music">该歌曲获取失败</string>
+    <string name="no_artist_id">无歌手id</string>
 </resources>

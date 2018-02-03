@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -11,13 +12,17 @@ import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
-import com.yzx.xiaomusic.service.MusicMessage;
-import com.yzx.xiaomusic.service.PlayEvent;
+import com.yzx.xiaomusic.common.Constants;
+import com.yzx.xiaomusic.entities.MusicMessage;
+import com.yzx.xiaomusic.entities.PlayEvent;
+import com.yzx.xiaomusic.entities.ProgressInfo;
 import com.yzx.xiaomusic.service.PlayService;
-import com.yzx.xiaomusic.service.ProgressInfo;
+import com.yzx.xiaomusic.ui.artistcenter.ArtistCenterFragment;
+import com.yzx.xiaomusic.ui.dialog.MusicMenuDialog;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.MusicDataUtils;
 import com.yzx.xiaomusic.utils.TimeUtils;
+import com.yzx.xiaomusic.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,7 +43,7 @@ import static com.yzx.xiaomusic.service.PlayService.STATE_PLAYING;
 public class PlayFragment extends BaseFragment {
 
     private static final String TAG = "yglPlayFragment";
-    private static PlayFragment playFragment;
+//    private static PlayFragment playFragment;
     @BindView(R.id.iv_play_bg)
     ImageView ivPlayBg;
     @BindView(R.id.toolBar)
@@ -81,10 +86,10 @@ public class PlayFragment extends BaseFragment {
     }
 
     public static PlayFragment getInstance() {
-        if (playFragment == null) {
-            playFragment = new PlayFragment();
-        }
-        return playFragment;
+//        if (playFragment == null) {
+//            playFragment = new PlayFragment();
+//        }
+        return new PlayFragment();
     }
 
     @Override
@@ -102,17 +107,31 @@ public class PlayFragment extends BaseFragment {
         super.onResume();
 
         PlayService playService = getPlayService();
+        Object musicInfo = playService.getMusicInfo();
         ivPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_music_play_play:R.drawable.ic_music_play_pause);
-        GlideUtils.loadImg(context,MusicDataUtils.getMusicPoster(),-1 ,GlideUtils.TRANSFORM_BLUR,ivPlayBg);
-        seekBarMusicSeek.setMax((int) MusicDataUtils.getMusicDuration());
-        setToolBar(toolBar,MusicDataUtils.getMusicName(),MusicDataUtils.getMusicArtist());
+        GlideUtils.loadImg(context,MusicDataUtils.getMusicPoster(musicInfo),-1 ,GlideUtils.TRANSFORM_BLUR,ivPlayBg);
+        seekBarMusicSeek.setMax((int) MusicDataUtils.getMusicDuration(musicInfo));
+        setToolBar(toolBar,MusicDataUtils.getMusicName(musicInfo),MusicDataUtils.getMusicArtist(musicInfo));
         tvMusicTimePlay.setText(TimeUtils.parseTime(playService.getProgress()));
-        tvMusicTimeLeft.setText(TimeUtils.parseTime(MusicDataUtils.getMusicDuration()-playService.getProgress()));
+        tvMusicTimeLeft.setText(TimeUtils.parseTime(MusicDataUtils.getMusicDuration(musicInfo)-playService.getProgress()));
     }
 
-    @OnClick({R.id.layout_play_lyrics, R.id.layout_play_card, R.id.iv_play_mode, R.id.iv_play_previous, R.id.iv_play, R.id.iv_play_next, R.id.iv_play_list})
+    @OnClick({R.id.tv_subtitle,R.id.layout_play_lyrics, R.id.layout_play_card, R.id.iv_play_mode, R.id.iv_play_previous,
+            R.id.iv_play, R.id.iv_play_next, R.id.iv_play_list})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tv_subtitle:
+                String musicArtistId = MusicDataUtils.getMusicArtistId(getPlayService().getMusicInfo());
+                if (TextUtils.isEmpty(musicArtistId)){
+                    ToastUtils.showToast(R.string.no_artist_id,ToastUtils.TYPE_NOTICE);
+                }else {
+                    ArtistCenterFragment artistCenterFragment = ArtistCenterFragment.getInstance();
+                    Bundle args=new Bundle();
+                    args.putString(Constants.KEY_ARTIST_ID, musicArtistId);
+                    artistCenterFragment.setArguments(args);
+                    start(artistCenterFragment);
+                }
+                break;
             case R.id.layout_play_lyrics:
                 layoutPlayCard.setVisibility(View.VISIBLE);
                 layoutPlayLyrics.setVisibility(View.INVISIBLE);
@@ -133,6 +152,8 @@ public class PlayFragment extends BaseFragment {
                 getPlayService().next();
                 break;
             case R.id.iv_play_list:
+                MusicMenuDialog dialog=new MusicMenuDialog();
+                dialog.show(getActivity().getSupportFragmentManager(),"musicMuenu");
                 break;
         }
     }

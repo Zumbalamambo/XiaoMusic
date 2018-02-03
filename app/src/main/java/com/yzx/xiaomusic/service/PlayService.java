@@ -9,7 +9,11 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.yzx.xiaomusic.entities.ArtistCenterInfo;
 import com.yzx.xiaomusic.entities.MusicInfo;
+import com.yzx.xiaomusic.entities.MusicMessage;
+import com.yzx.xiaomusic.entities.PlayEvent;
+import com.yzx.xiaomusic.entities.ProgressInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
 import com.yzx.xiaomusic.utils.MusicDataUtils;
 import com.yzx.xiaomusic.utils.PreferenceUtil;
@@ -135,6 +139,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
      * 开始播放
      */
     public void start() {
+
         if (musicInfo instanceof MusicInfo){//本地歌曲
             List<MusicInfo> localMusicList = PlayServiceManager.getInstance().getLocalMusicList();
             if (localMusicList!=null&&localMusicList.size()>0){
@@ -171,9 +176,28 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 //                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getArtistId(),getDuration(), getProgress()));
                 mediaSessionManager.updatePlaybackState();
                 setMusicInfo(tracksBean);
-                playSongSheetMusic(tracksBean);
+                playSongSheetMusic(String.valueOf(tracksBean.getId()));
             }else {
                 ToastUtils.showToast("歌单异常",ToastUtils.TYPE_NOTICE);
+            }
+        }else if (musicInfo instanceof ArtistCenterInfo.HotSongsBean){
+            List<ArtistCenterInfo.HotSongsBean> hotSongs = PlayServiceManager.getInstance().getHotSongs();
+            if (hotSongs!=null&&hotSongs.size()>0) {
+
+                ArtistCenterInfo.HotSongsBean hotSongsBean;
+                if (getPlayListPosition() > hotSongs.size() - 1) {
+                    setPlayListPosition(0);
+                    hotSongsBean = hotSongs.get(0);
+                } else if (getPlayListPosition() < 0) {
+                    hotSongsBean = hotSongs.get(hotSongs.size() - 1);
+                    setPlayListPosition(hotSongs.size() - 1);
+                } else {
+                    hotSongsBean = hotSongs.get(getPlayListPosition());
+                }
+//                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getArtistId(),getDuration(), getProgress()));
+                mediaSessionManager.updatePlaybackState();
+                setMusicInfo(hotSongsBean);
+                playSongSheetMusic(String.valueOf(hotSongsBean.getId()));
             }
         }
     }
@@ -219,11 +243,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
     /**
      * 歌单音乐url
-     * @param tracksBean
      */
-    private void playSongSheetMusic(SongSheetDetials.ResultBean.TracksBean tracksBean) {
+    private void playSongSheetMusic(String musicId) {
 
-        MusicAddressModel.getInstance().getMusicAddress(String.valueOf(tracksBean.getId()));
+        MusicAddressModel.getInstance().getMusicAddress(musicId);
     }
 
     /**
@@ -268,11 +291,11 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             setState(STATE_PLAYING);
             //更新数据
             EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_CHANGE,
-                    new MusicMessage(MusicDataUtils.getMusicName(),
-                                    MusicDataUtils.getMusicArtist(),
-                                    MusicDataUtils.getMusicPoster(),
-                                    MusicDataUtils.getMusicArtistId(),
-                                    MusicDataUtils.getMusicDuration(),
+                    new MusicMessage(MusicDataUtils.getMusicName(getMusicInfo()),
+                                    MusicDataUtils.getMusicArtist(getMusicInfo()),
+                                    MusicDataUtils.getMusicPoster(getMusicInfo()),
+                                    MusicDataUtils.getMusicArtistId(getMusicInfo()),
+                                    MusicDataUtils.getMusicDuration(getMusicInfo()),
                     getProgress())));
             EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_PLAY,null));
         }
@@ -287,7 +310,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_PROCESS,new ProgressInfo( MusicDataUtils.getMusicDuration()
+                        EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_PROCESS,new ProgressInfo( MusicDataUtils.getMusicDuration(getMusicInfo())
                                 ,mediaPlayer.getCurrentPosition())));
                     }
                 });

@@ -19,11 +19,12 @@ import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.common.OnItemClickLsitener;
 import com.yzx.xiaomusic.entities.MusicInfo;
-import com.yzx.xiaomusic.service.MusicMessage;
-import com.yzx.xiaomusic.service.PlayEvent;
+import com.yzx.xiaomusic.entities.MusicMessage;
+import com.yzx.xiaomusic.entities.PlayEvent;
+import com.yzx.xiaomusic.entities.ProgressInfo;
 import com.yzx.xiaomusic.service.PlayService;
-import com.yzx.xiaomusic.service.ProgressInfo;
 import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
+import com.yzx.xiaomusic.ui.dialog.MusicMenuDialog;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.MusicDataUtils;
@@ -169,9 +170,8 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
 
     @Override
     public void onItemClickListener(View itemView, int position, Object data) {
-//        Log.i(TAG, "onItemClickListener: "+MusicDataUtils.getMusicType());
         PlayService playService = getPlayService();
-        if (playService.getPlayListPosition()!=position&&MusicDataUtils.TYPE_LOCAL ==MusicDataUtils.getMusicType()){
+        if (playService.getPlayListPosition()!=position&&MusicDataUtils.TYPE_LOCAL ==MusicDataUtils.getMusicType(playService.getMusicInfo())){
             getPlayService().setState(PlayService.STATE_IDLE);
             getPlayService().setPlayListPosition(position);
         }
@@ -186,6 +186,8 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
                 getPlayService().playMusic();
                 break;
             case R.id.iv_music_menu:
+                MusicMenuDialog dialog=new MusicMenuDialog();
+                dialog.show(getActivity().getSupportFragmentManager(),"musicMuenu");
                 break;
             case R.id.layout_music_control:
                 start(PlayFragment.getInstance());

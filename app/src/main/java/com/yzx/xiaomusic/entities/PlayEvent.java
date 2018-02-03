@@ -1,4 +1,4 @@
-package com.yzx.xiaomusic.service;
+package com.yzx.xiaomusic.entities;
 
 /**
  * Created by yzx on 2018/1/26.

@@ -5,6 +5,8 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
+import com.yzx.xiaomusic.entities.MusicMessage;
+
 /**
  * Created by yzx on 2018/1/25.
  * Description

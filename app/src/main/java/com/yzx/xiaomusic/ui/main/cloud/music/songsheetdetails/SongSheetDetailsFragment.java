@@ -19,14 +19,15 @@ import android.widget.TextView;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.common.OnItemClickLsitener;
+import com.yzx.xiaomusic.entities.MusicMessage;
+import com.yzx.xiaomusic.entities.PlayEvent;
+import com.yzx.xiaomusic.entities.ProgressInfo;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
-import com.yzx.xiaomusic.service.MusicMessage;
-import com.yzx.xiaomusic.service.PlayEvent;
 import com.yzx.xiaomusic.service.PlayService;
-import com.yzx.xiaomusic.service.ProgressInfo;
 import com.yzx.xiaomusic.ui.adapter.ChildCloudMusicAdapter;
 import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
+import com.yzx.xiaomusic.ui.dialog.MusicMenuDialog;
 import com.yzx.xiaomusic.ui.mv.MvFragment;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.GlideUtils;
@@ -185,7 +186,7 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
                 break;
             default:
                 PlayService playService = getPlayService();
-                if (MusicDataUtils.TYPE_SONG_SHEET !=MusicDataUtils.getMusicType()||playService.getPlayListPosition()!=position){
+                if (MusicDataUtils.TYPE_SONG_SHEET !=MusicDataUtils.getMusicType(playService.getMusicInfo())||playService.getPlayListPosition()!=position){
                     getPlayService().setState(PlayService.STATE_IDLE);
                     getPlayService().setPlayListPosition(position);
                 }
@@ -203,6 +204,8 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
                 getPlayService().playMusic();
                 break;
             case R.id.iv_music_menu:
+                MusicMenuDialog dialog=new MusicMenuDialog();
+                dialog.show(getActivity().getSupportFragmentManager(),"musicMuenu");
                 break;
             case R.id.layout_music_control:
                 start(PlayFragment.getInstance());

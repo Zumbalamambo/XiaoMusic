@@ -14,14 +14,16 @@ import android.widget.TextView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
+import com.yzx.xiaomusic.entities.MusicMessage;
+import com.yzx.xiaomusic.entities.PlayEvent;
+import com.yzx.xiaomusic.entities.ProgressInfo;
 import com.yzx.xiaomusic.entities.SongSheet;
-import com.yzx.xiaomusic.service.MusicMessage;
-import com.yzx.xiaomusic.service.PlayEvent;
-import com.yzx.xiaomusic.service.ProgressInfo;
 import com.yzx.xiaomusic.ui.adapter.ChildCloudMusicAdapter;
 import com.yzx.xiaomusic.ui.adapter.SongSheetAdapter;
+import com.yzx.xiaomusic.ui.dialog.MusicMenuDialog;
 import com.yzx.xiaomusic.ui.main.MainFragment;
 import com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails.SongSheetDetailsFragment;
+import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.DensityUtils;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.widget.CircleProgress;
@@ -31,6 +33,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by yzx on 2018/1/12.
@@ -155,6 +158,22 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
     public void onResume() {
         super.onResume();
         setUpBottomPlayControl(tvMusicName,tvMusicArtist, circleProgress, ivMusicPoster);
+    }
+
+    @OnClick({R.id.circleProgress,R.id.iv_music_menu, R.id.layout_music_control})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.circleProgress:
+                getPlayService().playMusic();
+                break;
+            case R.id.iv_music_menu:
+                MusicMenuDialog dialog=new MusicMenuDialog();
+                dialog.show(getActivity().getSupportFragmentManager(),"musicMuenu");
+                break;
+            case R.id.layout_music_control:
+                start(PlayFragment.getInstance());
+                break;
+        }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(PlayEvent event) {

@@ -13,10 +13,11 @@ import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
-import com.yzx.xiaomusic.service.MusicMessage;
-import com.yzx.xiaomusic.service.PlayEvent;
-import com.yzx.xiaomusic.service.ProgressInfo;
+import com.yzx.xiaomusic.entities.MusicMessage;
+import com.yzx.xiaomusic.entities.PlayEvent;
+import com.yzx.xiaomusic.entities.ProgressInfo;
 import com.yzx.xiaomusic.ui.adapter.MainFragmentPagerAdapter;
+import com.yzx.xiaomusic.ui.dialog.MusicMenuDialog;
 import com.yzx.xiaomusic.ui.main.cloud.CloudFragment;
 import com.yzx.xiaomusic.ui.main.friend.FriendFragment;
 import com.yzx.xiaomusic.ui.main.music.MusicFragment;
@@ -102,6 +103,8 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
                 getPlayService().playMusic();
                 break;
             case R.id.iv_music_menu:
+                MusicMenuDialog dialog=new MusicMenuDialog();
+                dialog.show(getActivity().getSupportFragmentManager(),"musicMuenu");
                 break;
             case R.id.layout_music_control:
                 start(PlayFragment.getInstance());
@@ -166,7 +169,6 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
                 circleProgress.setState(CircleProgress.STATE_PAUSE);
                 break;
             case PlayEvent.TYPE_PROCESS:
-
                 ProgressInfo progressInfo = (ProgressInfo) event.getData();
                 circleProgress.setMax((int) progressInfo.getDuration());
                 circleProgress.setProgress(progressInfo.getProcess());
