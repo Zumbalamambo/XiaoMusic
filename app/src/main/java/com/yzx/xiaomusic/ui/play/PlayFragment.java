@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -28,8 +29,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.zhengken.lyricview.LyricView;
 
 import static com.yzx.xiaomusic.service.PlayService.STATE_PLAYING;
 
@@ -80,6 +84,9 @@ public class PlayFragment extends BaseFragment {
     TextView tvTitle;
     @BindView(R.id.tv_subtitle)
     TextView tvSubtitle;
+    @BindView(R.id.lyricView)
+    LyricView lyricView;
+    private PlayPresenter mPresenter;
 
     @SuppressLint("ValidFragment")
     private PlayFragment() {
@@ -98,8 +105,15 @@ public class PlayFragment extends BaseFragment {
     }
 
     @Override
+    public void initData(Bundle savedInstanceState) {
+        super.initData(savedInstanceState);
+        mPresenter = new PlayPresenter(this);
+    }
+
+    @Override
     protected void initView(Bundle savedInstanceState) {
         setToolBar(toolBar,null);
+
     }
 
     @Override
@@ -116,7 +130,7 @@ public class PlayFragment extends BaseFragment {
         tvMusicTimeLeft.setText(TimeUtils.parseTime(MusicDataUtils.getMusicDuration(musicInfo)-playService.getProgress()));
     }
 
-    @OnClick({R.id.tv_subtitle,R.id.layout_play_lyrics, R.id.layout_play_card, R.id.iv_play_mode, R.id.iv_play_previous,
+    @OnClick({R.id.tv_subtitle,R.id.layout_play_lyrics, R.id.layout_play_card, R.id.lyricView,R.id.iv_play_mode, R.id.iv_play_previous,
             R.id.iv_play, R.id.iv_play_next, R.id.iv_play_list})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -133,6 +147,10 @@ public class PlayFragment extends BaseFragment {
                 }
                 break;
             case R.id.layout_play_lyrics:
+                layoutPlayCard.setVisibility(View.VISIBLE);
+                layoutPlayLyrics.setVisibility(View.INVISIBLE);
+                break;
+            case R.id.lyricView:
                 layoutPlayCard.setVisibility(View.VISIBLE);
                 layoutPlayLyrics.setVisibility(View.INVISIBLE);
                 break;
@@ -176,6 +194,14 @@ public class PlayFragment extends BaseFragment {
                 MusicMessage musicMessage = (MusicMessage) event.getData();
                 tvTitle.setText(musicMessage.getName());
                 tvSubtitle.setText(musicMessage.getArtist());
+                Log.i(TAG, "onMessageEvent: "+musicMessage.getId());
+                File file = new File(context.getCacheDir(), musicMessage.getId());
+                //判断歌词是否存在
+                if (!file.exists()){
+                    mPresenter.getLyrics(musicMessage.getId());
+                }else {
+                    lyricView.setLyricFile(file);
+                }
                 GlideUtils.loadImg(context,musicMessage.getPoster(),-1,GlideUtils.TRANSFORM_BLUR,ivPlayBg);
                 break;
             case PlayEvent.TYPE_PLAY:
@@ -187,6 +213,7 @@ public class PlayFragment extends BaseFragment {
             case PlayEvent.TYPE_PROCESS:
 
                 ProgressInfo progressInfo = (ProgressInfo) event.getData();
+                lyricView.setCurrentTimeMillis(progressInfo.getProcess());
                 tvMusicTimePlay.setText(TimeUtils.parseTime(progressInfo.getProcess()));
                 tvMusicTimeLeft.setText(TimeUtils.parseTime(progressInfo.getDuration()-progressInfo.getProcess()));
                 seekBarMusicSeek.setMax((int) progressInfo.getDuration());

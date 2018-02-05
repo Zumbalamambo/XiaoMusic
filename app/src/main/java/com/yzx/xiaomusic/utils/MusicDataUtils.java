@@ -139,6 +139,24 @@ public class MusicDataUtils {
         }
     }
 
+    public static String getMusicId(Object musicInfo) {
+
+        if (musicInfo==null){
+            return null;
+        }
+        switch (getMusicType(musicInfo)){
+            case TYPE_LOCAL:
+                return null;
+            case TYPE_SONG_SHEET:
+                return String.valueOf(((SongSheetDetials.ResultBean.TracksBean)musicInfo).getId());
+
+            case TYPE_ARTIST_CENTER:
+                return String.valueOf(((ArtistCenterInfo.HotSongsBean) musicInfo).getId());
+            default:
+                return null;
+        }
+    }
+
     /**
      * 获取歌曲时长
      * @return

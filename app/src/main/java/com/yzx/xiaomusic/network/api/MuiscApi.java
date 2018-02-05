@@ -2,6 +2,7 @@ package com.yzx.xiaomusic.network.api;
 
 
 import com.yzx.xiaomusic.entities.Banner;
+import com.yzx.xiaomusic.entities.Lyric;
 import com.yzx.xiaomusic.entities.MusicAddress;
 import com.yzx.xiaomusic.entities.MvData;
 import com.yzx.xiaomusic.entities.SongSheet;
@@ -70,5 +71,14 @@ public interface MuiscApi {
      */
     @GET("http://musicapi.leanapp.cn/top/mv")
     Observable<VideoList> getVideoList(@Query("offset") int offset, @Query("limit") int limit);
+
+    /**
+     * 获取歌词
+     * @param type
+     * @param id
+     * @return
+     */
+    @GET("https://api.imjad.cn/cloudmusic/")
+    Observable<Lyric> getMusicLyrics(@Query("type") String type, @Query("id") String id);
 
 }

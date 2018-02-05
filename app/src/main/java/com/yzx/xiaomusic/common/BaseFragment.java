@@ -184,7 +184,6 @@ public abstract class BaseFragment extends SupportFragment implements BaseView {
     public void setUpBottomPlayControl(TextView tvMusicName, TextView tvMusicArtist, CircleProgress circleProgress, ImageView ivMusicPoster) {
 
         Object musicInfo = getPlayService().getMusicInfo();
-        Log.i(TAG, this.getClass().getSimpleName()+"setUpBottomPlayControl: "+MusicDataUtils.getMusicName(musicInfo));
         tvMusicName.setText(MusicDataUtils.getMusicName(musicInfo));
         tvMusicArtist.setText(MusicDataUtils.getMusicArtist(musicInfo));
         circleProgress.setState(PlayService.STATE_PLAYING==getPlayService().getState()?CircleProgress.STATE_PLAY:CircleProgress.STATE_PAUSE);

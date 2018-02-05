@@ -49,10 +49,11 @@
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
-                <TextView
+                <me.zhengken.lyricview.LyricView
+                    app:textSize="13sp"
+                    android:id="@+id/lyricView"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
-                    android:text="我是歌词"
                     android:textColor="@color/colorWhite"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />

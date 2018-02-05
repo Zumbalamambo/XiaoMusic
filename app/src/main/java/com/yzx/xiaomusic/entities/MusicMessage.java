@@ -13,7 +13,12 @@ public class MusicMessage {
     long totalTime;
     long currentProgress;
 
-    public MusicMessage(String name, String artist, String poster, String artistId, long totalTime, long currentProgress) {
+
+
+    String id;
+
+    public MusicMessage(String id,String name, String artist, String poster, String artistId, long totalTime, long currentProgress) {
+        this.id =id;
         this.name = name;
         this.artist = artist;
         this.poster = poster;
@@ -21,7 +26,13 @@ public class MusicMessage {
         this.totalTime = totalTime;
         this.currentProgress = currentProgress;
     }
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getName() {
         return name;
     }

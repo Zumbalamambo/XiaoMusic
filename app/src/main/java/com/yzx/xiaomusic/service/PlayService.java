@@ -307,7 +307,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             setState(STATE_PLAYING);
             //更新数据
             EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_CHANGE,
-                    new MusicMessage(MusicDataUtils.getMusicName(getMusicInfo()),
+                    new MusicMessage(MusicDataUtils.getMusicId(getMusicInfo()),
+                                    MusicDataUtils.getMusicName(getMusicInfo()),
                                     MusicDataUtils.getMusicArtist(getMusicInfo()),
                                     MusicDataUtils.getMusicPoster(getMusicInfo()),
                                     MusicDataUtils.getMusicArtistId(getMusicInfo()),
@@ -378,6 +379,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
 
     public int getPlayListPosition() {
+        Log.i(TAG, "getPlayListPosition: "+playListPosition);
         return playListPosition;
     }
 
