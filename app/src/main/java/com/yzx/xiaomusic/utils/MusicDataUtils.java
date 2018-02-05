@@ -17,6 +17,7 @@ public class MusicDataUtils {
     public static final int TYPE_LOCAL =1;
     public static final int TYPE_SONG_SHEET =2;
     public static final int TYPE_ARTIST_CENTER =3;
+    private static final String TAG = "yglMusicDataUtils";
 
     /**
      * 获取音乐类型

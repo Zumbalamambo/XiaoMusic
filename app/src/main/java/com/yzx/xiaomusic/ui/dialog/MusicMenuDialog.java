@@ -1,5 +1,6 @@
 package com.yzx.xiaomusic.ui.dialog;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.yzx.xiaomusic.R;
@@ -42,7 +44,6 @@ public class MusicMenuDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.layout_menu_music, container, false);
         bind = ButterKnife.bind(this, rootView);
-
         PlayServiceManager playServiceManager = PlayServiceManager.getInstance();
         List musicList = null;
         switch (MusicDataUtils.getMusicType(playServiceManager.getPlayService().getMusicInfo())) {
@@ -62,11 +63,22 @@ public class MusicMenuDialog extends BottomSheetDialogFragment {
         MusicMenuAdapter adapter = new MusicMenuAdapter();
         recyclerView.setAdapter(adapter);
         adapter.setMusicMenuDatas(musicList);
+        recyclerView.scrollToPosition(PlayServiceManager.getInstance().getPlayService().getPlayListPosition());
         return rootView;
     }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        BottomSheetDialog dialog = new BottomSheetDialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        dialog.setTitle("我是标题");
+        return super.onCreateDialog(savedInstanceState);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
+
         int dialogHeight = (int) (getContext().getResources().getDisplayMetrics().heightPixels * 0.5);
         getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, dialogHeight);
         getDialog().setCanceledOnTouchOutside(true);

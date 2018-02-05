@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -183,6 +184,7 @@ public abstract class BaseFragment extends SupportFragment implements BaseView {
     public void setUpBottomPlayControl(TextView tvMusicName, TextView tvMusicArtist, CircleProgress circleProgress, ImageView ivMusicPoster) {
 
         Object musicInfo = getPlayService().getMusicInfo();
+        Log.i(TAG, this.getClass().getSimpleName()+"setUpBottomPlayControl: "+MusicDataUtils.getMusicName(musicInfo));
         tvMusicName.setText(MusicDataUtils.getMusicName(musicInfo));
         tvMusicArtist.setText(MusicDataUtils.getMusicArtist(musicInfo));
         circleProgress.setState(PlayService.STATE_PLAYING==getPlayService().getState()?CircleProgress.STATE_PLAY:CircleProgress.STATE_PAUSE);

@@ -2,7 +2,6 @@ package com.yzx.xiaomusic.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +47,11 @@ public class MusicMenuAdapter extends RecyclerView.Adapter<MusicMenuAdapter.Hold
             int color = ResourceUtils.parseColor(R.color.colorAccent);
             holder.tvName.setTextColor(color);
             holder.tvArtist.setTextColor(color);
+        }else {
+            holder.tvName.setTextColor(ResourceUtils.parseColor(R.color.colorMusicNameGray));
+            holder.tvArtist.setTextColor(ResourceUtils.parseColor(R.color.colorMusicArtistGray));
         }
-        Log.i(TAG, "onBindViewHolder: "+MusicDataUtils.getMusicName(musicInfo));
+//        Log.i(TAG, "onBindViewHolder: "+MusicDataUtils.getMusicName(musicInfo));
         if (musicInfo instanceof MusicInfo) {
 
         } else if (musicInfo instanceof SongSheetDetials.ResultBean.TracksBean) {
@@ -61,13 +63,13 @@ public class MusicMenuAdapter extends RecyclerView.Adapter<MusicMenuAdapter.Hold
 
     @Override
     public int getItemCount() {
-        Log.i(TAG, "getItemCount: "+(musicList == null ? 0 : musicList.size()));
+//        Log.i(TAG, "getItemCount: "+(musicList == null ? 0 : musicList.size()));
         return musicList == null ? 0 : musicList.size();
     }
 
     public void setMusicMenuDatas(List musicList) {
         this.musicList = musicList;
-        Log.i(TAG, "setMusicMenuDatas: ");
+//        Log.i(TAG, "setMusicMenuDatas: ");
         notifyDataSetChanged();
     }
 

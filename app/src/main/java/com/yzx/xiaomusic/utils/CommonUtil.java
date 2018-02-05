@@ -1,6 +1,8 @@
 package com.yzx.xiaomusic.utils;
 
+import android.content.ContentUris;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -36,4 +38,28 @@ public class CommonUtil {
         }
     }
 
+    private static final Uri sArtworkUri = Uri
+            .parse("content://media/external/audio/albumart");
+
+    public static String getMusicBitemp(long songid,long albumid) {
+
+
+        try {
+            Uri uri;
+            if (albumid < 0) {
+                uri = Uri.parse("content://media/external/audio/media/" + songid + "/albumart");
+            } else {
+                uri = ContentUris.withAppendedId(sArtworkUri, albumid);
+            }
+
+            if (uri==null){
+                return null;
+            }
+            uri.toString();
+            return uri.toString();
+        } catch (Exception ignored) {
+        }
+
+        return null;
+    }
 }

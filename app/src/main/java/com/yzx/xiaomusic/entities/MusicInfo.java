@@ -1,14 +1,25 @@
 package com.yzx.xiaomusic.entities;
 
+import android.net.Uri;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 /**
  * Created by yzx on 2018/1/11.
  * Description
  */
 
-public class MusicInfo implements Serializable {
+public class MusicInfo implements Serializable,JsonDeserializer<Uri> {
 
+
+
+    public long id;//音乐Id
     public String name;//歌名
     public String artist;//歌手
     public String path;//路径
@@ -16,7 +27,13 @@ public class MusicInfo implements Serializable {
     public String poster;//海报
     public long size;//文件大小
     public String allName;//全名
+    public long getId() {
+        return id;
+    }
 
+    public void setId(long id) {
+        this.id = id;
+    }
     public String getAllName() {
         return allName;
     }
@@ -92,5 +109,10 @@ public class MusicInfo implements Serializable {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    @Override
+    public Uri deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        return Uri.parse(json.getAsString());
     }
 }

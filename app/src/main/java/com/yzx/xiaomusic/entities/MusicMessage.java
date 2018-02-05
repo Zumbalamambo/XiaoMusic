@@ -41,6 +41,9 @@ public class MusicMessage {
         return poster;
     }
 
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
     public String getArtistId() {
         return artistId;
     }
@@ -49,9 +52,6 @@ public class MusicMessage {
         this.artistId = artistId;
     }
 
-    public void setPoster(String poster) {
-        this.poster = poster;
-    }
 
     public long getTotalTime() {
         return totalTime;

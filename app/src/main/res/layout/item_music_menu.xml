@@ -1,41 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorWhite"
     android:layout_width="match_parent"
     android:gravity="center_vertical"
     android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:layout_height="40dp">
+    android:layout_height="50dp"
+    tools:ignore="RtlSymmetry">
 
     <LinearLayout
-        android:layout_weight="1"
-        android:layout_width="0dp"
+        android:paddingEnd="16dp"
+        android:layout_width="match_parent"
         android:gravity="center_vertical"
-        android:layout_height="wrap_content">
-        <TextView
-            android:text="娃哈哈"
-            android:id="@+id/tv_name"
-            android:textSize="14sp"
-            android:textColor="@color/colorMusicNameGray"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="娃哈哈"
+                android:id="@+id/tv_name"
+                android:textSize="12sp"
+                android:textColor="@color/colorMusicNameGray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_marginStart="16dp"
-            android:text="杨子晓"
-            android:id="@+id/tv_artist"
-            android:textSize="12sp"
-            android:textColor="@color/colorMusicArtistGray"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginStart="16dp"
+                android:text="杨子晓"
+                android:id="@+id/tv_artist"
+                android:textSize="10sp"
+                android:textColor="@color/colorMusicArtistGray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="SmallSp" />
+        </LinearLayout>
+
+        <ImageView
+            android:tint="@color/colorIconGray"
+            android:id="@+id/iv_delete"
+            android:src="@drawable/ic_music_play_delete"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
     </LinearLayout>
 
-    <ImageView
-        android:tint="@color/colorIconGray"
-        android:id="@+id/iv_delete"
-        android:src="@drawable/ic_music_play_delete"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
 
-</LinearLayout>
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorMusicArtistGray"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
+</RelativeLayout>

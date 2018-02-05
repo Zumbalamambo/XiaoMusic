@@ -7,14 +7,17 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.entities.ArtistCenterInfo;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.MusicMessage;
 import com.yzx.xiaomusic.entities.PlayEvent;
 import com.yzx.xiaomusic.entities.ProgressInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
+import com.yzx.xiaomusic.utils.JsonUtils;
 import com.yzx.xiaomusic.utils.MusicDataUtils;
 import com.yzx.xiaomusic.utils.PreferenceUtil;
 import com.yzx.xiaomusic.utils.ToastUtils;
@@ -40,19 +43,13 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         MediaPlayer.OnPreparedListener, MediaPlayer.OnBufferingUpdateListener,
         MediaPlayer.OnSeekCompleteListener {
 
-    public static final int TYPE_LOCAL =1;
-    public static final int TYPE_NET =2;
-
-
-
-    private static final String MUSIC_NAME = "musicName";
-    private static final String MUSIC_ARTIST = "artist";
-    private static final String MUSIC_TOTOL_TIME = "totalTime";
+    private static final String TAG = "yglPlayService";
     private static final String MUSIC_CURRENT_TIME = "currentTime";
-    private static final String MUSIC_TYPE = "musicType";
-    private static final String MUSIC_ADDRESS = "musicAddress";
     private  static final String MUSIC_PLAY_STATE = "playState";
     private static final String MUSIC_POSTION_IN_LIST ="positionInList";
+    private static final String MUSIC_LIST = "musicList";//歌单
+    private static final String MUSIC_INFO = "musicInfo";//音乐信息
+    private static final String MUSIC_TYPE = "musicTYpe";
 
     public static final int STATE_BEFORE_PREPARED =0;//准备之前
     public static final int STATE_PLAYING =1;//正在播放
@@ -60,8 +57,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     public static final int STATE_IDLE =3;//其他状态
 
     private int state = STATE_IDLE;
-
-    private static final String TAG = "yglPlayService";
     public MediaPlayer mediaPlayer=new MediaPlayer();
 
     private int progress;//歌曲播放进度
@@ -77,24 +72,45 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     @Override
     public void onCreate() {
         super.onCreate();
-
         mediaSessionManager = new MediaSessionManager(this);
-//        setMusicType(PreferenceUtil.getInt(MUSIC_TYPE, 1));
-//        setMusicAddress(PreferenceUtil.getString(MUSIC_ADDRESS,null));
-        setProgress(PreferenceUtil.getInt(MUSIC_CURRENT_TIME,0));
-//        if (musicType==1){//设置本地音乐数据
-//            String localMusicList = PreferenceUtil.getString(LOCAL_MUSIC_INFO, null);
-//            if (!TextUtils.isEmpty(localMusicList)){
-//                List<MusicInfo> musicInfos = JsonUtils.stringToList(localMusicList, MusicInfo.class);
-//                PlayServiceManager.getInstance().setLocalMusicList(musicInfos);
-//            }else {
-//                ToastUtils.showToast("本地数据音乐列表获取异常");
-//            }
-//
-//        }else {//
-//
-//        }
 
+        //初始化上次音乐播放信息
+        setProgress(PreferenceUtil.getInt(MUSIC_CURRENT_TIME,0));
+        setState(PreferenceUtil.getInt(MUSIC_PLAY_STATE,STATE_IDLE));
+        setPlayListPosition(PreferenceUtil.getInt(MUSIC_POSTION_IN_LIST,0));
+        String musicInfo = PreferenceUtil.getString(MUSIC_INFO, null);
+        String musicList = PreferenceUtil.getString(MUSIC_LIST, null);
+        if (TextUtils.isEmpty(musicInfo)){
+            ToastUtils.showToast(R.string.error_get_last_play_music_info,ToastUtils.TYPE_NOTICE);
+        }else {
+            switch (PreferenceUtil.getInt(MUSIC_TYPE,-1)){
+                case MusicDataUtils.TYPE_LOCAL:
+                    setMusicInfo(JsonUtils.stringToObject(musicInfo,MusicInfo.class));
+                    break;
+                case MusicDataUtils.TYPE_SONG_SHEET:
+                    setMusicInfo(JsonUtils.stringToObject(musicInfo,SongSheetDetials.ResultBean.TracksBean.class));
+                    break;
+                case MusicDataUtils.TYPE_ARTIST_CENTER:
+                    setMusicInfo(JsonUtils.stringToObject(musicInfo,ArtistCenterInfo.HotSongsBean.class));
+                    break;
+            }
+
+        }
+        //初始化音乐列表
+        if (!TextUtils.isEmpty(musicList)){
+            PlayServiceManager playServiceManager = PlayServiceManager.getInstance();
+            switch (MusicDataUtils.getMusicType(getMusicInfo())){
+                case MusicDataUtils.TYPE_LOCAL:
+                    playServiceManager.setLocalMusicList(JsonUtils.stringToList(musicList,MusicInfo.class));
+                    break;
+                case MusicDataUtils.TYPE_SONG_SHEET:
+                    playServiceManager.setSongSheetMusicList(JsonUtils.stringToList(musicList,SongSheetDetials.ResultBean.TracksBean.class));
+                    break;
+                case MusicDataUtils.TYPE_ARTIST_CENTER:
+                    playServiceManager.setArtistCenterMusicList(JsonUtils.stringToList(musicList,ArtistCenterInfo.HotSongsBean.class));
+                    break;
+            }
+        }
         mediaPlayer.setOnCompletionListener(this);
         mediaPlayer.setOnPreparedListener(this);
         mediaPlayer.setOnBufferingUpdateListener(this);
@@ -195,6 +211,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                     hotSongsBean = hotSongs.get(getPlayListPosition());
                 }
 //                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getArtistId(),getDuration(), getProgress()));
+
                 mediaSessionManager.updatePlaybackState();
                 setMusicInfo(hotSongsBean);
                 playSongSheetMusic(String.valueOf(hotSongsBean.getId()));
@@ -268,7 +285,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
      * @param musicInfo
      */
     private void playLocalMusic(MusicInfo musicInfo) {
-        Log.i(TAG, "playLocalMusic: "+musicInfo.path);
         mediaPlayer.reset();
         try {
             mediaPlayer.setDataSource(musicInfo.path);
@@ -360,37 +376,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         this.progress = progress;
     }
 
-//    public int getMusicType() {
-//        return musicType;
-//    }
-//
-//    public void setMusicType(int musicType) {
-//        this.musicType = musicType;
-//    }
-//
-//    public String getMusicAddress() {
-//        return musicAddress;
-//    }
-//
-//    public void setMusicAddress(String musicAddress) {
-//        this.musicAddress = musicAddress;
-//    }
-//
-//    public String getMd5() {
-//        return md5;
-//    }
-//
-//    public void setMd5(String md5) {
-//        this.md5 = md5;
-//    }
-//    public String getMusicId() {
-//        return musicId;
-//    }
-//
-//    public void setMusicId(String musicId) {
-//        this.musicId = musicId;
-//    }
-
 
     public int getPlayListPosition() {
         return playListPosition;
@@ -404,10 +389,24 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
      */
     private void saveCurrentMusicInfo() {
         PreferenceUtil.put(MUSIC_CURRENT_TIME, getProgress());
-//        PreferenceUtil.put(MUSIC_TYPE,getMusicType());
-//        PreferenceUtil.put(MUSIC_ADDRESS,getMusicAddress());
+        PreferenceUtil.put(MUSIC_INFO,JsonUtils.objectToString(getMusicInfo()));
         PreferenceUtil.put(MUSIC_PLAY_STATE,getState());
         PreferenceUtil.put(MUSIC_POSTION_IN_LIST,getPlayListPosition());
+        PlayServiceManager playServiceManager = PlayServiceManager.getInstance();
+        switch (MusicDataUtils.getMusicType(getMusicInfo())){
+            case MusicDataUtils.TYPE_LOCAL:
+                PreferenceUtil.put(MUSIC_LIST, JsonUtils.objectToString(playServiceManager.getLocalMusicList()));
+                PreferenceUtil.put(MUSIC_TYPE,MusicDataUtils.TYPE_LOCAL);
+                break;
+            case MusicDataUtils.TYPE_SONG_SHEET:
+                PreferenceUtil.put(MUSIC_LIST, JsonUtils.objectToString(playServiceManager.getSongSheetMusicList()));
+                PreferenceUtil.put(MUSIC_TYPE,MusicDataUtils.TYPE_SONG_SHEET);
+                break;
+            case MusicDataUtils.TYPE_ARTIST_CENTER:
+                PreferenceUtil.put(MUSIC_LIST, JsonUtils.objectToString(playServiceManager.getHotSongs()));
+                PreferenceUtil.put(MUSIC_TYPE,MusicDataUtils.TYPE_ARTIST_CENTER);
+                break;
+        }
     }
 
     public boolean isPlaying() {

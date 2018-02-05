@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 
 import com.yzx.xiaomusic.entities.MusicInfo;
+import com.yzx.xiaomusic.utils.CommonUtil;
 import com.yzx.xiaomusic.utils.FileUtils;
 import com.yzx.xiaomusic.utils.JsonUtils;
 import com.yzx.xiaomusic.utils.PreferenceUtil;
@@ -35,7 +36,7 @@ public class LocalMusicModel {
         void onNext(MusicInfo musicInfo);
         void onFail(String errorMsg);
     }
-    public void getLocalMusicInfo(Context context, final CallBack callBack){
+    public void getLocalMusicInfo(final Context context, final CallBack callBack){
         final List<MusicInfo> list = new ArrayList();
         final Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null,
                 null, MediaStore.Audio.AudioColumns.IS_MUSIC);
@@ -45,12 +46,14 @@ public class LocalMusicModel {
                 public void subscribe(ObservableEmitter<MusicInfo> e) throws Exception {
                     while (cursor.moveToNext()) {
                   MusicInfo musicInfo = new MusicInfo();
+                  musicInfo.id =cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));//歌曲id
                   musicInfo.allName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));//音乐全名包含歌名和歌手
                   musicInfo.artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));//歌手
                   musicInfo.path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));//本地路径
                   musicInfo.duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));//歌曲时间
                   musicInfo.size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));//歌曲大小
-                  musicInfo.poster = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));//海报
+                        String albumid = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
+                  musicInfo.poster = CommonUtil.getMusicBitemp(musicInfo.getId(),Long.parseLong(albumid));//海报
                   musicInfo.md5 = FileUtils.fileToMD5(musicInfo.getPath());//文件Md5
                   if (musicInfo.size > 1024 * 1024 * 3) {
                       // 注释部分是切割标题，分离出歌曲名和歌手 （本地媒体库读取的歌曲信息不规范）

@@ -48,7 +48,6 @@ public class MusicApplication extends Application {
         }
     }
 
-
     public class PlayServiceConnection implements ServiceConnection {
 
         @Override
