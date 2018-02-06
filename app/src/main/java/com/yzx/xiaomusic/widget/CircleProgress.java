@@ -64,17 +64,26 @@ public class CircleProgress extends View {
         int measuredHeight = getMeasuredHeight();
         float radius = 0.8f * measuredHeight / 2;
 
+
+        //画底部圆
+        if (STATE_PAUSE==state){
+            mPaint.setColor(GRAY);
+        }else {
+            mPaint.setColor(LIGHT_GRAY);
+        }
+
+        canvas.drawCircle(measuredHeight/2,measuredHeight/2,radius,mPaint);
+
+        //画状态Path
         Path path;
         if (STATE_PAUSE==state){
             mPaint.setColor(GRAY);
             path = getPausePath();
         }else {
-            mPaint.setColor(LIGHT_GRAY);
+            mPaint.setColor(COLOR_PLAY);
             path =getPlayPath();
         }
         canvas.drawPath(path,mPaint);
-
-        canvas.drawCircle(measuredHeight/2,measuredHeight/2,radius,mPaint);
 
         if (max<=0||progress<=0){
             return;

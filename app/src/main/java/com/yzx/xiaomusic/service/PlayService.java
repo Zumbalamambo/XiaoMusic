@@ -360,8 +360,6 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_PLAY,null));
     }
 
-
-
     public int getState() {
         return state;
     }
@@ -379,7 +377,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
 
     public int getPlayListPosition() {
-        Log.i(TAG, "getPlayListPosition: "+playListPosition);
+//        Log.i(TAG, "getPlayListPosition: "+playListPosition);
         return playListPosition;
     }
 
