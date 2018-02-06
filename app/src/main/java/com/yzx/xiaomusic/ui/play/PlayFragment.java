@@ -128,6 +128,24 @@ public class PlayFragment extends BaseFragment {
         setToolBar(toolBar,MusicDataUtils.getMusicName(musicInfo),MusicDataUtils.getMusicArtist(musicInfo));
         tvMusicTimePlay.setText(TimeUtils.parseTime(playService.getProgress()));
         tvMusicTimeLeft.setText(TimeUtils.parseTime(MusicDataUtils.getMusicDuration(musicInfo)-playService.getProgress()));
+        String musicId = MusicDataUtils.getMusicId(MusicDataUtils.getMusicInfo());
+        loadMusicLyrics(musicId);
+    }
+
+    /**
+     * 加载歌词
+     * @param musicId
+     */
+    private void loadMusicLyrics(String musicId) {
+        if (!TextUtils.isEmpty(musicId)){
+            File file = new File(context.getCacheDir(), musicId);
+            if (!file.exists()){
+                mPresenter.getLyrics(musicId);
+            }else {
+                lyricView.setLyricFile(file);
+            }
+            lyricView.setCurrentTimeMillis(getPlayService().mediaPlayer.getCurrentPosition());
+        }
     }
 
     @OnClick({R.id.tv_subtitle,R.id.layout_play_lyrics, R.id.layout_play_card, R.id.lyricView,R.id.iv_play_mode, R.id.iv_play_previous,
@@ -195,13 +213,7 @@ public class PlayFragment extends BaseFragment {
                 tvTitle.setText(musicMessage.getName());
                 tvSubtitle.setText(musicMessage.getArtist());
                 Log.i(TAG, "onMessageEvent: "+musicMessage.getId());
-                File file = new File(context.getCacheDir(), musicMessage.getId());
-                //判断歌词是否存在
-                if (!file.exists()){
-                    mPresenter.getLyrics(musicMessage.getId());
-                }else {
-                    lyricView.setLyricFile(file);
-                }
+                loadMusicLyrics(musicMessage.getId());
                 GlideUtils.loadImg(context,musicMessage.getPoster(),-1,GlideUtils.TRANSFORM_BLUR,ivPlayBg);
                 break;
             case PlayEvent.TYPE_PLAY:
@@ -211,7 +223,6 @@ public class PlayFragment extends BaseFragment {
                 ivPlay.setImageResource(R.drawable.ic_music_play_pause);
                 break;
             case PlayEvent.TYPE_PROCESS:
-
                 ProgressInfo progressInfo = (ProgressInfo) event.getData();
                 lyricView.setCurrentTimeMillis(progressInfo.getProcess());
                 tvMusicTimePlay.setText(TimeUtils.parseTime(progressInfo.getProcess()));

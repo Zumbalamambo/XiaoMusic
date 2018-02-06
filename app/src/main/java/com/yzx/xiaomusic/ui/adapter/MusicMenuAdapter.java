@@ -11,6 +11,7 @@ import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.entities.ArtistCenterInfo;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
+import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.service.PlayServiceManager;
 import com.yzx.xiaomusic.utils.MusicDataUtils;
 import com.yzx.xiaomusic.utils.ResourceUtils;
@@ -38,8 +39,8 @@ public class MusicMenuAdapter extends RecyclerView.Adapter<MusicMenuAdapter.Hold
     }
 
     @Override
-    public void onBindViewHolder(Holder holder, int position) {
-        Object musicInfo = musicList.get(position);
+    public void onBindViewHolder(Holder holder, final int position) {
+        final Object musicInfo = musicList.get(position);
         holder.tvName.setText(MusicDataUtils.getMusicName(musicInfo));
         holder.tvArtist.setText(MusicDataUtils.getMusicArtist(musicInfo));
 
@@ -52,13 +53,30 @@ public class MusicMenuAdapter extends RecyclerView.Adapter<MusicMenuAdapter.Hold
             holder.tvArtist.setTextColor(ResourceUtils.parseColor(R.color.colorMusicArtistGray));
         }
 //        Log.i(TAG, "onBindViewHolder: "+MusicDataUtils.getMusicName(musicInfo));
-        if (musicInfo instanceof MusicInfo) {
-
-        } else if (musicInfo instanceof SongSheetDetials.ResultBean.TracksBean) {
-
-        } else if (musicInfo instanceof ArtistCenterInfo.HotSongsBean) {
-
-        }
+        final PlayService playService = PlayServiceManager.getInstance().getPlayService();
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (musicInfo instanceof MusicInfo) {
+                    if (MusicDataUtils.TYPE_LOCAL !=MusicDataUtils.getMusicType(playService.getMusicInfo())||playService.getPlayListPosition()!=position){
+                        playService.setState(PlayService.STATE_IDLE);
+                        playService.setPlayListPosition(position);
+                    }
+                } else if (musicInfo instanceof SongSheetDetials.ResultBean.TracksBean) {
+                    if (MusicDataUtils.TYPE_SONG_SHEET !=MusicDataUtils.getMusicType(playService.getMusicInfo())||playService.getPlayListPosition()!=position){
+                        playService.setState(PlayService.STATE_IDLE);
+                        playService.setPlayListPosition(position);
+                    }
+                } else if (musicInfo instanceof ArtistCenterInfo.HotSongsBean) {
+                    if (MusicDataUtils.TYPE_ARTIST_CENTER !=MusicDataUtils.getMusicType(playService.getMusicInfo())||playService.getPlayListPosition()!=position){
+                        playService.setState(PlayService.STATE_IDLE);
+                        playService.setPlayListPosition(position);
+                    }
+                }
+                playService.playMusic();
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
