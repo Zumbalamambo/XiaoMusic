@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -138,7 +137,7 @@ public class PlayFragment extends BaseFragment {
      */
     private void loadMusicLyrics(String musicId) {
         if (!TextUtils.isEmpty(musicId)){
-            File file = new File(context.getCacheDir(), musicId);
+            File file = new File(Constants.PATH_ABSOLUTE_LYRIC+ "/"+musicId);
             if (!file.exists()){
                 mPresenter.getLyrics(musicId);
             }else {
@@ -212,7 +211,6 @@ public class PlayFragment extends BaseFragment {
                 MusicMessage musicMessage = (MusicMessage) event.getData();
                 tvTitle.setText(musicMessage.getName());
                 tvSubtitle.setText(musicMessage.getArtist());
-                Log.i(TAG, "onMessageEvent: "+musicMessage.getId());
                 loadMusicLyrics(musicMessage.getId());
                 GlideUtils.loadImg(context,musicMessage.getPoster(),-1,GlideUtils.TRANSFORM_BLUR,ivPlayBg);
                 break;

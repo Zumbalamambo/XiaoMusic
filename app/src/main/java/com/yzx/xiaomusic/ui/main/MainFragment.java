@@ -22,6 +22,7 @@ import com.yzx.xiaomusic.ui.main.cloud.CloudFragment;
 import com.yzx.xiaomusic.ui.main.friend.FriendFragment;
 import com.yzx.xiaomusic.ui.main.music.MusicFragment;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
+import com.yzx.xiaomusic.utils.ActivityUtils;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.widget.CircleProgress;
 
@@ -176,6 +177,11 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
             default:
                 break;
         }
-
     };
+
+    @Override
+    public boolean onBackPressedSupport() {
+        ActivityUtils.backToDesk(getContext());
+        return true;
+    }
 }

@@ -74,11 +74,10 @@ public interface MuiscApi {
 
     /**
      * 获取歌词
-     * @param type
      * @param id
      * @return
      */
-    @GET("https://api.imjad.cn/cloudmusic/")
-    Observable<Lyric> getMusicLyrics(@Query("type") String type, @Query("id") String id);
+    @GET("lyric")
+    Observable<Lyric> getMusicLyrics(@Query("id") String id);
 
 }

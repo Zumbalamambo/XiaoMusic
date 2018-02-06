@@ -2,7 +2,7 @@ package com.yzx.xiaomusic.ui.play;
 
 import android.util.Log;
 
-import com.yzx.xiaomusic.MusicApplication;
+import com.yzx.xiaomusic.common.Constants;
 import com.yzx.xiaomusic.common.observel.OtherObserver;
 import com.yzx.xiaomusic.entities.Lyric;
 import com.yzx.xiaomusic.network.AppHttpClient;
@@ -34,14 +34,18 @@ public class PlayModel implements PlayContract.Model<PlayFragment> {
         AppHttpClient
                 .getInstance()
                 .getService(MuiscApi.class)
-                .getMusicLyrics("lyric",id)
+                .getMusicLyrics(id)
                 .compose(playFragment.<Lyric>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Consumer<Lyric>() {
                     @Override
                     public void accept(Lyric lyric) throws Exception {
-                        Log.i(TAG, "accept: 获取歌词成功");
+                        if (lyric!=null&&lyric.getLrc()!=null&&lyric.getLrc().getLyric()!=null){
+                            Log.i(TAG, "accept: 获取歌词成功"+lyric.getLrc().getLyric());
+                        }else {
+
+                        }
                     }
                 })
                 .flatMap(new Function<Lyric, ObservableSource<?>>() {
@@ -52,18 +56,26 @@ public class PlayModel implements PlayContract.Model<PlayFragment> {
                             protected void subscribeActual(Observer<? super Lyric> observer) {
                                 if (lyric!=null&&lyric.getLrc()!=null&&lyric.getLrc().getLyric()!=null){
 
-                                    File file = new File(MusicApplication.getApplication().getCacheDir(),id);
+                                    File appDir = new File(Constants.PATH_APP);
+                                    if (!appDir.exists()){
+                                        appDir.mkdirs();
+                                    }
+                                    File lyricDir = new File(Constants.PATH_ABSOLUTE_LYRIC);
+                                    if (!lyricDir.exists()){
+                                        lyricDir.mkdirs();
+                                    }
+                                    File file = new File(Constants.PATH_ABSOLUTE_LYRIC+ "/" + id);
                                     try {
                                         FileOutputStream fileOutputStream=new FileOutputStream(file);
                                         fileOutputStream.write(lyric.getLrc().getLyric().getBytes());
                                         fileOutputStream.close();
-                                        observer.onComplete();
+                                        observer.onNext(lyric);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
                                         observer.onError(ex);
                                     }
                                 }else {
-                                    observer.onError(new NullPointerException("lyric为空"));
+                                    observer.onError(new NullPointerException("have no lyric"));
                                 }
                             }
                         };
@@ -71,7 +83,7 @@ public class PlayModel implements PlayContract.Model<PlayFragment> {
                 })
                 .compose(playFragment.bindToLifecycle())
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
 }

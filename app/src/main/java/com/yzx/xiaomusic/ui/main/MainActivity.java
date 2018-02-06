@@ -1,6 +1,7 @@
 package com.yzx.xiaomusic.ui.main;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.yzx.xiaomusic.R;
@@ -26,8 +27,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         //释放所有的视频资源
         GSYVideoPlayer.releaseAllVideos();
+        Log.i(TAG, "onDestroy: MAinActivity");
+        super.onDestroy();
     }
 }

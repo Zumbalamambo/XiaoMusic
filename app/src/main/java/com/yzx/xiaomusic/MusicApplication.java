@@ -38,6 +38,10 @@ public class MusicApplication extends Application {
                 .debug(BuildConfig.DEBUG)
                 .install();
 
+//        for (int i = 0; i < FileUtils.getSDCardPaths().size(); i++) {
+//            Log.i(TAG, "\nonCreate: "+FileUtils.getSDCardPaths().get(i));
+//            File file = new File(FileUtils.getSDCardPaths().get(i), "000");
+//        }
         //如果playService死了，再初始化PlayService
         if (!PlayServiceManager.getInstance().checkPlayServiceAlive()){
 
