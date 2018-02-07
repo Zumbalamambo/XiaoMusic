@@ -5,6 +5,7 @@ import com.yzx.xiaomusic.entities.Banner;
 import com.yzx.xiaomusic.entities.Lyric;
 import com.yzx.xiaomusic.entities.MusicAddress;
 import com.yzx.xiaomusic.entities.MvData;
+import com.yzx.xiaomusic.entities.SearchResult;
 import com.yzx.xiaomusic.entities.SongSheet;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
 import com.yzx.xiaomusic.entities.VideoList;
@@ -77,7 +78,19 @@ public interface MuiscApi {
      * @param id
      * @return
      */
-    @GET("lyric")
-    Observable<Lyric> getMusicLyrics(@Query("id") String id);
+    @GET("https://api.imjad.cn/cloudmusic")
+    Observable<Lyric> getMusicLyrics(@Query("type") String type,@Query("id") String id);
+
+
+    /**
+     * 搜索歌曲
+     * @param type
+     * @param keywords
+     * @param offset
+     * @param limit
+     * @return
+     */
+    @GET("http://musicapi.leanapp.cn/search")
+    Observable<SearchResult> searchMusic(@Query("type") String type, @Query("keywords") String keywords, @Query("offset") int offset,@Query("limit") int limit);
 
 }

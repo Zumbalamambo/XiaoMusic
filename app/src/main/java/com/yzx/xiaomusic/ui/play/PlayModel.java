@@ -3,8 +3,10 @@ package com.yzx.xiaomusic.ui.play;
 import android.util.Log;
 
 import com.yzx.xiaomusic.common.Constants;
+import com.yzx.xiaomusic.common.observel.MvpObserver;
 import com.yzx.xiaomusic.common.observel.OtherObserver;
 import com.yzx.xiaomusic.entities.Lyric;
+import com.yzx.xiaomusic.entities.SearchResult;
 import com.yzx.xiaomusic.network.AppHttpClient;
 import com.yzx.xiaomusic.network.api.MuiscApi;
 
@@ -34,7 +36,7 @@ public class PlayModel implements PlayContract.Model<PlayFragment> {
         AppHttpClient
                 .getInstance()
                 .getService(MuiscApi.class)
-                .getMusicLyrics(id)
+                .getMusicLyrics("lyric",id)
                 .compose(playFragment.<Lyric>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -82,6 +84,19 @@ public class PlayModel implements PlayContract.Model<PlayFragment> {
                     }
                 })
                 .compose(playFragment.bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    @Override
+    public void getLgetLocalMusicLyricsyrics(PlayFragment fragment, String musicName, MvpObserver<SearchResult> observer) {
+
+        AppHttpClient
+                .getInstance()
+                .getService(MuiscApi.class)
+                .searchMusic("1",musicName,0,1)
+                .compose(fragment.<SearchResult>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

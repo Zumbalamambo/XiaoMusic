@@ -67,8 +67,10 @@
                         android:scaleType="centerCrop" />
 
                     <TextView
+                        android:lines="1"
+                        android:ellipsize="end"
                         android:id="@+id/tv_name_author"
-                        android:layout_width="wrap_content"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"

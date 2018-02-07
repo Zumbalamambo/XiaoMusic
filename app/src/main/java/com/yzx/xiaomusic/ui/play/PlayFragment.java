@@ -158,8 +158,8 @@ public class PlayFragment extends BaseFragment {
      *
      * @param musicId
      */
-    private void loadMusicLyrics(String musicId) {
-        if (!TextUtils.isEmpty(musicId)) {
+    public void loadMusicLyrics(String musicId) {
+        if (!TextUtils.isEmpty(musicId)) {//非本地音乐
             File file = new File(Constants.PATH_ABSOLUTE_LYRIC + "/" + musicId);
             if (!file.exists()) {
                 mPresenter.getLyrics(musicId);
@@ -167,6 +167,11 @@ public class PlayFragment extends BaseFragment {
                 lyricView.setLyricFile(file);
             }
             lyricView.setCurrentTimeMillis(getPlayService().mediaPlayer.getCurrentPosition());
+        }else {//本地音乐  -----先搜索-----再获取id-----再获取歌词
+            String musicName = MusicDataUtils.getMusicName(getPlayService().getMusicInfo());
+            if (!TextUtils.isEmpty(musicName)){
+                mPresenter.getLocalMusicLyrics(musicName);
+            }
         }
     }
 
