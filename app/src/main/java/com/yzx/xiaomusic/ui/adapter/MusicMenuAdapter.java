@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yzx.xiaomusic.R;
@@ -48,9 +49,11 @@ public class MusicMenuAdapter extends RecyclerView.Adapter<MusicMenuAdapter.Hold
             int color = ResourceUtils.parseColor(R.color.colorAccent);
             holder.tvName.setTextColor(color);
             holder.tvArtist.setTextColor(color);
+            holder.ivMusicPlaying.setVisibility(View.VISIBLE);
         }else {
             holder.tvName.setTextColor(ResourceUtils.parseColor(R.color.colorMusicNameGray));
             holder.tvArtist.setTextColor(ResourceUtils.parseColor(R.color.colorMusicArtistGray));
+            holder.ivMusicPlaying.setVisibility(View.GONE);
         }
 //        Log.i(TAG, "onBindViewHolder: "+MusicDataUtils.getMusicName(musicInfo));
         final PlayService playService = PlayServiceManager.getInstance().getPlayService();
@@ -97,6 +100,9 @@ public class MusicMenuAdapter extends RecyclerView.Adapter<MusicMenuAdapter.Hold
         TextView tvName;
         @BindView(R.id.tv_artist)
         TextView tvArtist;
+        @BindView(R.id.iv_music_playing)
+        ImageView ivMusicPlaying;
+
         public Holder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

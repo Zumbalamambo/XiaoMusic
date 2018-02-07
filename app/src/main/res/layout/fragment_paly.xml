@@ -53,6 +53,8 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <me.zhengken.lyricview.LyricView
+                    app:highlightColor="@color/colorWhite"
+                    app:hintColor="@color/colorMusicArtistGray"
                     app:textColor="@color/colorMusicArtistGray"
                     app:textSize="13sp"
                     android:id="@+id/lyricView"
@@ -62,6 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
                 <ImageView
+                    android:id="@+id/iv_music_play_more"
                     android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_music_play_more"
                     android:layout_alignParentBottom="true"
@@ -80,6 +83,12 @@
                     android:layout_centerInParent="true"
                     android:layout_width="250dp"
                     android:layout_height="250dp" />
+
+                <ImageView
+                    android:id="@+id/iv_music_poster"
+                    android:layout_centerInParent="true"
+                    android:layout_width="170dp"
+                    android:layout_height="170dp" />
                 <!--黑胶片上面的的白色东东-->
                 <ImageView
                     android:id="@+id/iv_play_ear"

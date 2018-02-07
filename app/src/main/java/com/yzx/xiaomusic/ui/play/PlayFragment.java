@@ -57,6 +57,8 @@ public class PlayFragment extends BaseFragment {
     AppCompatSeekBar seekBarVoice;
     @BindView(R.id.iv_play_card)
     ImageView ivPlayCard;
+    @BindView(R.id.iv_music_poster)
+    ImageView ivMusicPoster;
     @BindView(R.id.iv_play_ear)
     ImageView ivPlayEar;
     @BindView(R.id.tv_music_time_play)
@@ -123,6 +125,7 @@ public class PlayFragment extends BaseFragment {
         Object musicInfo = playService.getMusicInfo();
         ivPlay.setImageResource(getPlayService().getState()==STATE_PLAYING? R.drawable.ic_music_play_play:R.drawable.ic_music_play_pause);
         GlideUtils.loadImg(context,MusicDataUtils.getMusicPoster(musicInfo),-1 ,GlideUtils.TRANSFORM_BLUR,ivPlayBg);
+        GlideUtils.loadImg(context,MusicDataUtils.getMusicPoster(musicInfo),GlideUtils.TYPE_PLAY_POSTER,GlideUtils.TRANSFORM_CIRCLE,ivMusicPoster);
         seekBarMusicSeek.setMax((int) MusicDataUtils.getMusicDuration(musicInfo));
         setToolBar(toolBar,MusicDataUtils.getMusicName(musicInfo),MusicDataUtils.getMusicArtist(musicInfo));
         tvMusicTimePlay.setText(TimeUtils.parseTime(playService.getProgress()));
@@ -147,7 +150,7 @@ public class PlayFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.tv_subtitle,R.id.layout_play_lyrics, R.id.layout_play_card, R.id.lyricView,R.id.iv_play_mode, R.id.iv_play_previous,
+    @OnClick({R.id.tv_subtitle,R.id.layout_play_lyrics, R.id.layout_play_card, R.id.lyricView,R.id.iv_music_play_more,R.id.iv_play_mode, R.id.iv_play_previous,
             R.id.iv_play, R.id.iv_play_next, R.id.iv_play_list})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -164,6 +167,10 @@ public class PlayFragment extends BaseFragment {
                 }
                 break;
             case R.id.layout_play_lyrics:
+                layoutPlayCard.setVisibility(View.VISIBLE);
+                layoutPlayLyrics.setVisibility(View.INVISIBLE);
+                break;
+            case R.id.iv_music_play_more:
                 layoutPlayCard.setVisibility(View.VISIBLE);
                 layoutPlayLyrics.setVisibility(View.INVISIBLE);
                 break;
@@ -212,6 +219,7 @@ public class PlayFragment extends BaseFragment {
                 tvTitle.setText(musicMessage.getName());
                 tvSubtitle.setText(musicMessage.getArtist());
                 loadMusicLyrics(musicMessage.getId());
+                GlideUtils.loadImg(context,musicMessage.getPoster(),GlideUtils.TYPE_PLAY_POSTER,GlideUtils.TRANSFORM_CIRCLE,ivMusicPoster);
                 GlideUtils.loadImg(context,musicMessage.getPoster(),-1,GlideUtils.TRANSFORM_BLUR,ivPlayBg);
                 break;
             case PlayEvent.TYPE_PLAY:

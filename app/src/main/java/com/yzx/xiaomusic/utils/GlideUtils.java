@@ -19,6 +19,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 public class GlideUtils {
     public static final int TYPE_DEFAULT = 0;
     public static final int TYPE_HEAD = 1;//头像
+    public static final int TYPE_PLAY_POSTER = 2;//播放页面海报
 
 
     public static final int TRANSFORM_CIRCLE = 1;//加载圆形图片
@@ -37,6 +38,9 @@ public class GlideUtils {
         switch (type) {
             case TYPE_DEFAULT:
                 options.placeholder(R.drawable.zhanweitu).error(R.drawable.zhanweitu);
+                break;
+            case TYPE_PLAY_POSTER:
+                options.placeholder(R.drawable.ic_zhanweitu_play_poster).error(R.drawable.ic_zhanweitu_play_poster);
                 break;
         }
         switch (transformType) {
