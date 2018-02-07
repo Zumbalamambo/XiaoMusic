@@ -13,6 +13,7 @@
 
     <TextView
         android:text="1"
+        android:paddingEnd="10dp"
         android:textSize="16sp"
         android:textColor="@color/colorGray"
         android:id="@+id/tv_SerialNumber"
@@ -21,6 +22,7 @@
         android:layout_height="match_parent" />
 
     <RelativeLayout
+
         android:layout_weight="1"
         android:orientation="vertical"
         android:layout_width="0dp"
@@ -48,17 +50,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
-                <TextView
-                    android:text="歌手"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="10sp"
-                    android:textColor="@color/colorMusicArtistGray"
+                <LinearLayout
+                    android:gravity="center_vertical"
                     android:layout_marginTop="6dp"
-                    android:id="@+id/tv_artist"
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:ignore="SmallSp" />
+                    android:layout_height="wrap_content">
+
+                    <!--是否下载过-->
+
+                    <ImageView
+                        android:layout_marginEnd="5dp"
+                        android:src="@drawable/ic_downloaded"
+                        android:id="@+id/iv_is_downloaded"
+                        android:layout_width="13dp"
+                        android:layout_height="13dp" />
+                    <TextView
+                        android:text="歌手"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="10sp"
+                        android:textColor="@color/colorMusicArtistGray"
+                        android:id="@+id/tv_artist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:ignore="SmallSp" />
+                </LinearLayout>
             </LinearLayout>
 
             <ImageView

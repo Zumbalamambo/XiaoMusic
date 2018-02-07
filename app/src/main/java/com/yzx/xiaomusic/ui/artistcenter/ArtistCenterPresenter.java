@@ -25,7 +25,7 @@ public class ArtistCenterPresenter implements ArtistCenterContract.Presenter {
         mModel.getArtistInfo(mFragment,artistId, new MvpObserver<ArtistCenterInfo>() {
             @Override
             protected void onSuccess(ArtistCenterInfo artistCenterInfo) {
-                GlideUtils.loadImg(mFragment.getContext(),artistCenterInfo.getArtist().getPicUrl(),-1,mFragment.ivArtistPoster);
+                GlideUtils.loadImg(mFragment.getContext(),artistCenterInfo.getArtist().getPicUrl(),GlideUtils.TYPE_ARTIST_CENTER,mFragment.ivArtistPoster);
                 mFragment.setToolBar(mFragment.toolBar,artistCenterInfo.getArtist().getName());
                 mFragment.adapter.setDatas(artistCenterInfo);
             }

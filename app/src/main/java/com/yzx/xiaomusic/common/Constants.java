@@ -34,5 +34,18 @@ public class Constants {
      */
     public static final String LYRIC ="/lyric";
 
+    /**
+     * 歌词绝对路径
+     */
     public static final String PATH_ABSOLUTE_LYRIC =PATH_APP+LYRIC;
+
+    /**
+     * 歌曲缓存路径
+     */
+    public static final String MUSIC ="/music";
+
+    /**
+     * 歌曲绝对路径
+     */
+    public static final String PATH_ABSOLUTE_MUSIC =PATH_APP+MUSIC;
 }

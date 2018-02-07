@@ -1,5 +1,6 @@
 package com.yzx.xiaomusic.utils;
 
+import com.yzx.xiaomusic.common.Constants;
 import com.yzx.xiaomusic.entities.ArtistCenterInfo;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
@@ -175,5 +176,15 @@ public class MusicDataUtils {
             default:
                 return 0;
         }
+    }
+
+    /**
+     * 根据名字和id获取文件路径
+     * @param name
+     * @param id
+     * @return
+     */
+    public static String getMusicPath(String name,String id) {
+        return Constants.PATH_ABSOLUTE_MUSIC + "/" + name+"-"+id;
     }
 }

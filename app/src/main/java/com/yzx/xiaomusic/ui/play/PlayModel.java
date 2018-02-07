@@ -1,7 +1,5 @@
 package com.yzx.xiaomusic.ui.play;
 
-import android.util.Log;
-
 import com.yzx.xiaomusic.common.Constants;
 import com.yzx.xiaomusic.common.observel.MvpObserver;
 import com.yzx.xiaomusic.common.observel.OtherObserver;
@@ -44,7 +42,7 @@ public class PlayModel implements PlayContract.Model<PlayFragment> {
                     @Override
                     public void accept(Lyric lyric) throws Exception {
                         if (lyric!=null&&lyric.getLrc()!=null&&lyric.getLrc().getLyric()!=null){
-                            Log.i(TAG, "accept: 获取歌词成功"+lyric.getLrc().getLyric());
+//                            Log.i(TAG, "accept: 获取歌词成功"+lyric.getLrc().getLyric());
                         }else {
 
                         }

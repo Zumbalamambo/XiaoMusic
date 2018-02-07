@@ -1,7 +1,6 @@
 package com.yzx.xiaomusic.ui.main.music.local;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,9 +27,7 @@ import com.yzx.xiaomusic.ui.adapter.CommonMusicAdapter;
 import com.yzx.xiaomusic.ui.dialog.MusicMenuDialog;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.GlideUtils;
-import com.yzx.xiaomusic.utils.LItemDivider;
 import com.yzx.xiaomusic.utils.MusicDataUtils;
-import com.yzx.xiaomusic.utils.ResourceUtils;
 import com.yzx.xiaomusic.utils.ScanMusicUtils;
 import com.yzx.xiaomusic.widget.CircleProgress;
 
@@ -104,9 +101,9 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
         setToolBar(toolBar, R.string.localMusic);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 //        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
-        LItemDivider itemDivider = new LItemDivider(context, LItemDivider.VERTICAL);
-        itemDivider.setDrawable(new ColorDrawable(ResourceUtils.parseColor(R.color.colorAccent)));
-        recyclerView.addItemDecoration(itemDivider);
+//        LItemDivider itemDivider = new LItemDivider(context, LItemDivider.VERTICAL);
+//        itemDivider.setDrawable(new ColorDrawable(ResourceUtils.parseColor(R.color.colorAccent)));
+//        recyclerView.addItemDecoration(itemDivider);
         adapter = new CommonMusicAdapter();
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);

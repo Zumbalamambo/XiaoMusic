@@ -21,6 +21,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:layout_marginEnd="10dp"
                 android:id="@+id/iv_music_playing"
                 android:src="@drawable/ic_music_playing"
                 android:tint="@color/colorAccent"
@@ -28,7 +29,6 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:layout_marginStart="10dp"
                 android:text="娃哈哈"
                 android:id="@+id/tv_name"
                 android:textSize="12sp"

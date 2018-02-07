@@ -163,7 +163,7 @@ public class ArtistCenterFragment extends BaseFragment implements OnItemClickLsi
                 MusicMessage musicMessage = (MusicMessage) event.getData();
                 tvMusicName.setText(musicMessage.getName());
                 tvMusicArtist.setText(musicMessage.getArtist());
-                GlideUtils.loadImg(context,musicMessage.getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
+                GlideUtils.loadImg(context,musicMessage.getPoster(),GlideUtils.TYPE_ARTIST_CENTER,ivMusicPoster);
                 break;
             case PlayEvent.TYPE_PLAY:
                 circleProgress.setState(CircleProgress.STATE_PLAY);

@@ -1,9 +1,13 @@
 package com.yzx.xiaomusic.network;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.util.Log;
+
+import com.yzx.xiaomusic.MusicApplication;
 
 /**
  * Created by yzx on 2017/6/21.
@@ -33,5 +37,24 @@ public class NetWorkUtils {
     private static ConnectivityManager getConnectivityManager(Context context) {
         ConnectivityManager contextSystemService = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return contextSystemService;
+    }
+
+
+    public static boolean getWifiEnabled(Context context) {
+        @SuppressLint("WifiManagerLeak")
+        WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        return manager != null && manager.isWifiEnabled();
+    }
+
+    /**
+     * 获取wifi是否连接
+     * @return
+     */
+    public static boolean isWifiConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) MusicApplication.getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm != null
+                && cm.getActiveNetworkInfo() != null
+                && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
     }
 }

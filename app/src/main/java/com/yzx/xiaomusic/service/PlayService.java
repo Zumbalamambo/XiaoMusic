@@ -18,6 +18,7 @@ import com.yzx.xiaomusic.entities.MusicMessage;
 import com.yzx.xiaomusic.entities.PlayEvent;
 import com.yzx.xiaomusic.entities.ProgressInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
+import com.yzx.xiaomusic.network.NetWorkUtils;
 import com.yzx.xiaomusic.utils.JsonUtils;
 import com.yzx.xiaomusic.utils.MusicDataUtils;
 import com.yzx.xiaomusic.utils.PreferenceUtil;
@@ -25,6 +26,7 @@ import com.yzx.xiaomusic.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -172,7 +174,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 }
                 mediaSessionManager.updatePlaybackState();
                 setMusicInfo(musicInfo);
-                playLocalMusic(musicInfo);
+                playLocalMusic(musicInfo.getPath());
             }else {
                 ToastUtils.showToast("本地歌单异常",ToastUtils.TYPE_NOTICE);
             }
@@ -193,7 +195,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 //                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getArtistId(),getDuration(), getProgress()));
                 mediaSessionManager.updatePlaybackState();
                 setMusicInfo(tracksBean);
-                playSongSheetMusic(String.valueOf(tracksBean.getId()));
+                playNetMusic(tracksBean.getName(),String.valueOf(tracksBean.getId()));
             }else {
                 ToastUtils.showToast("歌单异常",ToastUtils.TYPE_NOTICE);
             }
@@ -215,7 +217,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
                 mediaSessionManager.updatePlaybackState();
                 setMusicInfo(hotSongsBean);
-                playSongSheetMusic(String.valueOf(hotSongsBean.getId()));
+                playNetMusic(hotSongsBean.getName(), String.valueOf(hotSongsBean.getId()));
             }
         }
     }
@@ -260,11 +262,27 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     }
 
     /**
-     * 歌单音乐url
+     * 播放网络音乐
      */
-    private void playSongSheetMusic(String musicId) {
+    private void playNetMusic(String name, String musicId) {
+        Log.i(TAG, "playNetMusic: "+musicId);
+        if (!TextUtils.isEmpty(musicId)){
+            String pathname = MusicDataUtils.getMusicPath(name,musicId);
+            File file = new File(pathname);
+            if (file.exists()){
+                playLocalMusic(pathname);
+            }else {
+                if (NetWorkUtils.isWifiConnected()){//wifi可用，获取歌曲
+                    MusicAddressModel.getInstance().getMusicAddress(name,musicId);
+                }else {//下一曲
+                    ToastUtils.showToast(name+"未缓存，跳过该歌曲",ToastUtils.TYPE_NOTICE);
+                    next();
+                }
+            }
+        }else {
+            ToastUtils.showToast("播放网络音乐异常，id为空",ToastUtils.TYPE_NOTICE);
+        }
 
-        MusicAddressModel.getInstance().getMusicAddress(musicId);
     }
 
     /**
@@ -283,12 +301,12 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
     /**
      * 播放本地音乐
-     * @param musicInfo
+     * @param path
      */
-    private void playLocalMusic(MusicInfo musicInfo) {
+    private void playLocalMusic(String path) {
         mediaPlayer.reset();
         try {
-            mediaPlayer.setDataSource(musicInfo.path);
+            mediaPlayer.setDataSource(path);
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();

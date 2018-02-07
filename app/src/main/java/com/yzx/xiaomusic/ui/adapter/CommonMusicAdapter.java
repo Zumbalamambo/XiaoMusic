@@ -18,7 +18,9 @@ import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.service.PlayServiceManager;
 import com.yzx.xiaomusic.ui.dialog.CloudMusicDialog;
 import com.yzx.xiaomusic.ui.dialog.LocalMusicDialog;
+import com.yzx.xiaomusic.utils.MusicDataUtils;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,6 +54,9 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
             final SongSheetDetials.ResultBean.TracksBean songSheetMusicInfo = songSheetInfo.get(i);
             holder.tvName.setText(songSheetMusicInfo.getName());
             holder.tvSerialNumber.setText(String.valueOf(i+1));
+            //文件是否存在
+            showIsMusicExsitIcon(holder.ivIsDownloaded, songSheetMusicInfo.getName(),songSheetMusicInfo.getId());
+
             holder.ivMv.setVisibility(songSheetMusicInfo.getMvid()>0 ? View.VISIBLE:View.GONE);
             holder.tvArtist.setText(songSheetMusicInfo.getArtists().get(0).getName());
             holder.ivMv.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +95,9 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
             holder.tvSerialNumber.setText(String.valueOf(i+1));
             holder.ivMv.setVisibility(hotSongsBean.getMv()>0 ? View.VISIBLE:View.GONE);
             holder.tvArtist.setText(hotSongsBean.getAr().get(0).getName());
+            //文件是否存在
+            showIsMusicExsitIcon(holder.ivIsDownloaded, hotSongsBean.getName(), hotSongsBean.getId());
+
             holder.ivMv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -118,6 +126,7 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
             holder.ivMv.setVisibility(View.GONE);
             holder.tvName.setText(musicInfo.getName());
             holder.tvArtist.setText(musicInfo.getArtist());
+            holder.ivIsDownloaded.setVisibility(View.VISIBLE);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -139,6 +148,15 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
                     dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "local");
                 }
             });
+        }
+    }
+
+    private void showIsMusicExsitIcon(ImageView view, String name, int id) {
+        File file = new File(MusicDataUtils.getMusicPath(name, String.valueOf(id)));
+        if (file.exists()){
+            view.setVisibility(View.VISIBLE);
+        }else {
+            view.setVisibility(View.GONE);
         }
     }
 
@@ -181,6 +199,8 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
         ImageView ivMv;
         @BindView(R.id.iv_more)
         ImageView ivMore;
+        @BindView(R.id.iv_is_downloaded)
+        ImageView ivIsDownloaded;
         public Holder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

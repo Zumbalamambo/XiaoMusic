@@ -85,6 +85,9 @@ dependencies {
     //lyrics
 //    compile 'com.github.zhengken:LyricViewDemo:v1.2'
     //    compile 'me.yokeyword:fragmentation:1.2.4'
+
+    compile 'zlc.season:rxdownload3:1.2.1'
+
     implementation project(':fragmentation')
     implementation project(':fragmentation_core')
     implementation project(':xrecyclerview')

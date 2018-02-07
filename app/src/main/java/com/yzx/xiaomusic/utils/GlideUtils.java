@@ -20,6 +20,7 @@ public class GlideUtils {
     public static final int TYPE_DEFAULT = 0;
     public static final int TYPE_HEAD = 1;//头像
     public static final int TYPE_PLAY_POSTER = 2;//播放页面海报
+    public static final int TYPE_ARTIST_CENTER = 3;//歌手中心
 
 
     public static final int TRANSFORM_CIRCLE = 1;//加载圆形图片
@@ -42,6 +43,10 @@ public class GlideUtils {
             case TYPE_PLAY_POSTER:
                 options.placeholder(R.drawable.ic_zhanweitu_play_poster).error(R.drawable.ic_zhanweitu_play_poster);
                 break;
+            case TYPE_ARTIST_CENTER:
+                options.placeholder(R.drawable.ic_zwt_artist_center).error(R.drawable.ic_zwt_artist_center);
+                break;
+
         }
         switch (transformType) {
             case TRANSFORM_CIRCLE:
