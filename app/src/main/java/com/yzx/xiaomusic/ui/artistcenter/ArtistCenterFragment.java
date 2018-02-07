@@ -136,8 +136,6 @@ public class ArtistCenterFragment extends BaseFragment implements OnItemClickLsi
                 dialog.show(getActivity().getSupportFragmentManager(),"musicMuenu");
                 break;
             case R.id.layout_music_control:
-//                replaceFragment(PlayFragment.getInstance(),true);
-                pop();
                 start(PlayFragment.getInstance());
                 break;
         }

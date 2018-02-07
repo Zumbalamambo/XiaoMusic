@@ -55,4 +55,5 @@
     <string name="text_retry">点击重试</string>
     <string name="error_get_last_play_music_info">获取上次播放音乐信息失败</string>
     <string name="error_get_lyric">获取歌词失败</string>
+    <string name="default_hint">No Lyrics</string>
 </resources>

@@ -145,37 +145,37 @@ public class LyricView extends View {
         initMyView(context);
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        return super.dispatchTouchEvent(event);
-    }
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent event) {
+//        return super.dispatchTouchEvent(event);
+//    }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        if (mVelocityTracker == null) {
-            mVelocityTracker = VelocityTracker.obtain();
-        }
-        mVelocityTracker.addMovement(event);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_CANCEL:
-                actionCancel(event);
-                break;
-            case MotionEvent.ACTION_DOWN:
-                actionDown(event);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                actionMove(event);
-                break;
-            case MotionEvent.ACTION_UP:
-                actionUp(event);
-                break;
-            default:
-                break;
-        }
-        invalidateView();
-        return true;
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//
+//        if (mVelocityTracker == null) {
+//            mVelocityTracker = VelocityTracker.obtain();
+//        }
+//        mVelocityTracker.addMovement(event);
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_CANCEL:
+//                actionCancel(event);
+//                break;
+//            case MotionEvent.ACTION_DOWN:
+//                actionDown(event);
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                actionMove(event);
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                actionUp(event);
+//                break;
+//            default:
+//                break;
+//        }
+//        invalidateView();
+//        return true;
+//    }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -756,7 +756,7 @@ public class LyricView extends View {
         if (index >= 9 && line.trim().length() > index + 1) {
             // lyrics
             LineInfo lineInfo = new LineInfo();
-            lineInfo.content = line.substring(10, line.length());
+            lineInfo.content = line.substring(index+1, line.length());
             lineInfo.start = measureStartTimeMillis(line.substring(0, index));
             lyricInfo.songLines.add(lineInfo);
         }

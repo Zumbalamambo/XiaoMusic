@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.entities.ArtistCenterInfo;
+import com.yzx.xiaomusic.entities.BufferInfo;
 import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.MusicMessage;
 import com.yzx.xiaomusic.entities.PlayEvent;
@@ -347,7 +348,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     }
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
-        Log.i(TAG, "onBufferingUpdate: "+percent);
+//        Log.i(TAG, "onBufferingUpdate: "+percent);
+        EventBus.getDefault().post(new PlayEvent(PlayEvent.TYPE_BUFFER,new BufferInfo(MusicDataUtils.getMusicDuration(getMusicInfo()),percent)));
     }
 
     @Override

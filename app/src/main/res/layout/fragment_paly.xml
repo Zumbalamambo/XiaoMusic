@@ -52,15 +52,13 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-                <me.zhengken.lyricview.LyricView
+                <com.yzx.xiaomusic.widget.lyrics.LyricView
                     app:highlightColor="@color/colorWhite"
-                    app:hintColor="@color/colorMusicArtistGray"
-                    app:textColor="@color/colorMusicArtistGray"
+                    app:hintColor="@color/colorGray"
                     app:textSize="13sp"
                     android:id="@+id/lyricView"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
-                    android:textColor="@color/colorWhite"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
                 <ImageView
@@ -126,6 +124,7 @@
                     android:layout_height="wrap_content"
                     tools:ignore="SmallSp" />
                 <android.support.v7.widget.AppCompatSeekBar
+                    android:secondaryProgressTint="@color/colorLightWhite"
                     android:id="@+id/seekBar_music_seek"
                     android:padding="5dp"
                     android:layout_weight="1"
