@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ import static com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails.SongSheetDe
 
 public class ArtistCenterFragment extends BaseFragment implements OnItemClickLsitener {
 
+    private static final String TAG = "yglArtistCenterFragment";
     private static ArtistCenterFragment fragment;
     @BindView(R.id.iv_artist_poster)
     public ImageView ivArtistPoster;
@@ -121,6 +123,7 @@ public class ArtistCenterFragment extends BaseFragment implements OnItemClickLsi
                     getPlayService().setState(PlayService.STATE_IDLE);
                     getPlayService().setPlayListPosition(position);
                 }
+                Log.i(TAG, "onItemClickListener: "+position);
                 playService.playMusic();
                 break;
         }

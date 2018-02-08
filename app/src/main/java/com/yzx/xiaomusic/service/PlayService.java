@@ -78,7 +78,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         mediaSessionManager = new MediaSessionManager(this);
 
         //初始化上次音乐播放信息
-        setProgress(PreferenceUtil.getInt(MUSIC_CURRENT_TIME,0));
+        setProgress(PreferenceUtil.getInt(MUSIC_CURRENT_TIME,1));
+        Log.i(TAG, "onCreate: "+PreferenceUtil.getInt(MUSIC_CURRENT_TIME,1));
         setState(PreferenceUtil.getInt(MUSIC_PLAY_STATE,STATE_IDLE));
         setPlayListPosition(PreferenceUtil.getInt(MUSIC_POSTION_IN_LIST,0));
         String musicInfo = PreferenceUtil.getString(MUSIC_INFO, null);
@@ -172,6 +173,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 }else {
                     musicInfo = localMusicList.get(getPlayListPosition());
                 }
+                Log.i(TAG, "start: 本地音乐"+getPlayListPosition());
                 mediaSessionManager.updatePlaybackState();
                 setMusicInfo(musicInfo);
                 playLocalMusic(musicInfo.getPath());
@@ -193,6 +195,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                     tracksBean = songSheetMusicList.get(getPlayListPosition());
                 }
 //                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getArtistId(),getDuration(), getProgress()));
+                Log.i(TAG, "start: 歌单音乐"+getPlayListPosition());
                 mediaSessionManager.updatePlaybackState();
                 setMusicInfo(tracksBean);
                 playNetMusic(tracksBean.getName(),String.valueOf(tracksBean.getId()));
@@ -214,7 +217,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                     hotSongsBean = hotSongs.get(getPlayListPosition());
                 }
 //                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getArtistId(),getDuration(), getProgress()));
-
+                Log.i(TAG, "start: 歌手中心"+getPlayListPosition());
                 mediaSessionManager.updatePlaybackState();
                 setMusicInfo(hotSongsBean);
                 playNetMusic(hotSongsBean.getName(), String.valueOf(hotSongsBean.getId()));
@@ -296,6 +299,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();
+            Log.i(TAG, "playLocalMusic: "+e.toString());
         }
     }
 
@@ -310,6 +314,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();
+            Log.i(TAG, "playLocalMusic: "+e.toString());
         }
     }
 

@@ -199,6 +199,7 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
                     getPlayService().setState(PlayService.STATE_IDLE);
                     getPlayService().setPlayListPosition(position);
                 }
+                Log.i(TAG, "onItemClickListener: "+position);
                 playService.playMusic();
                 break;
         }

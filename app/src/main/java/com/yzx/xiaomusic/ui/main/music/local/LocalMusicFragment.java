@@ -179,6 +179,7 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
             getPlayService().setState(PlayService.STATE_IDLE);
             getPlayService().setPlayListPosition(position);
         }
+        Log.i(TAG, "onItemClickListener: "+position);
         playService.playMusic();
 
     }
