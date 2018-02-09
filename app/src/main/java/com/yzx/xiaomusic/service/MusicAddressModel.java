@@ -15,6 +15,7 @@ import com.yzx.xiaomusic.common.observel.MvpObserver;
 import com.yzx.xiaomusic.entities.MusicAddress;
 import com.yzx.xiaomusic.network.AppHttpClient;
 import com.yzx.xiaomusic.network.api.MuiscApi;
+import com.yzx.xiaomusic.utils.FileUtils;
 import com.yzx.xiaomusic.utils.ToastUtils;
 
 import java.io.File;
@@ -124,8 +125,6 @@ public class MusicAddressModel{
                             if (TextUtils.isEmpty(dataBean.getUrl())){
                                 ToastUtils.showToast(R.string.error_get_music,ToastUtils.TYPE_NOTICE);
                             }else {
-//                                PlayServiceManager.getInstance().getPlayService().playCloudMusic(dataBean.getUrl());
-
                                 showDownloadDialog(context,dataBean,name);
                             }
                         }else {
@@ -148,7 +147,7 @@ public class MusicAddressModel{
         TextView tv_128 = (TextView)dialogView.findViewById(R.id.tv_bit_128);
 
 
-        tv_128.setText("文件大小："+ android.text.format.Formatter.formatFileSize(context,dataBean.getSize()));
+        tv_128.setText("音质："+(dataBean.getBr()/1000)+"k/s\n\n文件大小："+ android.text.format.Formatter.formatFileSize(context,dataBean.getSize()));
         builder.setView(dialogView);
         builder.setTitle("选择要下载的音质");
         final AlertDialog dialog = builder.show();
@@ -156,7 +155,13 @@ public class MusicAddressModel{
         tv_128.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                download(context,dataBean,name);
+
+                if (dataBean.getMd5().equals(FileUtils.fileToMD5(Constants.PATH_ABSOLUTE_DOWNLOAD+"/"+name+dataBean.getMd5()+".mp3"))){
+                    ToastUtils.showToast("歌曲已存在");
+                }else {
+                    download(context,dataBean,name);
+                }
+
                 dialog.dismiss();
             }
         });
@@ -173,7 +178,7 @@ public class MusicAddressModel{
         }
         final ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        Mission mission = new Mission(dataBean.getUrl(), name+".mp3", Constants.PATH_ABSOLUTE_DOWNLOAD);
+        Mission mission = new Mission(dataBean.getUrl(), name+dataBean.getMd5()+".mp3", Constants.PATH_ABSOLUTE_DOWNLOAD);
         RxDownload
                 .INSTANCE
                 .create(mission)
