@@ -207,6 +207,7 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
 
 
 
+    @SuppressWarnings("AlibabaSwitchStatement")
     @OnClick({R.id.circleProgress, R.id.iv_music_menu,R.id.layout_music_control})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -215,7 +216,7 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
                 break;
             case R.id.iv_music_menu:
                 MusicMenuDialog dialog=new MusicMenuDialog();
-                dialog.show(getActivity().getSupportFragmentManager(),"musicMuenu");
+                dialog.show(getFragmentManager(),"musicMenu");
                 break;
             case R.id.layout_music_control:
                 start(PlayFragment.getInstance());

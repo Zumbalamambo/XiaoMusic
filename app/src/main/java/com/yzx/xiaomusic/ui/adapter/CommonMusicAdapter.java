@@ -13,7 +13,9 @@ import android.widget.TextView;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.entities.ArtistCenterInfo;
 import com.yzx.xiaomusic.entities.MusicInfo;
+import com.yzx.xiaomusic.entities.SearchResult;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
+import com.yzx.xiaomusic.service.MusicAddressModel;
 import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.service.PlayServiceManager;
 import com.yzx.xiaomusic.ui.dialog.CloudMusicDialog;
@@ -34,7 +36,7 @@ import static com.yzx.xiaomusic.ui.main.music.local.LocalMusicFragment.MUSIC_INF
  * Description 音乐列表共同Adapter
  */
 
-public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
+public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder>{
 
     private static final String TAG = "yglCommonMusicAdapter";
     private Context context;
@@ -118,6 +120,29 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
                     }
                 }
             });
+        }else if (data instanceof SearchResult){//搜索
+            final SearchResult.ResultBean.SongsBean songsBean = ((SearchResult) data).getResult().getSongs().get(i);
+            holder.tvSerialNumber.setVisibility(View.GONE);
+            holder.ivMv.setVisibility(View.GONE);
+            holder.tvName.setText(songsBean.getName());
+            //文件是否存在
+//            showIsMusicExsitIcon(holder.ivIsDownloaded, songsBean.getName(), songsBean.getId());
+            holder.ivIsDownloaded.setVisibility(View.GONE);
+            holder.tvArtist.setText(songsBean.getArtists().get(0).getName());
+            holder.ivMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    showDownloadDialog(songsBean);
+                    downLoadMusic(songsBean.getName(), songsBean.getId());
+                }
+            });
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PlayServiceManager.getInstance().getPlayService().playNetMusic(songsBean.getName(), String.valueOf(songsBean.getId()));
+                }
+            });
         }else {//本地音乐
 
             final List<MusicInfo> localMusicInfo = (List<MusicInfo>)data;
@@ -151,6 +176,15 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
         }
     }
 
+    /**
+     * 下载音乐
+     * @param name
+     * @param id
+     */
+    private void downLoadMusic(String name, int id) {
+        MusicAddressModel.getInstance().downloadMusic(context,name, String.valueOf(id));
+    }
+
     private void showIsMusicExsitIcon(ImageView view, String name, int id) {
         File file = new File(MusicDataUtils.getMusicPath(name, String.valueOf(id)));
         if (file.exists()){
@@ -169,6 +203,9 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder> {
         }else if (data instanceof ArtistCenterInfo){
             List<ArtistCenterInfo.HotSongsBean> hotSongs = ((ArtistCenterInfo) data).getHotSongs();
             return hotSongs ==null?0:hotSongs.size();
+        }else if (data instanceof SearchResult){//搜索
+            List<SearchResult.ResultBean.SongsBean> songs = ((SearchResult) data).getResult().getSongs();
+            return songs ==null?0:songs.size();
         }else {//本地音乐
             @SuppressWarnings("unchecked")
             List<MusicInfo> localMusicInfo = (List<MusicInfo>)data;

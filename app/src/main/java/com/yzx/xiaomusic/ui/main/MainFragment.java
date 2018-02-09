@@ -5,6 +5,9 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +25,7 @@ import com.yzx.xiaomusic.ui.main.cloud.CloudFragment;
 import com.yzx.xiaomusic.ui.main.friend.FriendFragment;
 import com.yzx.xiaomusic.ui.main.music.MusicFragment;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
+import com.yzx.xiaomusic.ui.search.SearchFragment;
 import com.yzx.xiaomusic.utils.ActivityUtils;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.widget.CircleProgress;
@@ -76,7 +80,13 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        toolBar.setNavigationIcon(R.drawable.ic_menu);
+
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null) {
+            activity.setSupportActionBar(toolBar);
+            activity.getSupportActionBar().setTitle(null);
+            toolBar.setNavigationIcon(R.drawable.ic_menu);
+        }
         viewPager.setOffscreenPageLimit(3);
         MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(getChildFragmentManager());
         ArrayList<BaseFragment> fragments = new ArrayList<>();
@@ -105,7 +115,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
                 break;
             case R.id.iv_music_menu:
                 MusicMenuDialog dialog=new MusicMenuDialog();
-                dialog.show(getActivity().getSupportFragmentManager(),"musicMuenu");
+                dialog.show(getFragmentManager(),"musicMuenu");
                 break;
             case R.id.layout_music_control:
                 start(PlayFragment.getInstance());
@@ -183,5 +193,22 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
     public boolean onBackPressedSupport() {
         ActivityUtils.backToDesk(getContext());
         return true;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_search,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.menu_search:
+                start(SearchFragment.getInstance());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

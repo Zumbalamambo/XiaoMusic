@@ -48,4 +48,14 @@ public class Constants {
      * 歌曲绝对路径
      */
     public static final String PATH_ABSOLUTE_MUSIC =PATH_APP+MUSIC;
+
+    /**
+     * 歌曲缓存路径
+     */
+    public static final String DOWNLOAD ="/download";
+
+    /**
+     * 歌曲绝对路径
+     */
+    public static final String PATH_ABSOLUTE_DOWNLOAD =PATH_APP+DOWNLOAD;
 }

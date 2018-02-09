@@ -267,7 +267,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     /**
      * 播放网络音乐
      */
-    private void playNetMusic(String name, String musicId) {
+    public void playNetMusic(String name, String musicId) {
         Log.i(TAG, "playNetMusic: "+musicId);
         if (!TextUtils.isEmpty(musicId)){
             String pathname = MusicDataUtils.getMusicPath(name,musicId);
