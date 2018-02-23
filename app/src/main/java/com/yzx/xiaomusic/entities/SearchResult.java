@@ -1,5 +1,6 @@
 package com.yzx.xiaomusic.entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class SearchResult extends BaseResposeBody {
             this.songs = songs;
         }
 
-        public static class SongsBean {
+        public static class SongsBean implements Serializable {
             /**
              * name : 海阔天空
              * id : 400162138

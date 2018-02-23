@@ -116,11 +116,11 @@
                 android:layout_height="wrap_content">
                 <!--音乐已经播放多久了-->
                 <TextView
-                    android:text="0:00"
                     android:textSize="10sp"
+                    android:gravity="center"
                     android:textColor="@color/colorWhite"
                     android:id="@+id/tv_music_time_play"
-                    android:layout_width="wrap_content"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     tools:ignore="SmallSp" />
                 <android.support.v7.widget.AppCompatSeekBar
@@ -132,11 +132,11 @@
                     android:layout_height="wrap_content" />
                 <!--音乐已经还剩多久-->
                 <TextView
-                    android:text="3:00"
                     android:textSize="10sp"
+                    android:gravity="center"
                     android:textColor="@color/colorLightWhite"
                     android:id="@+id/tv_music_time_left"
-                    android:layout_width="wrap_content"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     tools:ignore="SmallSp" />
             </LinearLayout>

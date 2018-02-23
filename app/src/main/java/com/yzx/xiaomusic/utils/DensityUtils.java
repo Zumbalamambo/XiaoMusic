@@ -47,4 +47,12 @@ public class DensityUtils {
     public static float pxToSp(float pxValue) {
         return pxValue / Resources.getSystem().getDisplayMetrics().scaledDensity;
     }
+
+    /**
+     * 获取屏幕宽度
+     * @return
+     */
+    public static int getScreenWidth(){
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
 }

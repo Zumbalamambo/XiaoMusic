@@ -20,16 +20,19 @@ public class SearchPresenter implements SearchContract.Presenter {
 
     @Override
     public void search(String keyWord) {
+        searchFragment.stateView.showLoading();
         model.search(searchFragment, keyWord, new MvpObserver<SearchResult>() {
             @Override
             protected void onSuccess(SearchResult searchResult) {
 //                Log.i(TAG, "onSuccess: "+searchResult.getResult().getSongs().get(0).getName());
+                searchFragment.stateView.showContent();
                 searchFragment.adapter.setDatas(searchResult);
             }
 
             @Override
             protected void onFail(String errorMsg) {
                 super.onFail(errorMsg);
+                searchFragment.stateView.showRetry();
             }
         });
     }

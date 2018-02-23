@@ -142,7 +142,7 @@ public class PlayFragment extends BaseFragment {
         PlayService playService = getPlayService();
         Object musicInfo = playService.getMusicInfo();
         ivPlay.setImageResource(getPlayService().getState() == STATE_PLAYING ? R.drawable.ic_music_play_play : R.drawable.ic_music_play_pause);
-        GlideUtils.loadImg(context, MusicDataUtils.getMusicPoster(musicInfo), -1, GlideUtils.TRANSFORM_BLUR, ivPlayBg);
+        GlideUtils.loadImg(context, MusicDataUtils.getMusicPoster(musicInfo),  GlideUtils.TYPE_PLAY_BG, GlideUtils.TRANSFORM_BLUR, ivPlayBg);
         GlideUtils.loadImg(context, MusicDataUtils.getMusicPoster(musicInfo), GlideUtils.TYPE_PLAY_POSTER, GlideUtils.TRANSFORM_CIRCLE, ivMusicPoster);
         seekBarMusicSeek.setMax((int) MusicDataUtils.getMusicDuration(musicInfo));
         seekBarMusicSeek.setSecondaryProgress((int) MusicDataUtils.getMusicDuration(musicInfo));
@@ -249,7 +249,7 @@ public class PlayFragment extends BaseFragment {
                 tvSubtitle.setText(musicMessage.getArtist());
                 loadMusicLyrics(musicMessage.getId());
                 GlideUtils.loadImg(context, musicMessage.getPoster(), GlideUtils.TYPE_PLAY_POSTER, GlideUtils.TRANSFORM_CIRCLE, ivMusicPoster);
-                GlideUtils.loadImg(context, musicMessage.getPoster(), -1, GlideUtils.TRANSFORM_BLUR, ivPlayBg);
+                GlideUtils.loadImg(context, musicMessage.getPoster(), GlideUtils.TYPE_PLAY_BG, GlideUtils.TRANSFORM_BLUR, ivPlayBg);
                 break;
             case PlayEvent.TYPE_PLAY:
                 ivPlay.setImageResource(R.drawable.ic_music_play_play);

@@ -24,8 +24,13 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:paddingStart="10dp"
-                    android:backgroundTint="@color/colorLightWhite"
+                    android:inputType="textAutoComplete"
+                    android:gravity="bottom"
+                    android:paddingBottom="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textCursorDrawable="@drawable/cursor"
+                    android:cursorVisible="true"
+                    android:background="@drawable/bg_edit"
                     android:id="@+id/et_search"
                     android:hint="@string/KeyWord"
                     android:textSize="14sp"
@@ -35,24 +40,24 @@
                     android:layout_weight="1"
                     android:layout_height="?attr/actionBarSize" />
 
-                <ImageView
-                    android:padding="10dp"
-                    android:id="@+id/iv_search"
-                    android:src="@drawable/ic_search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+
             </LinearLayout>
 
         </android.support.v7.widget.Toolbar>
 
-
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/recyclerView"
+    <RelativeLayout
+        android:id="@+id/layout_state_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
 
     <!--<android.support.v7.widget.SearchView.SearchAutoComplete-->
         <!--android:layout_gravity="center"-->

@@ -21,7 +21,7 @@ public class MusicAddressModel implements MusicAddressContract.Model {
         AppHttpClient
                 .getInstance()
                 .getService(MuiscApi.class)
-                .getMusicAddress("song",id,"320000")
+                .getMusicAddress("song",id,320000)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

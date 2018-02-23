@@ -58,4 +58,5 @@
     <string name="default_hint">No Lyrics</string>
     <string name="KeyWord">关键词</string>
     <string name="note_cant_be_null">不可以为空</string>
+    <string name="br">%s(%sk/s)</string>
 </resources>

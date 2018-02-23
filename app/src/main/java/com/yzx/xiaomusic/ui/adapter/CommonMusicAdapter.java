@@ -18,8 +18,10 @@ import com.yzx.xiaomusic.entities.SongSheetDetials;
 import com.yzx.xiaomusic.service.MusicAddressModel;
 import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.service.PlayServiceManager;
+import com.yzx.xiaomusic.ui.dialog.BrDownloadDialog;
 import com.yzx.xiaomusic.ui.dialog.CloudMusicDialog;
 import com.yzx.xiaomusic.ui.dialog.LocalMusicDialog;
+import com.yzx.xiaomusic.ui.main.MainActivity;
 import com.yzx.xiaomusic.utils.MusicDataUtils;
 
 import java.io.File;
@@ -28,6 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.yzx.xiaomusic.ui.dialog.BrDownloadDialog.KEY_MUSIC_INFO;
 import static com.yzx.xiaomusic.ui.main.music.local.LocalMusicFragment.MUSIC_INFO;
 
 
@@ -132,8 +135,7 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder>{
             holder.ivMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    showDownloadDialog(songsBean);
-                    downLoadMusic(songsBean.getName(), songsBean.getId());
+                    showBrDownloadDialog(songsBean);
                 }
             });
 
@@ -177,12 +179,32 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder>{
     }
 
     /**
+     * 显示码率下载对话框
+     * @param songsBean
+     */
+    private void showBrDownloadDialog(final SearchResult.ResultBean.SongsBean songsBean) {
+        final BrDownloadDialog brDownloadDialog = new BrDownloadDialog();
+        Bundle args =new Bundle();
+        args.putSerializable(KEY_MUSIC_INFO,songsBean);
+        brDownloadDialog.setArguments(args);
+        brDownloadDialog.setOnChoiceListener(new BrDownloadDialog.OnChoiceListener() {
+            @Override
+            public void onChoice(int br) {
+                List<SearchResult.ResultBean.SongsBean.ArtistsBeanX> artists = songsBean.getArtists();
+                downLoadMusic(songsBean.getName(), artists.size()>0? artists.get(0).getName():"未知",songsBean.getId(),br);
+                brDownloadDialog.dismiss();
+            }
+        });
+        brDownloadDialog.show(((MainActivity)context).getSupportFragmentManager(),"br");
+    }
+
+    /**
      * 下载音乐
      * @param name
      * @param id
      */
-    private void downLoadMusic(String name, int id) {
-        MusicAddressModel.getInstance().downloadMusic(context,name, String.valueOf(id));
+    private void downLoadMusic(String name, String artist,int id,int rb) {
+        MusicAddressModel.getInstance().downloadMusic(context,name,artist, String.valueOf(id),rb);
     }
 
     private void showIsMusicExsitIcon(ImageView view, String name, int id) {
