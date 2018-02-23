@@ -36,7 +36,7 @@ public class PlayPresenter implements PlayContract.Presenter {
         model.getLyrics(fragment, id, new OtherObserver<Lyric>() {
             @Override
             protected void onSuccess(Lyric lyric) {
-                fragment.lyricView.setLyricFile(new File(Constants.PATH_ABSOLUTE_LYRIC+ "/"+id));
+                fragment.lyricView.setLyricFile(new File(Constants.PATH_ABSOLUTE_CACHE_LYRIC+ "/"+id));
             }
 
             @Override

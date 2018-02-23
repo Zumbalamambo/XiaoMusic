@@ -6,6 +6,7 @@ import com.yzx.xiaomusic.entities.MusicInfo;
 import com.yzx.xiaomusic.entities.SongSheetDetials;
 import com.yzx.xiaomusic.service.PlayServiceManager;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -179,12 +180,43 @@ public class MusicDataUtils {
     }
 
     /**
-     * 根据名字和id获取文件路径
+     * 根据名字和歌手获取文件路径
      * @param name
+     * @param artist
+     * @return
+     */
+    public static String getMusicPath(String name,String artist) {
+        return Constants.PATH_ABSOLUTE_DOWNLOAD + "/" + name + " - " + artist+".mp3";
+    }
+
+
+    /**
+     * 判断歌曲是否存在
      * @param id
      * @return
      */
-    public static String getMusicPath(String name,String id) {
-        return Constants.PATH_ABSOLUTE_MUSIC + "/" + name+"-"+id;
+    public static String getMusicAddress(String name,String artist,String id){
+        if (getLocalMusic(name,artist)!=null){
+            return getLocalMusic(name,artist);
+        }else if (getCacheMusic(id)!=null){
+            return getCacheMusic(id);
+        }
+        return null;
+    }
+
+    public static String getLocalMusic(String name, String artist){
+        File file = new File(MusicDataUtils.getMusicPath(name, artist));
+        if (file.exists()){
+            return MusicDataUtils.getMusicPath(name, artist);
+        }
+        return null;
+    }
+
+    public static String getCacheMusic(String id){
+        File file = new File(Constants.PATH_ABSOLUTE_CACHE_MUSIC+"/"+id+".0");
+        if (file.exists()){
+            return Constants.PATH_ABSOLUTE_CACHE_MUSIC+"/"+id+".0";
+        }
+        return null;
     }
 }

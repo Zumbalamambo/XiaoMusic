@@ -60,11 +60,11 @@ public class PlayModel implements PlayContract.Model<PlayFragment> {
                                     if (!appDir.exists()){
                                         appDir.mkdirs();
                                     }
-                                    File lyricDir = new File(Constants.PATH_ABSOLUTE_LYRIC);
+                                    File lyricDir = new File(Constants.PATH_ABSOLUTE_CACHE_LYRIC);
                                     if (!lyricDir.exists()){
                                         lyricDir.mkdirs();
                                     }
-                                    File file = new File(Constants.PATH_ABSOLUTE_LYRIC+ "/" + id);
+                                    File file = new File(Constants.PATH_ABSOLUTE_CACHE_LYRIC+ "/" + id);
                                     try {
                                         FileOutputStream fileOutputStream=new FileOutputStream(file);
                                         fileOutputStream.write(lyric.getLrc().getLyric().getBytes());

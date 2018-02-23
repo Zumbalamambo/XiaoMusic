@@ -26,7 +26,6 @@ import com.yzx.xiaomusic.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -194,11 +193,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 }else {
                     tracksBean = songSheetMusicList.get(getPlayListPosition());
                 }
-//                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getArtistId(),getDuration(), getProgress()));
                 Log.i(TAG, "start: 歌单音乐"+getPlayListPosition());
                 mediaSessionManager.updatePlaybackState();
                 setMusicInfo(tracksBean);
-                playNetMusic(tracksBean.getName(),String.valueOf(tracksBean.getId()));
+                playNetMusic(tracksBean.getName(),MusicDataUtils.getMusicArtist(tracksBean),String.valueOf(tracksBean.getId()));
             }else {
                 ToastUtils.showToast("歌单异常",ToastUtils.TYPE_NOTICE);
             }
@@ -216,11 +214,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 } else {
                     hotSongsBean = hotSongs.get(getPlayListPosition());
                 }
-//                mediaSessionManager.updateMetaData(new MusicMessage(getMusicName(),getArtist(),getPoster(), getArtistId(),getDuration(), getProgress()));
                 Log.i(TAG, "start: 歌手中心"+getPlayListPosition());
                 mediaSessionManager.updatePlaybackState();
                 setMusicInfo(hotSongsBean);
-                playNetMusic(hotSongsBean.getName(), String.valueOf(hotSongsBean.getId()));
+                playNetMusic(hotSongsBean.getName(),MusicDataUtils.getMusicArtist(hotSongsBean),String.valueOf(hotSongsBean.getId()));
             }
         }
     }
@@ -267,15 +264,14 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     /**
      * 播放网络音乐
      */
-    public void playNetMusic(String name, String musicId) {
-        Log.i(TAG, "playNetMusic: "+musicId);
+    public void playNetMusic(String name, String artist,String musicId) {
         if (!TextUtils.isEmpty(musicId)){
-            String pathname = MusicDataUtils.getMusicPath(name,musicId);
-            File file = new File(pathname);
-            if (file.exists()){
-                playLocalMusic(pathname);
+            String musicAddress = MusicDataUtils.getMusicAddress(name,artist , musicId);
+            if (musicAddress!=null){
+                playLocalMusic(musicAddress);
             }else {
-                if (NetWorkUtils.isWifiConnected()){//wifi可用，获取歌曲
+                //wifi可用，获取歌曲
+                if (NetWorkUtils.isWifiConnected()){
                     MusicAddressModel.getInstance().getMusicAddress(name,musicId);
                 }else {//下一曲
                     ToastUtils.showToast(name+"未缓存，跳过该歌曲",ToastUtils.TYPE_NOTICE);

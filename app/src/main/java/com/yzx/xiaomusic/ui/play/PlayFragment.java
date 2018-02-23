@@ -160,7 +160,7 @@ public class PlayFragment extends BaseFragment {
      */
     public void loadMusicLyrics(String musicId) {
         if (!TextUtils.isEmpty(musicId)) {//非本地音乐
-            File file = new File(Constants.PATH_ABSOLUTE_LYRIC + "/" + musicId);
+            File file = new File(Constants.PATH_ABSOLUTE_CACHE_LYRIC + "/" + musicId);
             if (!file.exists()) {
                 mPresenter.getLyrics(musicId);
             } else {

@@ -142,7 +142,7 @@ public class CommonMusicAdapter extends BaseAdapter<CommonMusicAdapter.Holder>{
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PlayServiceManager.getInstance().getPlayService().playNetMusic(songsBean.getName(), String.valueOf(songsBean.getId()));
+                    PlayServiceManager.getInstance().getPlayService().playNetMusic(songsBean.getName(),songsBean.getArtists().get(0).getName(), String.valueOf(songsBean.getId()));
                 }
             });
         }else {//本地音乐

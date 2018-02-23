@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.tencent.bugly.crashreport.CrashReport;
+import com.yzx.xiaomusic.cache.CacheManager;
 import com.yzx.xiaomusic.service.PlayService;
 import com.yzx.xiaomusic.service.PlayServiceManager;
 
@@ -38,10 +39,9 @@ public class MusicApplication extends Application {
                 .debug(BuildConfig.DEBUG)
                 .install();
 
-//        for (int i = 0; i < FileUtils.getSDCardPaths().size(); i++) {
-//            Log.i(TAG, "\nonCreate: "+FileUtils.getSDCardPaths().get(i));
-//            File file = new File(FileUtils.getSDCardPaths().get(i), "000");
-//        }
+
+        //初始化缓存
+        CacheManager.getCacheManager().init();
         //如果playService死了，再初始化PlayService
         if (!PlayServiceManager.getInstance().checkPlayServiceAlive()){
 
