@@ -41,6 +41,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @author yzx
@@ -219,7 +220,7 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
                 dialog.show(getFragmentManager(),"musicMenu");
                 break;
             case R.id.layout_music_control:
-                start(PlayFragment.getInstance());
+                start(PlayFragment.getInstance(), SupportFragment.SINGLETASK);
                 break;
         }
     }

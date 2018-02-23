@@ -38,6 +38,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Created by yzx on 2018/1/19.
@@ -118,7 +119,7 @@ public class MainFragment extends BaseFragment implements ViewPager.OnPageChange
                 dialog.show(getFragmentManager(),"musicMuenu");
                 break;
             case R.id.layout_music_control:
-                start(PlayFragment.getInstance());
+                start(PlayFragment.getInstance(), SupportFragment.SINGLETASK);
                 break;
         }
     }

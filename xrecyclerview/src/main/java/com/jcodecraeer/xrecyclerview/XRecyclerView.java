@@ -246,6 +246,13 @@ public class XRecyclerView extends RecyclerView {
         }
     }
 
+    public void setLoadingMoreProgressColor(int color) {
+
+        if (mFootView instanceof LoadingMoreFooter) {
+            ((LoadingMoreFooter) mFootView).setProgressColor(color);
+        }
+    }
+
     public void setArrowImageView(int resId) {
         if (mRefreshHeader != null) {
             mRefreshHeader.setArrowImageView(resId);

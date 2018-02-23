@@ -40,6 +40,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @author yzx
@@ -195,7 +196,7 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
                 dialog.show(getActivity().getSupportFragmentManager(),"musicMuenu");
                 break;
             case R.id.layout_music_control:
-                start(PlayFragment.getInstance());
+                start(PlayFragment.getInstance(), SupportFragment.SINGLETASK);
                 break;
         }
     }

@@ -105,6 +105,13 @@ public class LoadingMoreFooter extends LinearLayout {
         }
     }
 
+    public void setProgressColor(int color) {
+            progressView = new  AVLoadingIndicatorView(this.getContext());
+            progressView.setIndicatorColor(color);
+            progressView.setIndicatorId(ProgressStyle.LineScalePulseOut);
+            progressCon.setView(progressView);
+    }
+
     public void  setState(int state) {
         switch(state) {
             case STATE_LOADING:

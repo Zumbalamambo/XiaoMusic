@@ -35,6 +35,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.yokeyword.fragmentation.SupportFragment;
 
 import static com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails.SongSheetDetailsFragment.KEY_MV_ID;
 
@@ -139,7 +140,7 @@ public class ArtistCenterFragment extends BaseFragment implements OnItemClickLsi
                 dialog.show(getActivity().getSupportFragmentManager(),"musicMuenu");
                 break;
             case R.id.layout_music_control:
-                start(PlayFragment.getInstance());
+                start(PlayFragment.getInstance(), SupportFragment.SINGLETASK);
                 break;
         }
     }

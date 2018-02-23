@@ -27,6 +27,7 @@ import com.yzx.xiaomusic.ui.main.cloud.music.songsheetdetails.SongSheetDetailsFr
 import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.DensityUtils;
 import com.yzx.xiaomusic.utils.GlideUtils;
+import com.yzx.xiaomusic.utils.ResourceUtils;
 import com.yzx.xiaomusic.widget.CircleProgress;
 import com.yzx.xiaomusic.widget.StateView;
 
@@ -36,6 +37,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Created by yzx on 2018/1/12.
@@ -98,6 +100,7 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
         View headView = getLayoutInflater().inflate(R.layout.head_song_sheet, null);
 
         recyclerView.addHeaderView(headView);
+        recyclerView.setLoadingMoreProgressColor(ResourceUtils.parseColor(R.color.colorAccent));
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -178,7 +181,7 @@ public class SongSheetListFragment extends BaseFragment implements SongSheetList
                 dialog.show(getActivity().getSupportFragmentManager(),"musicMuenu");
                 break;
             case R.id.layout_music_control:
-                start(PlayFragment.getInstance());
+                start(PlayFragment.getInstance(), SupportFragment.SINGLETASK);
                 break;
         }
     }
