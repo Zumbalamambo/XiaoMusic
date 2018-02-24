@@ -101,10 +101,6 @@ public class LocalMusicFragment extends BaseFragment implements OnItemClickLsite
     protected void initView(Bundle savedInstanceState) {
         setToolBar(toolBar, R.string.localMusic);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
-//        LItemDivider itemDivider = new LItemDivider(context, LItemDivider.VERTICAL);
-//        itemDivider.setDrawable(new ColorDrawable(ResourceUtils.parseColor(R.color.colorAccent)));
-//        recyclerView.addItemDecoration(itemDivider);
         adapter = new CommonMusicAdapter();
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);

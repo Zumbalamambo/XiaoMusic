@@ -9,11 +9,11 @@
     tools:ignore="RtlSymmetry">
 
     <ImageView
+        android:tint="@color/colorAccent"
         android:id="@+id/iv_icon"
-        android:src="@drawable/ic_head"
         android:layout_centerVertical="true"
-        android:layout_width="35dp"
-        android:layout_height="35dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/tv_name"

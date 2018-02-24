@@ -41,6 +41,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.Holder> {
         switch (i) {
             case 0:
                 holder.tvName.setText(R.string.localMusic);
+                holder.ivIcon.setImageResource(R.drawable.ic_local_music);
                 List<MusicInfo> musicInfos = ScanMusicUtils.getLocalMusicInfoByPreference();
                 if (musicInfos == null) {
                     holder.tvCount.setVisibility(View.GONE);
@@ -51,12 +52,16 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.Holder> {
                 break;
             case 1:
                 holder.tvName.setText(R.string.recentPlay);
+                holder.ivIcon.setImageResource(R.drawable.ic_recent_play);
                 break;
             case 2:
                 holder.tvName.setText(R.string.myCollection);
+                holder.ivIcon.setImageResource(R.drawable.ic_my_collection);
                 break;
             case 3:
+                holder.ivIcon.setImageResource(R.drawable.ic_download_manager);
                 holder.tvName.setText(R.string.downloadManager);
+//                holder.ivIcon.setImageResource(R.drawable.ic_music_play_undownload_normal);
                 break;
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {

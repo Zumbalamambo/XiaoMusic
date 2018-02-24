@@ -151,7 +151,6 @@ public class MusicDataUtils {
                 return null;
             case TYPE_SONG_SHEET:
                 return String.valueOf(((SongSheetDetials.ResultBean.TracksBean)musicInfo).getId());
-
             case TYPE_ARTIST_CENTER:
                 return String.valueOf(((ArtistCenterInfo.HotSongsBean) musicInfo).getId());
             default:
@@ -204,7 +203,7 @@ public class MusicDataUtils {
         return null;
     }
 
-    public static String getLocalMusic(String name, String artist){
+    private static String getLocalMusic(String name, String artist){
         File file = new File(MusicDataUtils.getMusicPath(name, artist));
         if (file.exists()){
             return MusicDataUtils.getMusicPath(name, artist);
@@ -212,7 +211,7 @@ public class MusicDataUtils {
         return null;
     }
 
-    public static String getCacheMusic(String id){
+    private static String getCacheMusic(String id){
         File file = new File(Constants.PATH_ABSOLUTE_CACHE_MUSIC+"/"+id+".0");
         if (file.exists()){
             return Constants.PATH_ABSOLUTE_CACHE_MUSIC+"/"+id+".0";
