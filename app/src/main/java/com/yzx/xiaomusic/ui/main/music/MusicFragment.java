@@ -8,11 +8,14 @@ import android.view.View;
 
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
+import com.yzx.xiaomusic.db.AppDatabase;
+import com.yzx.xiaomusic.ui.adapter.CollectedSongSheetAdapter;
 import com.yzx.xiaomusic.ui.adapter.MusicAdapter;
 import com.yzx.xiaomusic.ui.main.MainFragment;
 import com.yzx.xiaomusic.ui.main.music.local.LocalMusicFragment;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by yzx on 2018/1/12.
@@ -23,18 +26,21 @@ public class MusicFragment extends BaseFragment {
     private static MusicFragment musicFragment;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.recyclerViewSongSheet)
+    RecyclerView recyclerViewSongSheet;
     private MusicAdapter adapter;
 
     @SuppressLint("ValidFragment")
     private MusicFragment() {
     }
 
-    public static MusicFragment getInstance(){
-        if (musicFragment == null){
+    public static MusicFragment getInstance() {
+        if (musicFragment == null) {
             musicFragment = new MusicFragment();
         }
         return musicFragment;
     }
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_music;
@@ -48,10 +54,10 @@ public class MusicFragment extends BaseFragment {
         adapter.setOnItemClickListener(new MusicAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View itemView, int i) {
-                 switch (i) {
+                switch (i) {
                     case 0:
-                            MainFragment parentFragment = (MainFragment) getParentFragment();
-                            parentFragment.start(LocalMusicFragment.getInstance());
+                        MainFragment parentFragment = (MainFragment) getParentFragment();
+                        parentFragment.start(LocalMusicFragment.getInstance());
                         break;
                     case 1:
                         break;
@@ -59,19 +65,30 @@ public class MusicFragment extends BaseFragment {
                         break;
                     case 3:
                         break;
-                        default:
-                            break;
+                    default:
+                        break;
                 }
             }
         });
         recyclerView.setAdapter(adapter);
+
+        recyclerViewSongSheet.setLayoutManager(new LinearLayoutManager(context));
+        CollectedSongSheetAdapter collectedSongSheetAdapter = new CollectedSongSheetAdapter();
+        recyclerViewSongSheet.setAdapter(collectedSongSheetAdapter);
+
+
+        collectedSongSheetAdapter.setData(AppDatabase.getInstance().getSongSheetDAO().getSongSheets());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (adapter!=null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @OnClick(R.id.iv_edit_songSheet)
+    public void onViewClicked() {
     }
 }

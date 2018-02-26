@@ -85,7 +85,7 @@ dependencies {
     compile 'zlc.season:rxdownload3:1.2.1'
     //disklrucache
     compile 'com.jakewharton:disklrucache:2.0.2'
-
+    compile 'com.github.florent37:expansionpanel:1.0.9'
     implementation project(':fragmentation')
     implementation project(':fragmentation_core')
     implementation project(':xrecyclerview')

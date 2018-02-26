@@ -60,4 +60,5 @@
     <string name="note_cant_be_null">不可以为空</string>
     <string name="br">%s(%sk/s)</string>
     <string name="Collected">已收藏</string>
+    <string name="CollectedSongSheet">收藏的歌单</string>
 </resources>

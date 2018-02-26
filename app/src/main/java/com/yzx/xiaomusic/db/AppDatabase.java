@@ -28,7 +28,6 @@ public abstract class AppDatabase extends RoomDatabase {
         if (appDataBase==null){
             appDataBase = Room.databaseBuilder(MusicApplication.getApplication(), AppDatabase.class, "xiaoMusic")
                     .allowMainThreadQueries()
-                    .addMigrations()
                     .build();
         }
         return appDataBase;

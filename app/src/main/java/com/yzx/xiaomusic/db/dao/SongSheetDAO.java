@@ -37,4 +37,11 @@ public interface SongSheetDAO {
      */
     @Query("select * from songSheet where id = :id")
     SongSheet getSongSheetById(String id);
+
+    /**
+     * 查所有收藏歌单
+     * @return
+     */
+    @Query("select * from songSheet")
+    List<SongSheet> getSongSheets();
 }
