@@ -96,9 +96,11 @@
                     android:layout_marginTop="25dp"
                     android:orientation="horizontal">
                     <LinearLayout
+                        android:id="@+id/layout_collect"
                         style="@style/style_weight_h_1">
 
                         <ImageView
+                            android:id="@+id/iv_collect"
                             android:src="@drawable/ic_collect"
                             style="@style/style_img_centercrop_40" />
 
@@ -108,6 +110,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layout_evaluation"
                         style="@style/style_weight_h_1">
 
                         <ImageView

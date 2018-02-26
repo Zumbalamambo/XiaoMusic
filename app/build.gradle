@@ -81,10 +81,6 @@ dependencies {
     //banner
     compile 'com.github.pinguo-zhouwei:MZBannerView:v2.0.0'
     compile 'org.greenrobot:eventbus:3.1.1'
-    //    //fragmentation
-    //lyrics
-//    compile 'com.github.zhengken:LyricViewDemo:v1.2'
-    //    compile 'me.yokeyword:fragmentation:1.2.4'
 
     compile 'zlc.season:rxdownload3:1.2.1'
     //disklrucache

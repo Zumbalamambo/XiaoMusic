@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.yzx.xiaomusic.R;
@@ -51,7 +50,6 @@ public class MusicFragment extends BaseFragment {
             public void onItemClickListener(View itemView, int i) {
                  switch (i) {
                     case 0:
-                        Log.i("ygl", "onItemClickListener: 本地音乐");
                             MainFragment parentFragment = (MainFragment) getParentFragment();
                             parentFragment.start(LocalMusicFragment.getInstance());
                         break;

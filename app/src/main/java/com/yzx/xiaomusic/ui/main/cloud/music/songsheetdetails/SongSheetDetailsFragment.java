@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.yzx.xiaomusic.R;
 import com.yzx.xiaomusic.common.BaseFragment;
 import com.yzx.xiaomusic.common.OnItemClickLsitener;
+import com.yzx.xiaomusic.db.AppDatabase;
+import com.yzx.xiaomusic.db.dao.SongSheetDAO;
 import com.yzx.xiaomusic.entities.MusicMessage;
 import com.yzx.xiaomusic.entities.PlayEvent;
 import com.yzx.xiaomusic.entities.ProgressInfo;
@@ -32,6 +34,7 @@ import com.yzx.xiaomusic.ui.mv.MvFragment;
 import com.yzx.xiaomusic.ui.play.PlayFragment;
 import com.yzx.xiaomusic.utils.GlideUtils;
 import com.yzx.xiaomusic.utils.MusicDataUtils;
+import com.yzx.xiaomusic.utils.ToastUtils;
 import com.yzx.xiaomusic.widget.CircleProgress;
 import com.yzx.xiaomusic.widget.StateView;
 
@@ -41,6 +44,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -97,12 +101,16 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
     CircleProgress circleProgress;
     @BindView(R.id.layout_state_container)
     RelativeLayout layoutStateContainer;
+    @BindView(R.id.iv_collect)
+    ImageView ivCollect;
+    Unbinder unbinder;
     private CommonMusicAdapter adapter;
     private SongSheetDetailsPresenter mPresenter;
     private String songSheetTitle;
     private String subTitle;
     public StateView stateView;
     private String songSheetId;
+    private SongSheetDetials detials;
 
     @SuppressLint("ValidFragment")
     private SongSheetDetailsFragment() {
@@ -159,19 +167,19 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
 
     @Override
     public void getSongSheetDetails(String id) {
-        Log.i(TAG, "getSongSheetDetails: " + id);
         mPresenter.getSongSheetDetails(id);
     }
 
     @Override
     public void setDatas(SongSheetDetials detials) {
-
+        this.detials = detials;
         GlideUtils.loadImg(context, detials.getResult().getCreator().getAvatarUrl(), GlideUtils.TYPE_HEAD, GlideUtils.TRANSFORM_CIRCLE, ivHeadAuthor);
         tvNameAuthor.setText(detials.getResult().getCreator().getNickname());
         adapter.setDatas(detials);
         tvCollectionNum.setText(String.valueOf(detials.getResult().getSubscribedCount()));
         tvEvaluteNum.setText(String.valueOf(detials.getResult().getCommentCount()));
         tvShareNum.setText(String.valueOf(detials.getResult().getShareCount()));
+        ivCollect.setImageResource(isSongSheetCollected()?R.drawable.ic_collected:R.drawable.ic_collect);
     }
 
     /**
@@ -187,8 +195,8 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
         switch (itemView.getId()) {
             case R.id.iv_mv:
                 MvFragment mvFragment = MvFragment.getInstance();
-                if (!TextUtils.isEmpty(String.valueOf(tracksBean.getMvid()))){
-                    Bundle args =new Bundle();
+                if (!TextUtils.isEmpty(String.valueOf(tracksBean.getMvid()))) {
+                    Bundle args = new Bundle();
                     args.putString(KEY_MV_ID, String.valueOf(tracksBean.getMvid()));
                     mvFragment.setArguments(args);
                     start(mvFragment);
@@ -196,34 +204,69 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
                 break;
             default:
                 PlayService playService = getPlayService();
-                if (MusicDataUtils.TYPE_SONG_SHEET !=MusicDataUtils.getMusicType(playService.getMusicInfo())||playService.getPlayListPosition()!=position){
+                if (MusicDataUtils.TYPE_SONG_SHEET != MusicDataUtils.getMusicType(playService.getMusicInfo()) || playService.getPlayListPosition() != position) {
                     getPlayService().setState(PlayService.STATE_IDLE);
                     getPlayService().setPlayListPosition(position);
                 }
-                Log.i(TAG, "onItemClickListener: "+position);
+                Log.i(TAG, "onItemClickListener: " + position);
                 playService.playMusic();
                 break;
         }
     }
 
 
-
     @SuppressWarnings("AlibabaSwitchStatement")
-    @OnClick({R.id.circleProgress, R.id.iv_music_menu,R.id.layout_music_control})
+    @OnClick({R.id.layout_collect, R.id.layout_evaluation, R.id.circleProgress, R.id.iv_music_menu, R.id.layout_music_control})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.layout_collect:
+                collectSongSheet();
+                break;
+            case R.id.layout_evaluation:
+
+                break;
             case R.id.circleProgress:
                 getPlayService().playMusic();
                 break;
             case R.id.iv_music_menu:
-                MusicMenuDialog dialog=new MusicMenuDialog();
-                dialog.show(getFragmentManager(),"musicMenu");
+                MusicMenuDialog dialog = new MusicMenuDialog();
+                dialog.show(getFragmentManager(), "musicMenu");
                 break;
             case R.id.layout_music_control:
                 start(PlayFragment.getInstance(), SupportFragment.SINGLETASK);
                 break;
         }
     }
+
+    /**
+     * 收藏歌单
+     */
+    private void collectSongSheet() {
+        SongSheetDAO songSheetDAO = AppDatabase.getInstance().getSongSheetDAO();
+        //已收藏
+        if (isSongSheetCollected()) {
+            ToastUtils.showToast(R.string.Collected);
+        } else {
+            SongSheetDetials.ResultBean result = detials.getResult();
+            songSheetDAO.addSingleSongSheet(new com.yzx.xiaomusic.db.entity.SongSheet(songSheetId,
+                    result.getName(), result.getCreator().getNickname(), result.getCoverImgUrl(), result.getTrackCount()));
+            ivCollect.setImageResource(R.drawable.ic_collected);
+        }
+    }
+
+    /**
+     * 歌单是否被收藏
+     * @return
+     */
+    private boolean isSongSheetCollected(){
+        SongSheetDAO songSheetDAO = AppDatabase.getInstance().getSongSheetDAO();
+        if (songSheetDAO.getSongSheetById(songSheetId) != null){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
 
     @Override
     public void onStart() {
@@ -236,19 +279,21 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        setUpBottomPlayControl(tvMusicName,tvMusicArtist,circleProgress,ivMusicPoster);
+        setUpBottomPlayControl(tvMusicName, tvMusicArtist, circleProgress, ivMusicPoster);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(PlayEvent event) {
-        switch (event.type){
+        switch (event.type) {
             case PlayEvent.TYPE_CHANGE:
                 MusicMessage musicMessage = (MusicMessage) event.getData();
                 tvMusicName.setText(musicMessage.getName());
                 tvMusicArtist.setText(musicMessage.getArtist());
-                GlideUtils.loadImg(context,musicMessage.getPoster(),GlideUtils.TYPE_DEFAULT,ivMusicPoster);
+                GlideUtils.loadImg(context, musicMessage.getPoster(), GlideUtils.TYPE_DEFAULT, ivMusicPoster);
                 break;
             case PlayEvent.TYPE_PLAY:
                 circleProgress.setState(CircleProgress.STATE_PLAY);
@@ -268,9 +313,9 @@ public class SongSheetDetailsFragment extends BaseFragment implements AppBarLayo
         }
 
     };
-
     @Override
     public void onRetryClick() {
         getSongSheetDetails(songSheetId);
     }
+
 }
